@@ -187,21 +187,33 @@
       <a href="#" class="social-btn" rel="noopener">TikTok</a>
     </div>
   </div>
-
+  <div class="contact-right">
+    <div class="contact-card">
+      <div class="contact-card-title">Booking &amp; Partenariats</div>
+      <div class="contact-field">
+        <label for="cNom">Votre Nom</label>
+        <input type="text" id="cNom" data-contact="nom" placeholder="Prénom Nom" autocomplete="name">
+      </div>
+      <div class="contact-field">
+        <label for="cEmail">Email</label>
+        <input type="email" id="cEmail" data-contact="email" placeholder="votre@email.com" autocomplete="email">
+      </div>
+      <div class="contact-field">
+        <label for="cMsg">Message</label>
+        <textarea id="cMsg" data-contact="message" placeholder="Décrivez votre demande..."></textarea>
+      </div>
+      <button class="btn-send" id="sendBtn">Envoyer le Message</button>
+    </div>
+  </div>
 </section>
 
 <!-- ═══════ FOOTER ═══════ -->
 <footer>
-  <div class="footer-top">
-    <div class="footer-logo-wrap">
-      <span class="footer-mac">M.A.C JAMAIS ASSEZ</span>
-      <span class="footer-mac-sub">Artiste Sénégalais · Dakar</span>
-    </div>
-    <div class="footer-copy">© 2025 M.A.C Jamais Assez · Tous droits réservés</div>
+  <div class="footer-logo-wrap">
+    <span class="footer-mac">M.A.C JAMAIS ASSEZ</span>
+    <span class="footer-mac-sub">Artiste Sénégalais · Dakar</span>
   </div>
-  <div class="footer-bottom">
-    <a href="admin.html" class="footer-admin">Admin</a>
-  </div>
+  <div class="footer-copy">© 2026 BUABEY Arold Yves Nel'si · Tous droits réservés <a href="admin.html" style="font-size: 0.75em; color: #888; text-decoration: none; margin-left: 1rem;">Admin</a></div>
 </footer>
 
 <!-- ══════════════════════════════════════════
@@ -388,6 +400,7 @@
   </div>
 </div>
 
+<script src="firebase.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
