@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — M.A.C Jamais Assez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0A0A0A; --bg2:#111111; --bg3:#181818; --bg4:#1E1E1E;
+  --or:#C9A84C; --or2:#E8C96A;
+  --blanc:#F0EDE6; --gris:#888580; --gris2:#333;
+  --vert:#2D7A50; --vert2:#3DA068;
+  --rouge:#8B2020; --rouge2:#C43030;
+  --border:rgba(255,255,255,0.07);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--blanc);font-family:'Space Grotesk',sans-serif;min-height:100vh;display:flex;}
+
+/* SIDEBAR */
+.sidebar{width:240px;min-height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;}
+.sidebar-brand{padding:1.8rem 1.5rem 1.5rem;border-bottom:1px solid var(--border);}
+.sidebar-brand-mac{font-family:'Oswald',sans-serif;font-size:1.2rem;font-weight:700;color:var(--or);letter-spacing:0.2em;display:block;}
+.sidebar-brand-sub{font-size:0.6rem;color:var(--gris);letter-spacing:0.15em;margin-top:3px;display:block;}
+.sidebar-label{font-size:0.58rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gris);padding:1.5rem 1.5rem 0.6rem;}
+.sidebar-nav{flex:1;padding:0.5rem 0;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:0.8rem;padding:0.75rem 1.5rem;cursor:pointer;font-size:0.82rem;color:rgba(240,237,230,0.6);transition:all 0.2s;text-decoration:none;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--blanc);background:rgba(255,255,255,0.03);}
+.nav-item.active{color:var(--or);border-left-color:var(--or);background:rgba(201,168,76,0.06);}
+.nav-item .icon{font-size:0.9rem;width:18px;text-align:center;}
+.sidebar-footer{padding:1.2rem 1.5rem;border-top:1px solid var(--border);}
+.back-link{display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:var(--gris);text-decoration:none;transition:color 0.2s;}
+.back-link:hover{color:var(--or);}
+
+/* MAIN */
+.main{margin-left:240px;flex:1;padding:0;min-height:100vh;}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:1.2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;}
+.topbar-title{font-family:'Oswald',sans-serif;font-size:1.1rem;letter-spacing:0.15em;color:var(--blanc);}
+.topbar-title span{color:var(--or);}
+.badge-saved{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;background:rgba(45,122,80,0.2);color:var(--vert2);border:1px solid rgba(61,160,104,0.3);padding:0.35rem 1rem;display:none;}
+
+/* PANELS */
+.panel{display:none;padding:2.5rem;}
+.panel.active{display:block;}
+.panel-title{font-family:'Oswald',sans-serif;font-size:1.5rem;font-weight:600;color:var(--blanc);margin-bottom:0.5rem;letter-spacing:0.05em;}
+.panel-sub{font-size:0.82rem;color:var(--gris);margin-bottom:2.5rem;}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);padding:1.8rem;margin-bottom:1.5rem;}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.card-title{font-size:0.85rem;font-weight:600;color:var(--blanc);letter-spacing:0.08em;text-transform:uppercase;}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);padding:1.5rem;}
+.stat-num{font-family:'Oswald',sans-serif;font-size:2.5rem;font-weight:600;color:var(--or);line-height:1;}
+.stat-num.alert{color:#D94444;}
+.stat-label{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gris);margin-top:0.5rem;}
+.stat-sub{font-size:0.72rem;color:var(--gris);margin-top:0.3rem;}
+
+/* ALBUMS GRID */
+.albums-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+.album-admin-card{background:var(--bg3);border:1px solid var(--border);padding:1.2rem;transition:border-color 0.2s;}
+.album-admin-card.hidden-item{opacity:0.4;}
+.album-admin-card:hover{border-color:rgba(201,168,76,0.25);}
+.alb-preview{width:100%;aspect-ratio:1;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;font-family:'Oswald',sans-serif;font-size:2.8rem;font-weight:700;letter-spacing:-0.02em;}
+.alb-preview.a1{background:linear-gradient(145deg,#0A0A0A,#1A1A1A);color:rgba(201,168,76,0.4);}
+.alb-preview.a2{background:linear-gradient(145deg,#080C10,#0F1820);color:rgba(106,158,212,0.4);}
+.alb-preview.a3{background:linear-gradient(145deg,#0A1008,#0F1C0F);color:rgba(93,200,138,0.35);}
+.alb-preview.a4{background:linear-gradient(145deg,#0C0808,#180F0F);color:rgba(217,68,68,0.3);}
+.alb-admin-title{font-weight:600;font-size:0.9rem;margin-bottom:0.2rem;}
+.alb-admin-meta{font-size:0.72rem;color:var(--gris);margin-bottom:1rem;}
+.alb-actions{display:flex;gap:0.5rem;flex-wrap:wrap;}
+
+/* EVENTS */
+.event-admin-row{background:var(--bg3);border:1px solid var(--border);padding:1.2rem 1.5rem;margin-bottom:0.6rem;display:grid;grid-template-columns:70px 1fr auto;gap:1.2rem;align-items:center;transition:border-color 0.2s;}
+.event-admin-row.hidden-item{opacity:0.4;}
+.event-admin-row:hover{border-color:rgba(201,168,76,0.2);}
+.ev-date-badge{text-align:center;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);padding:0.5rem;}
+.ev-day{font-family:'Oswald',sans-serif;font-size:1.8rem;color:var(--or);line-height:1;}
+.ev-mon{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris);}
+.ev-titre{font-size:0.88rem;font-weight:500;margin-bottom:0.2rem;}
+.ev-lieu{font-size:0.72rem;color:var(--gris);}
+.ev-actions{display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:flex-end;}
+.status-badge{font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;padding:0.3rem 0.8rem;white-space:nowrap;display:inline-block;}
+.status-badge.dispo{background:rgba(26,58,42,0.25);color:#5DC88A;border:1px solid rgba(26,58,42,0.5);}
+.status-badge.complet{background:rgba(139,26,26,0.2);color:#D94444;border:1px solid rgba(139,26,26,0.4);}
+
+/* COMMANDES / RÉSERVATIONS */
+.order-row{background:var(--bg3);border:1px solid var(--border);padding:1.2rem 1.5rem;margin-bottom:0.5rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:start;transition:border-color 0.2s;}
+.order-row:hover{border-color:rgba(201,168,76,0.15);}
+.order-ref{font-family:'Oswald',sans-serif;font-size:0.75rem;color:var(--or);letter-spacing:0.1em;margin-bottom:0.4rem;}
+.order-client{font-size:0.9rem;font-weight:500;margin-bottom:0.2rem;}
+.order-detail{font-size:0.75rem;color:var(--gris);}
+.order-meta{font-size:0.68rem;color:rgba(168,168,168,0.5);margin-top:0.3rem;}
+.order-actions{display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end;}
+.order-statut{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.3rem 0.8rem;font-weight:600;}
+.order-statut.en_attente{background:rgba(201,168,76,0.1);color:var(--or);border:1px solid rgba(201,168,76,0.3);}
+.order-statut.confirmee{background:rgba(26,58,42,0.2);color:#5DC88A;border:1px solid rgba(26,58,42,0.4);}
+.order-statut.traite{background:rgba(26,46,74,0.2);color:#6A9ED4;border:1px solid rgba(26,46,74,0.4);}
+.order-statut.annule{background:rgba(139,26,26,0.15);color:#D94444;border:1px solid rgba(139,26,26,0.3);}
+
+/* MESSAGES */
+.msg-row{background:var(--bg3);border:1px solid var(--border);padding:1.2rem 1.5rem;margin-bottom:0.5rem;}
+.msg-row:hover{border-color:rgba(201,168,76,0.15);}
+.msg-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;}
+.msg-from{font-size:0.88rem;font-weight:500;}
+.msg-date{font-size:0.68rem;color:var(--gris);}
+.msg-email{font-size:0.75rem;color:var(--or);margin-bottom:0.5rem;}
+.msg-text{font-size:0.82rem;color:rgba(240,237,230,0.7);line-height:1.6;}
+
+/* NEWSLETTER */
+.nl-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.5rem;}
+.nl-item{background:var(--bg3);border:1px solid var(--border);padding:0.6rem 1rem;font-size:0.8rem;display:flex;justify-content:space-between;align-items:center;}
+.nl-email{color:var(--or);}
+
+/* FILTRES */
+.filters{display:flex;gap:0.6rem;margin-bottom:1.2rem;flex-wrap:wrap;}
+.filter-btn{background:transparent;border:1px solid var(--gris2);color:var(--gris);padding:0.35rem 0.9rem;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;font-family:'Space Grotesk';transition:all 0.2s;}
+.filter-btn.active{border-color:var(--or);color:var(--or);background:rgba(201,168,76,0.06);}
+.filter-btn:hover{border-color:var(--or);color:var(--or);}
+
+/* BOUTONS */
+.btn{font-family:'Space Grotesk';font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.45rem 1rem;cursor:pointer;border:1px solid;transition:all 0.2s;font-weight:500;}
+.btn-primary{background:var(--or);color:#080808;border-color:var(--or);}
+.btn-primary:hover{background:var(--or2);border-color:var(--or2);}
+.btn-danger{background:transparent;color:var(--rouge2);border-color:rgba(196,48,48,0.4);}
+.btn-danger:hover{background:var(--rouge2);color:white;border-color:var(--rouge2);}
+.btn-toggle{background:transparent;color:var(--gris);border-color:var(--gris2);}
+.btn-toggle.on{color:var(--vert2);border-color:rgba(61,160,104,0.4);background:rgba(45,122,80,0.1);}
+.btn-toggle:hover{border-color:var(--or);color:var(--or);}
+.btn-status{background:transparent;color:var(--or);border-color:rgba(201,168,76,0.35);}
+.btn-status:hover{background:rgba(201,168,76,0.1);}
+.btn-save{background:var(--vert);color:white;border-color:var(--vert);padding:0.65rem 2rem;font-size:0.75rem;}
+.btn-save:hover{background:var(--vert2);border-color:var(--vert2);}
+.btn-add{background:transparent;color:var(--or);border:1px dashed rgba(201,168,76,0.4);padding:0.7rem 1.5rem;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;font-family:'Space Grotesk';font-weight:500;width:100%;margin-top:1rem;}
+.btn-add:hover{background:rgba(201,168,76,0.06);border-color:var(--or);}
+.btn-sm{padding:0.35rem 0.75rem;font-size:0.62rem;}
+.btn-export{background:rgba(26,46,74,0.2);color:#6A9ED4;border:1px solid rgba(26,46,74,0.4);}
+.btn-export:hover{background:rgba(26,46,74,0.4);}
+
+/* FORMULAIRES */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0;}
+.form-group.full{grid-column:1/-1;}
+.form-group label{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gris);}
+.form-group input,.form-group select,.form-group textarea{background:var(--bg4);border:1px solid var(--border);color:var(--blanc);padding:0.65rem 0.9rem;font-family:'Space Grotesk';font-size:0.85rem;outline:none;transition:border-color 0.2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--or);}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(136,133,128,0.6);}
+.form-group select{cursor:pointer;}
+.form-group select option{background:var(--bg3);}
+.form-group textarea{height:80px;resize:vertical;}
+.form-actions{display:flex;gap:0.8rem;justify-content:flex-end;margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+
+/* PHOTO UPLOAD */
+.photo-zone{width:100%;aspect-ratio:3/4;max-width:240px;background:var(--bg3);border:2px dashed var(--gris2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color 0.25s;position:relative;overflow:hidden;}
+.photo-zone:hover{border-color:var(--or);}
+.photo-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.photo-zone-label{font-size:0.72rem;color:var(--gris);text-align:center;margin-top:0.8rem;}
+.photo-icon{font-size:2rem;opacity:0.3;}
+.photo-row{display:flex;gap:2rem;align-items:flex-start;}
+.photo-info{flex:1;}
+.photo-info p{font-size:0.82rem;color:var(--gris);line-height:1.7;margin-bottom:1rem;}
+#photoFileInput{display:none;}
+
+/* MODAL */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-backdrop.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border);width:100%;max-width:540px;max-height:92vh;overflow-y:auto;padding:2rem;}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;}
+.modal-title{font-family:'Oswald',sans-serif;font-size:1.1rem;letter-spacing:0.1em;color:var(--or);}
+.modal-close{background:none;border:none;color:var(--gris);font-size:1.3rem;cursor:pointer;line-height:1;}
+.modal-close:hover{color:var(--blanc);}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--bg3);border:1px solid var(--border);padding:0.9rem 1.5rem;font-size:0.8rem;display:flex;align-items:center;gap:0.8rem;transform:translateY(100px);opacity:0;transition:all 0.35s;pointer-events:none;max-width:360px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(61,160,104,0.4);}
+.toast.success .toast-dot{background:var(--vert2);}
+.toast.error{border-color:rgba(196,48,48,0.4);}
+.toast.error .toast-dot{background:var(--rouge2);}
+.toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.login-box{width:100%;max-width:380px;padding:2.5rem;background:var(--bg2);border:1px solid var(--border);}
+.login-logo{font-family:'Oswald',sans-serif;font-size:1.4rem;color:var(--or);letter-spacing:0.25em;margin-bottom:0.3rem;}
+.login-sub{font-size:0.7rem;color:var(--gris);letter-spacing:0.15em;margin-bottom:2rem;}
+.login-field{margin-bottom:1rem;}
+.login-field label{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gris);display:block;margin-bottom:0.4rem;}
+.login-field input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--blanc);padding:0.8rem 1rem;font-family:'Space Grotesk';font-size:0.9rem;outline:none;transition:border-color 0.2s;}
+.login-field input:focus{border-color:var(--or);}
+.login-btn{width:100%;background:var(--or);color:#080808;border:none;padding:0.9rem;font-family:'Space Grotesk';font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;font-weight:600;margin-top:0.5rem;transition:background 0.2s;}
+.login-btn:hover{background:var(--or2);}
+.login-err{font-size:0.75rem;color:var(--rouge2);margin-top:0.8rem;display:none;}
+.login-attempts{font-size:0.7rem;color:var(--gris);text-align:center;margin-top:0.6rem;}
+
+/* EMAILJS CONFIG BOX */
+.config-box{background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);padding:1.5rem;margin-bottom:1.5rem;}
+.config-box-title{font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--or);margin-bottom:1rem;}
+.config-steps{font-size:0.8rem;color:rgba(240,237,230,0.7);line-height:2;}
+.config-steps a{color:var(--or);text-decoration:none;}
+.config-steps a:hover{text-decoration:underline;}
+.config-status{display:flex;align-items:center;gap:0.5rem;margin-top:1rem;font-size:0.78rem;}
+.config-dot{width:8px;height:8px;border-radius:50%;background:var(--rouge2);}
+.config-dot.ok{background:var(--vert2);}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--gris);}
+.empty-state-icon{font-size:2.5rem;opacity:0.3;margin-bottom:0.8rem;}
+.empty-state-text{font-size:0.85rem;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{width:200px;}
+  .main{margin-left:200px;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .form-grid{grid-template-columns:1fr;}
+  .event-admin-row{grid-template-columns:60px 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">M.A.C ADMIN</div>
+    <div class="login-sub">Panneau d'administration sécurisé</div>
+    <div class="login-field">
+      <label for="loginUser">Identifiant</label>
+      <input type="text" id="loginUser" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label for="loginPass">Mot de passe</label>
+      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Connexion</button>
+    <div class="login-err" id="loginErr"></div>
+    <div class="login-attempts" id="loginAttempts"></div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <span class="sidebar-brand-mac">M.A.C</span>
+    <span class="sidebar-brand-sub">Administration</span>
+  </div>
+  <div class="sidebar-label">Principal</div>
+  <nav class="sidebar-nav">
+    <a class="nav-item active" onclick="showPanel('dashboard')" href="#"><span class="icon">◈</span>Tableau de bord</a>
+    <a class="nav-item" onclick="showPanel('photo')" href="#"><span class="icon">◉</span>Photo artiste</a>
+    <a class="nav-item" onclick="showPanel('albums')" href="#"><span class="icon">◎</span>Albums / Catalogue</a>
+    <a class="nav-item" onclick="showPanel('events')" href="#"><span class="icon">◷</span>Événements</a>
+    <div class="sidebar-label" style="margin-top:0.5rem;">Transactions</div>
+    <a class="nav-item" onclick="showPanel('commandes')" href="#"><span class="icon">🛒</span>Commandes <span id="badgeCmd" style="margin-left:auto;background:var(--rouge2);color:white;font-size:0.6rem;padding:0.1rem 0.4rem;display:none;">0</span></a>
+    <a class="nav-item" onclick="showPanel('reservations')" href="#"><span class="icon">🎫</span>Réservations <span id="badgeRes" style="margin-left:auto;background:var(--rouge2);color:white;font-size:0.6rem;padding:0.1rem 0.4rem;display:none;">0</span></a>
+    <a class="nav-item" onclick="showPanel('messages')" href="#"><span class="icon">✉</span>Messages</a>
+    <a class="nav-item" onclick="showPanel('newsletter')" href="#"><span class="icon">◌</span>Newsletter</a>
+    <div class="sidebar-label" style="margin-top:0.5rem;">Paramètres</div>
+    <a class="nav-item" onclick="showPanel('emailjs')" href="#"><span class="icon">⚙</span>Config. Email</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="index.html" target="_blank" class="back-link">↗ Voir le site</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">Admin <span>M.A.C Jamais Assez</span></div>
+    <div style="display:flex;gap:1rem;align-items:center;">
+      <div class="badge-saved" id="badgeSaved">✓ Sauvegardé</div>
+      <button class="btn btn-danger btn-sm" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div class="panel active" id="panel-dashboard">
+    <div class="panel-title">Tableau de bord</div>
+    <div class="panel-sub">Vue d'ensemble — M.A.C Jamais Assez</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num" id="statAlbums">—</div><div class="stat-label">Albums visibles</div><div class="stat-sub">en vente</div></div>
+      <div class="stat-card"><div class="stat-num" id="statEvents">—</div><div class="stat-label">Événements actifs</div><div class="stat-sub">billets disponibles</div></div>
+      <div class="stat-card"><div class="stat-num" id="statCmds">—</div><div class="stat-label">Commandes</div><div class="stat-sub" id="statCmdsSub">en attente</div></div>
+      <div class="stat-card"><div class="stat-num" id="statRes">—</div><div class="stat-label">Réservations</div><div class="stat-sub" id="statResSub">confirmées</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Actions rapides</div></div>
+      <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="showPanel('albums');openAlbumModal()">+ Album</button>
+        <button class="btn btn-primary" onclick="showPanel('events');openEventModal()">+ Événement</button>
+        <button class="btn btn-primary" onclick="showPanel('commandes')">Voir commandes</button>
+        <button class="btn btn-primary" onclick="showPanel('reservations')">Voir réservations</button>
+        <button class="btn btn-export" onclick="exportData()">↓ Exporter tout (JSON)</button>
+        <button class="btn btn-danger" onclick="resetAll()">⚠ Réinitialiser</button>
+      </div>
+    </div>
+    <div class="card" id="recentActivity">
+      <div class="card-header"><div class="card-title">Activité récente</div></div>
+      <div id="activityList"></div>
+    </div>
+  </div>
+
+  <!-- ═══ PHOTO ═══ -->
+  <div class="panel" id="panel-photo">
+    <div class="panel-title">Photo de l'artiste</div>
+    <div class="panel-sub">Photo affichée dans la section Biographie du site.</div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Photo principale</div></div>
+      <div class="photo-row">
+        <div>
+          <div class="photo-zone" onclick="document.getElementById('photoFileInput').click()" id="photoZone">
+            <span class="photo-icon">⊕</span>
+            <div class="photo-zone-label">Cliquer pour choisir<br>une photo</div>
+          </div>
+          <input type="file" id="photoFileInput" accept="image/jpeg,image/png,image/webp" onchange="handlePhotoUpload(event)">
+        </div>
+        <div class="photo-info">
+          <p>Formats acceptés : JPG, PNG, WEBP<br>Taille max : 2 Mo recommandé<br>Ratio idéal : portrait 3/4</p>
+          <p id="photoCurrentInfo" style="color:var(--or);font-size:0.8rem;margin-bottom:1rem;"></p>
+          <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
+            <button class="btn btn-save" onclick="savePhoto()">Sauvegarder</button>
+            <button class="btn btn-danger" onclick="removePhoto()">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ALBUMS ═══ -->
+  <div class="panel" id="panel-albums">
+    <div class="panel-title">Albums &amp; Catalogue</div>
+    <div class="panel-sub">Albums visibles dans la section Discographie du site.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Albums (<span id="albumCount">0</span>)</div>
+        <button class="btn btn-primary" onclick="openAlbumModal()">+ Ajouter un album</button>
+      </div>
+      <div class="albums-grid" id="albumsGrid"></div>
+    </div>
+  </div>
+
+  <!-- ═══ ÉVÉNEMENTS ═══ -->
+  <div class="panel" id="panel-events">
+    <div class="panel-title">Événements</div>
+    <div class="panel-sub">Concerts et événements de l'agenda.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Événements (<span id="eventCount">0</span>)</div>
+        <button class="btn btn-primary" onclick="openEventModal()">+ Ajouter un événement</button>
+      </div>
+      <div id="eventsAdmin"></div>
+    </div>
+  </div>
+
+  <!-- ═══ COMMANDES ═══ -->
+  <div class="panel" id="panel-commandes">
+    <div class="panel-title">Commandes Albums</div>
+    <div class="panel-sub">Toutes les commandes d'achat d'albums.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Commandes (<span id="cmdCount">0</span>)</div>
+        <div style="display:flex;gap:0.5rem;">
+          <button class="btn btn-export btn-sm" onclick="exportCommandes()">↓ CSV</button>
+          <button class="btn btn-danger btn-sm" onclick="clearCommandes()">Effacer tout</button>
+        </div>
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" onclick="filterOrders('all','cmd')">Tous</button>
+        <button class="filter-btn" onclick="filterOrders('en_attente','cmd')">En attente</button>
+        <button class="filter-btn" onclick="filterOrders('traite','cmd')">Traités</button>
+        <button class="filter-btn" onclick="filterOrders('annule','cmd')">Annulés</button>
+      </div>
+      <div id="commandesList"></div>
+    </div>
+  </div>
+
+  <!-- ═══ RÉSERVATIONS ═══ -->
+  <div class="panel" id="panel-reservations">
+    <div class="panel-title">Réservations Billets</div>
+    <div class="panel-sub">Toutes les réservations de billets de concert.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Réservations (<span id="resCount">0</span>)</div>
+        <div style="display:flex;gap:0.5rem;">
+          <button class="btn btn-export btn-sm" onclick="exportReservations()">↓ CSV</button>
+          <button class="btn btn-danger btn-sm" onclick="clearReservations()">Effacer tout</button>
+        </div>
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" onclick="filterOrders('all','res')">Tous</button>
+        <button class="filter-btn" onclick="filterOrders('confirmee','res')">Confirmés</button>
+        <button class="filter-btn" onclick="filterOrders('traite','res')">Traités</button>
+        <button class="filter-btn" onclick="filterOrders('annule','res')">Annulés</button>
+      </div>
+      <div id="reservationsList"></div>
+    </div>
+  </div>
+
+  <!-- ═══ MESSAGES ═══ -->
+  <div class="panel" id="panel-messages">
+    <div class="panel-title">Messages de contact</div>
+    <div class="panel-sub">Messages reçus via le formulaire de contact.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Messages (<span id="msgCount">0</span>)</div>
+        <button class="btn btn-danger btn-sm" onclick="clearMessages()">Effacer tout</button>
+      </div>
+      <div id="messagesList"></div>
+    </div>
+  </div>
+
+  <!-- ═══ NEWSLETTER ═══ -->
+  <div class="panel" id="panel-newsletter">
+    <div class="panel-title">Liste Newsletter</div>
+    <div class="panel-sub">Adresses email inscrites à la newsletter.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Abonnés (<span id="nlCount">0</span>)</div>
+        <div style="display:flex;gap:0.5rem;">
+          <button class="btn btn-export btn-sm" onclick="exportNewsletter()">↓ CSV</button>
+          <button class="btn btn-danger btn-sm" onclick="clearNewsletter()">Effacer tout</button>
+        </div>
+      </div>
+      <div class="nl-list" id="nlList"></div>
+    </div>
+  </div>
+
+  <!-- ═══ CONFIG EMAILJS ═══ -->
+  <div class="panel" id="panel-emailjs">
+    <div class="panel-title">Configuration Email</div>
+    <div class="panel-sub">Paramétrez les notifications email automatiques via EmailJS.</div>
+    <div class="config-box">
+      <div class="config-box-title">Statut de la configuration</div>
+      <div class="config-status" id="emailStatus">
+        <div class="config-dot" id="emailDot"></div>
+        <span id="emailStatusText">Non configuré — les notifications email sont désactivées.</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Instructions d'installation</div></div>
+      <div class="config-steps">
+        <p>1. Créez un compte gratuit sur <a href="https://www.emailjs.com" target="_blank">emailjs.com</a></p>
+        <p>2. Ajoutez un <strong>Service Email</strong> (Gmail recommandé) → copiez le <strong>Service ID</strong></p>
+        <p>3. Créez un <strong>Template</strong> avec ces variables :<br>
+           <code style="font-size:0.75rem;background:rgba(255,255,255,0.05);padding:0.2rem 0.4rem;">{{type}}</code>
+           <code style="font-size:0.75rem;background:rgba(255,255,255,0.05);padding:0.2rem 0.4rem;">{{reference}}</code>
+           <code style="font-size:0.75rem;background:rgba(255,255,255,0.05);padding:0.2rem 0.4rem;">{{client}}</code>
+           <code style="font-size:0.75rem;background:rgba(255,255,255,0.05);padding:0.2rem 0.4rem;">{{email}}</code>
+           <code style="font-size:0.75rem;background:rgba(255,255,255,0.05);padding:0.2rem 0.4rem;">{{tel}}</code>
+           <code style="font-size:0.75rem;background:rgba(255,255,255,0.05);padding:0.2rem 0.4rem;">{{detail}}</code>
+           <code style="font-size:0.75rem;background:rgba(255,255,255,0.05);padding:0.2rem 0.4rem;">{{prix}}</code>
+           <code style="font-size:0.75rem;background:rgba(255,255,255,0.05);padding:0.2rem 0.4rem;">{{date}}</code>
+        </p>
+        <p>4. Copiez votre <strong>Public Key</strong> (Account → API Keys)</p>
+        <p>5. Collez les 3 valeurs ci-dessous et sauvegardez.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Clés de configuration</div></div>
+      <div class="form-grid">
+        <div class="form-group full"><label>Public Key</label><input type="text" id="ejPublicKey" placeholder="user_xxxxxxxxxxxxxxxx"></div>
+        <div class="form-group"><label>Service ID</label><input type="text" id="ejServiceId" placeholder="service_xxxxxxx"></div>
+        <div class="form-group"><label>Template ID</label><input type="text" id="ejTemplateId" placeholder="template_xxxxxxx"></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-save" onclick="saveEmailConfig()">Sauvegarder la configuration</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL ALBUM -->
+<div class="modal-backdrop" id="albumModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="albumModalTitle">Nouvel Album</div>
+      <button class="modal-close" onclick="closeModal('albumModal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="albumId">
+      <div class="form-group"><label>Titre *</label><input type="text" id="albumTitre" placeholder="Jamais Assez Vol.1"></div>
+      <div class="form-group"><label>Année</label><input type="text" id="albumAnnee" placeholder="2024"></div>
+      <div class="form-group"><label>Genre musical</label><input type="text" id="albumGenre" placeholder="Rap / Gospel"></div>
+      <div class="form-group"><label>Prix</label><input type="text" id="albumPrix" placeholder="12 000 FCFA"></div>
+      <div class="form-group"><label>Code couverture (2-5 car.)</label><input type="text" id="albumCode" placeholder="JA" maxlength="5"></div>
+      <div class="form-group"><label>Thème visuel</label>
+        <select id="albumTheme">
+          <option value="a1">Thème 1 — Or / Noir</option>
+          <option value="a2">Thème 2 — Bleu nuit</option>
+          <option value="a3">Thème 3 — Vert Gospel</option>
+          <option value="a4">Thème 4 — Rouge profond</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Badge</label>
+        <select id="albumBadge">
+          <option value="">Aucun</option>
+          <option value="new">Nouveau</option>
+          <option value="gospel">Gospel</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-toggle" onclick="closeModal('albumModal')">Annuler</button>
+      <button class="btn btn-save" onclick="saveAlbum()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ÉVÉNEMENT -->
+<div class="modal-backdrop" id="eventModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="eventModalTitle">Nouvel Événement</div>
+      <button class="modal-close" onclick="closeModal('eventModal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <input type="hidden" id="eventId">
+      <div class="form-group full"><label>Titre *</label><input type="text" id="eventTitre" placeholder="Concert de Lancement"></div>
+      <div class="form-group full"><label>Lieu / Salle</label><input type="text" id="eventLieu" placeholder="CCBM, Dakar"></div>
+      <div class="form-group"><label>Jour</label><input type="text" id="eventJour" placeholder="18" maxlength="2"></div>
+      <div class="form-group"><label>Mois (abrégé)</label><input type="text" id="eventMois" placeholder="Avr" maxlength="4"></div>
+      <div class="form-group"><label>Année</label><input type="text" id="eventAnnee" placeholder="2025" maxlength="4"></div>
+      <div class="form-group"><label>Prix billets</label><input type="text" id="eventPrix" placeholder="5 000 FCFA ou Gratuit"></div>
+      <div class="form-group"><label>Type</label>
+        <select id="eventType"><option value="concert">Concert</option><option value="festival">Festival</option><option value="gospel">Gospel</option></select>
+      </div>
+      <div class="form-group"><label>Statut</label>
+        <select id="eventStatut"><option value="dispo">Disponible</option><option value="complet">Complet</option></select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-toggle" onclick="closeModal('eventModal')">Annuler</button>
+      <button class="btn btn-save" onclick="saveEvent()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="toast-dot"></div><span id="toastMsg"></span></div>
+
+<script>
+'use strict';
+
+/* ─── AUTHENTIFICATION SÉCURISÉE ─── */
+// Hash simple côté client (pour plus de sécurité, utilisez un vrai backend)
+// Identifiants : admin / mac2025!
+const HASH_USER = 'YWRtaW4=';   // base64('admin')
+const HASH_PASS = 'bWFjMjAyNSE='; // base64('mac2025!')
+let loginAttempts = parseInt(sessionStorage.getItem('mac_attempts') || '0');
+let lockUntil = parseInt(sessionStorage.getItem('mac_lock') || '0');
+
+function doLogin() {
+  const now = Date.now();
+  if (now < lockUntil) {
+    const wait = Math.ceil((lockUntil - now) / 1000);
+    showLoginErr(`Compte bloqué. Réessayez dans ${wait}s.`);
+    return;
+  }
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if (btoa(u) === HASH_USER && btoa(p) === HASH_PASS) {
+    loginAttempts = 0;
+    sessionStorage.removeItem('mac_attempts');
+    sessionStorage.setItem('mac_admin', '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    initAdmin();
+  } else {
+    loginAttempts++;
+    sessionStorage.setItem('mac_attempts', loginAttempts);
+    if (loginAttempts >= 5) {
+      const lockTime = Date.now() + 5 * 60 * 1000;
+      sessionStorage.setItem('mac_lock', lockTime);
+      showLoginErr(`Trop de tentatives. Compte bloqué 5 minutes.`);
+    } else {
+      showLoginErr(`Identifiant ou mot de passe incorrect. (${5 - loginAttempts} essais restants)`);
+    }
+  }
+}
+function showLoginErr(msg) {
+  const el = document.getElementById('loginErr');
+  el.textContent = msg; el.style.display = 'block';
+}
+function doLogout() {
+  sessionStorage.removeItem('mac_admin');
+  location.reload();
+}
+['loginUser','loginPass'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+});
+if (sessionStorage.getItem('mac_admin') === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  initAdmin();
+}
+
+/* ─── DONNÉES PAR DÉFAUT ─── */
+const DEFAULT_ALBUMS = [
+  { id:1, titre:'Jamais Assez Vol.1', annee:'2024', genre:'Rap / Gospel',    prix:'12 000 FCFA', badge:'new',    badgeLabel:'Nouveau', code:'JA',  theme:'a1', visible:true },
+  { id:2, titre:'Foi & Lumière',      annee:'2022', genre:'Gospel / Mbalax', prix:'10 000 FCFA', badge:'gospel', badgeLabel:'Gospel',  code:'FOI', theme:'a2', visible:true },
+  { id:3, titre:'Dakar Debout',       annee:'2020', genre:'Rap / Mbalax',    prix:'8 000 FCFA',  badge:'',       badgeLabel:'',        code:'DKR', theme:'a3', visible:true },
+  { id:4, titre:'Rue de la Médina',   annee:'2017', genre:'Rap Sénégalais',  prix:'6 000 FCFA',  badge:'',       badgeLabel:'',        code:'RUE', theme:'a4', visible:true }
+];
+const DEFAULT_EVENTS = [
+  { id:1, jour:'18', mois:'Avr', annee:'2025', titre:'Concert de Lancement — Jamais Assez Vol.1', lieu:'CCBM — Centre Culturel Blaise Senghor, Dakar', type:'concert', typeLabel:'Concert',  prix:'7 500 FCFA', statut:'dispo',   visible:true },
+  { id:2, jour:'02', mois:'Mai', annee:'2025', titre:'Soirée Gospel & Louange',                   lieu:'Église Évangélique de Dakar-Plateau',           type:'gospel',  typeLabel:'Gospel',   prix:'Gratuit',    statut:'dispo',   visible:true },
+  { id:3, jour:'24', mois:'Mai', annee:'2025', titre:'Festival Hip-Hop Sénégal',                  lieu:'Stade Iba Mar Diop, Dakar',                     type:'festival',typeLabel:'Festival', prix:'5 000 FCFA', statut:'dispo',   visible:true },
+  { id:4, jour:'07', mois:'Jun', annee:'2025', titre:'Nuit du Mbalax — Spécial M.A.C',            lieu:'Thiossane Club, Dakar',                         type:'festival',typeLabel:'Mbalax',   prix:'—',          statut:'complet', visible:true },
+  { id:5, jour:'19', mois:'Jul', annee:'2025', titre:'Tournée Diaspora — Paris',                  lieu:'La Cigale, Paris, France',                      type:'concert', typeLabel:'Concert',  prix:'28 €',       statut:'dispo',   visible:true }
+];
+const TYPE_LABELS = { concert:'Concert', festival:'Festival', gospel:'Gospel' };
+
+/* ─── STOCKAGE ─── */
+const Store = {
+  get(k, fb=null) { try{const v=localStorage.getItem(k);return v?JSON.parse(v):fb;}catch{return fb;} },
+  set(k, v) { try{localStorage.setItem(k,JSON.stringify(v));return true;}catch{return false;} }
+};
+const getAlbums    = () => Store.get('mac_albums', JSON.parse(JSON.stringify(DEFAULT_ALBUMS)));
+const getEvents    = () => Store.get('mac_events', JSON.parse(JSON.stringify(DEFAULT_EVENTS)));
+const getCommandes = () => Store.get('mac_commandes', []);
+const getRes       = () => Store.get('mac_reservations', []);
+const getMessages  = () => Store.get('mac_messages', []);
+const getNL        = () => Store.get('mac_newsletter', []);
+
+function saveItems(key, data) { Store.set(key, data); flashSaved(); }
+function flashSaved() {
+  const b = document.getElementById('badgeSaved');
+  b.style.display = 'block';
+  clearTimeout(b._t);
+  b._t = setTimeout(()=>b.style.display='none', 2500);
+}
+
+/* ─── INIT ─── */
+function initAdmin() {
+  refreshAll();
+  loadEmailConfig();
+  updateBadges();
+}
+function refreshAll() {
+  renderDashboard();
+  renderAlbumsAdmin();
+  renderEventsAdmin();
+  renderCommandes();
+  renderReservations();
+  renderMessages();
+  renderNewsletter();
+  updateBadges();
+}
+
+/* ─── NAVIGATION ─── */
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'"+name+"'")) n.classList.add('active');
+  });
+  const renderers = { albums:renderAlbumsAdmin, events:renderEventsAdmin, dashboard:renderDashboard, commandes:renderCommandes, reservations:renderReservations, messages:renderMessages, newsletter:renderNewsletter, photo:renderPhotoPanel };
+  if (renderers[name]) renderers[name]();
+}
+
+/* ─── BADGES MENU ─── */
+function updateBadges() {
+  const pendingCmd = getCommandes().filter(c=>c.statut==='en_attente').length;
+  const pendingRes = getRes().filter(r=>r.statut==='confirmee').length;
+  const bc = document.getElementById('badgeCmd');
+  const br = document.getElementById('badgeRes');
+  if (bc) { bc.textContent = pendingCmd; bc.style.display = pendingCmd ? 'inline' : 'none'; }
+  if (br) { br.textContent = pendingRes; br.style.display = pendingRes ? 'inline' : 'none'; }
+}
+
+/* ─── DASHBOARD ─── */
+function renderDashboard() {
+  const albums = getAlbums(), events = getEvents();
+  const cmds = getCommandes(), res = getRes();
+  document.getElementById('statAlbums').textContent = albums.filter(a=>a.visible).length;
+  document.getElementById('statEvents').textContent = events.filter(e=>e.visible&&e.statut!=='complet').length;
+  const pendingCmd = cmds.filter(c=>c.statut==='en_attente').length;
+  const pendingRes = res.filter(r=>r.statut==='confirmee').length;
+  document.getElementById('statCmds').textContent = cmds.length;
+  document.getElementById('statCmds').className = 'stat-num' + (pendingCmd > 0 ? ' alert' : '');
+  document.getElementById('statCmdsSub').textContent = pendingCmd + ' en attente';
+  document.getElementById('statRes').textContent = res.length;
+  document.getElementById('statRes').className = 'stat-num' + (pendingRes > 0 ? ' alert' : '');
+  document.getElementById('statResSub').textContent = pendingRes + ' non traitées';
+
+  // Activité récente (10 derniers)
+  const all = [...cmds.map(c=>({...c,_type:'cmd'})), ...res.map(r=>({...r,_type:'res'})), ...getMessages().map(m=>({...m,_type:'msg'}))];
+  all.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  const recent = all.slice(0,8);
+  const al = document.getElementById('activityList');
+  if (!recent.length) { al.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div class="empty-state-text">Aucune activité récente.</div></div>'; return; }
+  al.innerHTML = recent.map(item => {
+    if (item._type==='cmd')  return `<div class="order-row"><div><div class="order-ref">${item.id}</div><div class="order-client">🛒 ${item.prenom} ${item.nom}</div><div class="order-detail">${item.album} × ${item.quantite}</div><div class="order-meta">${item.date}</div></div><div class="order-actions"><span class="order-statut ${item.statut}">${statLabel(item.statut)}</span></div></div>`;
+    if (item._type==='res')  return `<div class="order-row"><div><div class="order-ref">${item.id}</div><div class="order-client">🎫 ${item.prenom} ${item.nom}</div><div class="order-detail">${item.evenement}</div><div class="order-meta">${item.date}</div></div><div class="order-actions"><span class="order-statut ${item.statut}">${statLabel(item.statut)}</span></div></div>`;
+    if (item._type==='msg')  return `<div class="order-row"><div><div class="order-client">✉ ${item.nom}</div><div class="order-detail">${(item.message||'').substring(0,80)}…</div><div class="order-meta">${item.date}</div></div></div>`;
+    return '';
+  }).join('');
+}
+function statLabel(s) { const m={en_attente:'En attente',confirmee:'Confirmée',traite:'Traité',annule:'Annulé'}; return m[s]||s; }
+
+/* ─── PHOTO ─── */
+let pendingPhoto = null;
+function renderPhotoPanel() {
+  const zone = document.getElementById('photoZone');
+  const photo = localStorage.getItem('mac_photo');
+  zone.querySelector('.photo-icon').style.display = photo?'none':'';
+  zone.querySelector('.photo-zone-label').style.display = photo?'none':'';
+  const ei = zone.querySelector('img'); if(ei) ei.remove();
+  if (photo) {
+    const img = document.createElement('img'); img.src = photo;
+    zone.appendChild(img);
+    document.getElementById('photoCurrentInfo').textContent = '✓ Photo actuelle chargée.';
+  } else {
+    document.getElementById('photoCurrentInfo').textContent = 'Aucune photo — monogramme affiché.';
+  }
+}
+function handlePhotoUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { toast('Image trop lourde (max 3 Mo).', 'error'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingPhoto = ev.target.result;
+    const zone = document.getElementById('photoZone');
+    zone.querySelector('.photo-icon').style.display = 'none';
+    zone.querySelector('.photo-zone-label').style.display = 'none';
+    const ei = zone.querySelector('img'); if(ei) ei.remove();
+    const img = document.createElement('img'); img.src = pendingPhoto;
+    zone.appendChild(img);
+    document.getElementById('photoCurrentInfo').textContent = `📎 ${file.name} — cliquez Sauvegarder`;
+  };
+  reader.readAsDataURL(file);
+}
+function savePhoto() {
+  if (!pendingPhoto) { toast('Choisissez d\'abord une photo.', 'error'); return; }
+  localStorage.setItem('mac_photo', pendingPhoto);
+  pendingPhoto = null;
+  toast('Photo sauvegardée !', 'success'); flashSaved();
+  renderPhotoPanel();
+}
+function removePhoto() {
+  localStorage.removeItem('mac_photo'); pendingPhoto = null;
+  toast('Photo supprimée.', 'success'); renderPhotoPanel();
+}
+
+/* ─── ALBUMS ─── */
+function renderAlbumsAdmin() {
+  const albums = getAlbums();
+  document.getElementById('albumCount').textContent = albums.length;
+  document.getElementById('albumsGrid').innerHTML = albums.map(a => `
+    <div class="album-admin-card ${!a.visible?'hidden-item':''}">
+      <div class="alb-preview ${a.theme}">${a.code}</div>
+      <div class="alb-admin-title">${a.titre}</div>
+      <div class="alb-admin-meta">${a.annee} · ${a.genre} · ${a.prix}</div>
+      <div class="alb-actions">
+        <button class="btn btn-toggle ${a.visible?'on':''} btn-sm" onclick="toggleAlbum(${a.id})">${a.visible?'Visible':'Masqué'}</button>
+        <button class="btn btn-primary btn-sm" onclick="editAlbum(${a.id})" style="flex:1">Modifier</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteAlbum(${a.id})">✕</button>
+      </div>
+    </div>
+  `).join('') || '<div class="empty-state"><div class="empty-state-icon">○</div><div class="empty-state-text">Aucun album.</div></div>';
+}
+function toggleAlbum(id) {
+  const a=getAlbums(); const item=a.find(x=>x.id===id); if(!item)return;
+  item.visible=!item.visible; saveItems('mac_albums',a); renderAlbumsAdmin();
+  toast(`"${item.titre}" ${item.visible?'visible':'masqué'}.`,'success');
+}
+function deleteAlbum(id) {
+  if(!confirm('Supprimer cet album ?'))return;
+  saveItems('mac_albums',getAlbums().filter(a=>a.id!==id)); renderAlbumsAdmin(); toast('Album supprimé.','success');
+}
+function editAlbum(id) {
+  const a=getAlbums().find(x=>x.id===id); if(!a)return;
+  document.getElementById('albumModalTitle').textContent='Modifier l\'album';
+  document.getElementById('albumId').value=a.id;
+  document.getElementById('albumTitre').value=a.titre;
+  document.getElementById('albumAnnee').value=a.annee;
+  document.getElementById('albumGenre').value=a.genre;
+  document.getElementById('albumPrix').value=a.prix;
+  document.getElementById('albumCode').value=a.code;
+  document.getElementById('albumTheme').value=a.theme;
+  document.getElementById('albumBadge').value=a.badge;
+  openModal('albumModal');
+}
+function openAlbumModal() {
+  document.getElementById('albumModalTitle').textContent='Nouvel Album';
+  ['albumId','albumTitre','albumGenre','albumPrix','albumCode'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('albumAnnee').value=new Date().getFullYear();
+  document.getElementById('albumTheme').value='a1';
+  document.getElementById('albumBadge').value='';
+  openModal('albumModal');
+}
+function saveAlbum() {
+  const titre=document.getElementById('albumTitre').value.trim();
+  if(!titre){toast('Titre obligatoire.','error');return;}
+  const albums=getAlbums(); const idVal=document.getElementById('albumId').value;
+  const badgeV=document.getElementById('albumBadge').value;
+  const badgeLabels={new:'Nouveau',gospel:'Gospel'};
+  const payload={id:idVal?parseInt(idVal):Date.now(),titre,annee:document.getElementById('albumAnnee').value.trim(),genre:document.getElementById('albumGenre').value.trim(),prix:document.getElementById('albumPrix').value.trim(),code:document.getElementById('albumCode').value.trim().toUpperCase()||titre.slice(0,3).toUpperCase(),theme:document.getElementById('albumTheme').value,badge:badgeV,badgeLabel:badgeLabels[badgeV]||'',visible:true};
+  if(idVal){const idx=albums.findIndex(a=>a.id===parseInt(idVal));if(idx>-1){payload.visible=albums[idx].visible;albums[idx]=payload;}}else albums.push(payload);
+  saveItems('mac_albums',albums); closeModal('albumModal'); renderAlbumsAdmin();
+  toast(`"${titre}" sauvegardé.`,'success');
+}
+
+/* ─── ÉVÉNEMENTS ─── */
+function renderEventsAdmin() {
+  const events=getEvents();
+  document.getElementById('eventCount').textContent=events.length;
+  const cont=document.getElementById('eventsAdmin');
+  cont.innerHTML=events.map(ev=>`
+    <div class="event-admin-row ${!ev.visible?'hidden-item':''}">
+      <div class="ev-date-badge"><div class="ev-day">${ev.jour}</div><div class="ev-mon">${ev.mois} ${ev.annee}</div></div>
+      <div><div class="ev-titre">${ev.titre}</div><div class="ev-lieu">${ev.lieu}</div><span class="status-badge ${ev.statut}" style="margin-top:0.4rem;display:inline-block;">${ev.statut==='complet'?'Complet':'Disponible'}</span></div>
+      <div class="ev-actions">
+        <button class="btn btn-status btn-sm" onclick="toggleEventStatut(${ev.id})">${ev.statut==='complet'?'→ Dispo':'→ Complet'}</button>
+        <button class="btn btn-toggle ${ev.visible?'on':''} btn-sm" onclick="toggleEvent(${ev.id})">${ev.visible?'Visible':'Masqué'}</button>
+        <button class="btn btn-primary btn-sm" onclick="editEvent(${ev.id})">Modifier</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteEvent(${ev.id})">✕</button>
+      </div>
+    </div>
+  `).join('')||'<div class="empty-state"><div class="empty-state-icon">○</div><div class="empty-state-text">Aucun événement.</div></div>';
+}
+function toggleEvent(id){const e=getEvents();const ev=e.find(x=>x.id===id);if(!ev)return;ev.visible=!ev.visible;saveItems('mac_events',e);renderEventsAdmin();toast(`Événement ${ev.visible?'visible':'masqué'}.`,'success');}
+function toggleEventStatut(id){const e=getEvents();const ev=e.find(x=>x.id===id);if(!ev)return;ev.statut=ev.statut==='complet'?'dispo':'complet';saveItems('mac_events',e);renderEventsAdmin();toast(`Statut → ${ev.statut}.`,'success');}
+function deleteEvent(id){if(!confirm('Supprimer ?'))return;saveItems('mac_events',getEvents().filter(e=>e.id!==id));renderEventsAdmin();toast('Événement supprimé.','success');}
+function editEvent(id){
+  const ev=getEvents().find(x=>x.id===id);if(!ev)return;
+  document.getElementById('eventModalTitle').textContent='Modifier l\'événement';
+  document.getElementById('eventId').value=ev.id;
+  document.getElementById('eventTitre').value=ev.titre;
+  document.getElementById('eventLieu').value=ev.lieu;
+  document.getElementById('eventJour').value=ev.jour;
+  document.getElementById('eventMois').value=ev.mois;
+  document.getElementById('eventAnnee').value=ev.annee;
+  document.getElementById('eventPrix').value=ev.prix;
+  document.getElementById('eventType').value=ev.type;
+  document.getElementById('eventStatut').value=ev.statut;
+  openModal('eventModal');
+}
+function openEventModal(){
+  document.getElementById('eventModalTitle').textContent='Nouvel Événement';
+  ['eventId','eventTitre','eventLieu','eventJour','eventMois','eventPrix'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('eventAnnee').value=new Date().getFullYear();
+  document.getElementById('eventType').value='concert';
+  document.getElementById('eventStatut').value='dispo';
+  openModal('eventModal');
+}
+function saveEvent(){
+  const titre=document.getElementById('eventTitre').value.trim();
+  if(!titre){toast('Titre obligatoire.','error');return;}
+  const events=getEvents();const idVal=document.getElementById('eventId').value;
+  const typeV=document.getElementById('eventType').value;
+  const payload={id:idVal?parseInt(idVal):Date.now(),titre,lieu:document.getElementById('eventLieu').value.trim(),jour:document.getElementById('eventJour').value.trim(),mois:document.getElementById('eventMois').value.trim(),annee:document.getElementById('eventAnnee').value.trim(),prix:document.getElementById('eventPrix').value.trim(),type:typeV,typeLabel:TYPE_LABELS[typeV]||typeV,statut:document.getElementById('eventStatut').value,visible:true};
+  if(idVal){const idx=events.findIndex(e=>e.id===parseInt(idVal));if(idx>-1){payload.visible=events[idx].visible;events[idx]=payload;}}else events.push(payload);
+  saveItems('mac_events',events);closeModal('eventModal');renderEventsAdmin();
+  toast(`"${titre}" sauvegardé.`,'success');
+}
+
+/* ─── COMMANDES ─── */
+let cmdFilter='all';
+function renderCommandes(filter) {
+  if(filter) cmdFilter=filter;
+  const cmds=getCommandes();
+  document.getElementById('cmdCount').textContent=cmds.length;
+  const list=cmdFilter==='all'?cmds:cmds.filter(c=>c.statut===cmdFilter);
+  document.getElementById('commandesList').innerHTML=list.length?list.map((c,i)=>`
+    <div class="order-row">
+      <div>
+        <div class="order-ref">${c.id}</div>
+        <div class="order-client">${c.prenom} ${c.nom}</div>
+        <div class="order-detail">${c.album} × ${c.quantite} — ${c.prix}</div>
+        <div class="order-meta">📧 ${c.email}  📞 ${c.tel||'—'}  📍 ${c.ville||'—'}  🕐 ${c.date}</div>
+      </div>
+      <div class="order-actions">
+        <span class="order-statut ${c.statut}">${statLabel(c.statut)}</span>
+        <select class="btn btn-sm" onchange="updateCmdStatut(${i},this.value)" style="font-size:0.65rem;padding:0.3rem 0.5rem;">
+          <option value="en_attente" ${c.statut==='en_attente'?'selected':''}>En attente</option>
+          <option value="traite" ${c.statut==='traite'?'selected':''}>Traité</option>
+          <option value="annule" ${c.statut==='annule'?'selected':''}>Annulé</option>
+        </select>
+      </div>
+    </div>
+  `).join(''):'<div class="empty-state"><div class="empty-state-icon">○</div><div class="empty-state-text">Aucune commande.</div></div>';
+}
+function filterOrders(f,type){
+  if(type==='cmd'){cmdFilter=f;renderCommandes();}else{resFilter=f;renderReservations();}
+  document.querySelectorAll(`#panel-${type==='cmd'?'commandes':'reservations'} .filter-btn`).forEach(b=>{b.classList.toggle('active',b.getAttribute('onclick').includes(`'${f}'`));});
+}
+function updateCmdStatut(idx,val){
+  const cmds=getCommandes();
+  const sorted=cmdFilter==='all'?cmds:cmds.filter(c=>c.statut===cmdFilter);
+  const item=sorted[idx];
+  const realIdx=cmds.findIndex(c=>c.id===item.id);
+  if(realIdx>-1){cmds[realIdx].statut=val;saveItems('mac_commandes',cmds);renderCommandes();updateBadges();toast('Statut mis à jour.','success');}
+}
+function clearCommandes(){if(!confirm('Effacer toutes les commandes ?'))return;Store.set('mac_commandes',[]);renderCommandes();renderDashboard();toast('Commandes effacées.','success');}
+
+/* ─── RÉSERVATIONS ─── */
+let resFilter='all';
+function renderReservations(filter){
+  if(filter)resFilter=filter;
+  const res=getRes();
+  document.getElementById('resCount').textContent=res.length;
+  const list=resFilter==='all'?res:res.filter(r=>r.statut===resFilter);
+  document.getElementById('reservationsList').innerHTML=list.length?list.map((r,i)=>`
+    <div class="order-row">
+      <div>
+        <div class="order-ref">${r.id}</div>
+        <div class="order-client">${r.prenom} ${r.nom}</div>
+        <div class="order-detail">${r.evenement} — ${r.date_event}</div>
+        <div class="order-meta">📧 ${r.email}  📞 ${r.tel}  🎫 ${r.quantite} billet(s) · ${r.prix}  🕐 ${r.date}</div>
+      </div>
+      <div class="order-actions">
+        <span class="order-statut ${r.statut}">${statLabel(r.statut)}</span>
+        <select class="btn btn-sm" onchange="updateResStatut(${i},this.value)" style="font-size:0.65rem;padding:0.3rem 0.5rem;">
+          <option value="confirmee" ${r.statut==='confirmee'?'selected':''}>Confirmée</option>
+          <option value="traite" ${r.statut==='traite'?'selected':''}>Traité</option>
+          <option value="annule" ${r.statut==='annule'?'selected':''}>Annulé</option>
+        </select>
+      </div>
+    </div>
+  `).join(''):'<div class="empty-state"><div class="empty-state-icon">○</div><div class="empty-state-text">Aucune réservation.</div></div>';
+}
+function updateResStatut(idx,val){
+  const res=getRes();
+  const sorted=resFilter==='all'?res:res.filter(r=>r.statut===resFilter);
+  const item=sorted[idx];
+  const realIdx=res.findIndex(r=>r.id===item.id);
+  if(realIdx>-1){res[realIdx].statut=val;saveItems('mac_reservations',res);renderReservations();updateBadges();toast('Statut mis à jour.','success');}
+}
+function clearReservations(){if(!confirm('Effacer toutes les réservations ?'))return;Store.set('mac_reservations',[]);renderReservations();renderDashboard();toast('Réservations effacées.','success');}
+
+/* ─── MESSAGES ─── */
+function renderMessages(){
+  const msgs=getMessages();
+  document.getElementById('msgCount').textContent=msgs.length;
+  document.getElementById('messagesList').innerHTML=msgs.length?[...msgs].reverse().map(m=>`
+    <div class="msg-row">
+      <div class="msg-header"><span class="msg-from">${m.nom}</span><span class="msg-date">${m.date}</span></div>
+      <div class="msg-email">${m.email}</div>
+      <div class="msg-text">${m.message}</div>
+    </div>
+  `).join(''):'<div class="empty-state"><div class="empty-state-icon">○</div><div class="empty-state-text">Aucun message.</div></div>';
+}
+function clearMessages(){if(!confirm('Effacer tous les messages ?'))return;Store.set('mac_messages',[]);renderMessages();toast('Messages effacés.','success');}
+
+/* ─── NEWSLETTER ─── */
+function renderNewsletter(){
+  const list=getNL();
+  document.getElementById('nlCount').textContent=list.length;
+  document.getElementById('nlList').innerHTML=list.length?list.map((email,i)=>`
+    <div class="nl-item"><span class="nl-email">${email}</span><button class="btn btn-danger btn-sm" onclick="removeNL(${i})">✕</button></div>
+  `).join(''):'<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">○</div><div class="empty-state-text">Aucun abonné.</div></div>';
+}
+function removeNL(i){const l=getNL();l.splice(i,1);Store.set('mac_newsletter',l);renderNewsletter();toast('Email retiré.','success');}
+function clearNewsletter(){if(!confirm('Effacer toute la liste ?'))return;Store.set('mac_newsletter',[]);renderNewsletter();toast('Liste effacée.','success');}
+
+/* ─── CONFIG EMAILJS ─── */
+function loadEmailConfig(){
+  const cfg=Store.get('mac_emailjs_cfg',null);
+  if(!cfg)return;
+  document.getElementById('ejPublicKey').value=cfg.publicKey||'';
+  document.getElementById('ejServiceId').value=cfg.serviceId||'';
+  document.getElementById('ejTemplateId').value=cfg.templateId||'';
+  const ok=cfg.publicKey&&cfg.serviceId&&cfg.templateId;
+  document.getElementById('emailDot').className='config-dot'+(ok?' ok':'');
+  document.getElementById('emailStatusText').textContent=ok?'Configuration active — notifications email activées.':'Non configuré — les notifications email sont désactivées.';
+}
+function saveEmailConfig(){
+  const cfg={publicKey:document.getElementById('ejPublicKey').value.trim(),serviceId:document.getElementById('ejServiceId').value.trim(),templateId:document.getElementById('ejTemplateId').value.trim()};
+  Store.set('mac_emailjs_cfg',cfg);flashSaved();loadEmailConfig();
+  toast('Configuration EmailJS sauvegardée.','success');
+}
+
+/* ─── EXPORT ─── */
+function toCSV(arr,cols){const head=cols.join(';');const rows=arr.map(r=>cols.map(c=>`"${(r[c]||'').toString().replace(/"/g,'""')}"`).join(';'));return [head,...rows].join('\n');}
+function downloadCSV(content,filename){const blob=new Blob(['\uFEFF'+content],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();}
+function exportCommandes(){const cmds=getCommandes();if(!cmds.length){toast('Aucune commande.','error');return;}downloadCSV(toCSV(cmds,['id','date','nom','prenom','email','tel','ville','album','quantite','prix','statut']),'commandes_mac.csv');toast('Export CSV téléchargé.','success');}
+function exportReservations(){const res=getRes();if(!res.length){toast('Aucune réservation.','error');return;}downloadCSV(toCSV(res,['id','date','nom','prenom','email','tel','evenement','date_event','lieu','quantite','prix','statut']),'reservations_mac.csv');toast('Export CSV téléchargé.','success');}
+function exportNewsletter(){const nl=getNL();if(!nl.length){toast('Aucun abonné.','error');return;}downloadCSV(nl.join('\n'),'newsletter_mac.csv');toast('Export CSV téléchargé.','success');}
+function exportData(){
+  const data={albums:getAlbums(),events:getEvents(),commandes:getCommandes(),reservations:getRes(),messages:getMessages(),newsletter:getNL(),exported:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mac_backup_'+Date.now()+'.json';a.click();
+  toast('Export JSON complet téléchargé.','success');
+}
+
+/* ─── RESET ─── */
+function resetAll(){
+  if(!confirm('Réinitialiser TOUTES les données ? Cette action est irréversible.'))return;
+  ['mac_albums','mac_events','mac_photo','mac_commandes','mac_reservations','mac_messages','mac_newsletter'].forEach(k=>localStorage.removeItem(k));
+  toast('Données réinitialisées.','success');
+  refreshAll();
+}
+
+/* ─── MODALS ─── */
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-backdrop').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-backdrop.open').forEach(m=>m.classList.remove('open'));});
+
+/* ─── TOAST ─── */
+let _toastT;
+function toast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.className=`toast ${type}`;
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(_toastT);
+  _toastT=setTimeout(()=>t.classList.remove('show'),3200);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="M.A.C Jamais Assez — Artiste Rap, Mbalax et Gospel sénégalais. Achetez ses albums et réservez vos billets de concert.">
+  <title>M.A.C Jamais Assez – Artiste Sénégalais</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Space+Grotesk:wght@300;400;500;600&family=Oswald:wght@200;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══════ NAV ═══════ -->
+<nav id="nav">
+  <div class="nav-logo">
+    <span class="nav-logo-mac">M.A.C</span>
+    <span class="nav-logo-sub">Jamais Assez</span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#bio" onclick="closeMenu()">Biographie</a></li>
+    <li><a href="#disco" onclick="closeMenu()">Discographie</a></li>
+    <li><a href="#events" onclick="closeMenu()">Événements</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#events" class="nav-cta">Réserver des Billets</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Menu mobile -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#bio"     onclick="closeMenu()">Biographie</a></li>
+    <li><a href="#disco"   onclick="closeMenu()">Discographie</a></li>
+    <li><a href="#events"  onclick="closeMenu()">Événements</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+  </ul>
+  <a href="#events" class="mobile-cta" onclick="closeMenu()">Réserver des Billets</a>
+</div>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero" id="accueil">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-genre-tags">
+        <span class="genre-tag rap">Rap / Hip-Hop</span>
+        <span class="genre-tag mbalax">Mbalax</span>
+        <span class="genre-tag gospel">Gospel</span>
+      </div>
+      <h1 class="hero-name">
+        <span class="mac">M.A.C</span>
+        <span class="jamais">JAMAIS</span>
+        <span class="assez">ASSEZ</span>
+      </h1>
+      <p class="hero-tagline">
+        La musique comme <em>acte de foi</em> —<br>
+        entre les rues de Dakar et la grâce divine.
+      </p>
+      <div class="hero-btns">
+        <a href="#disco" class="btn-gold">Écouter la Musique</a>
+        <a href="#bio"   class="btn-ghost">Découvrir l'Artiste</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-quote">
+        <p class="hero-quote-text">
+          « On n'en a jamais <strong>assez</strong> de la vérité,<br>
+          jamais assez de la foi,<br>
+          jamais assez de la musique. »
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div class="h-stat"><div class="h-stat-n">10+</div><div class="h-stat-l">Ans de carrière</div></div>
+        <div class="h-stat"><div class="h-stat-n">6</div><div class="h-stat-l">Albums</div></div>
+        <div class="h-stat"><div class="h-stat-n">3</div><div class="h-stat-l">Styles musicaux</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-dot"></div>Défiler</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ BIOGRAPHIE ═══════ -->
+<section class="bio" id="bio">
+  <div class="bio-inner">
+    <div class="bio-visual">
+      <div class="bio-frame">
+        <div class="bio-photo">
+          <div class="bio-photo-monogram">MAC</div>
+          <div class="bio-corner tl"></div>
+          <div class="bio-corner br"></div>
+        </div>
+      </div>
+      <div class="bio-caption">
+        <div class="bio-caption-name">M.A.C Jamais Assez</div>
+        <div class="bio-caption-loc">Dakar, Sénégal · Artiste Engagé</div>
+      </div>
+    </div>
+    <div class="bio-content">
+      <div class="s-label">Biographie</div>
+      <h2>Une voix entre les rues<br>et <em>la foi</em></h2>
+      <p class="bio-p" style="margin-top:1.5rem;">
+        M.A.C Jamais Assez est né et a grandi dans les quartiers populaires de Dakar,
+        là où la vie forge les caractères et les voix. Son nom est une philosophie :
+        <strong>on n'en a jamais assez</strong> — de foi, de vérité, de musique, de dignité.
+      </p>
+      <p class="bio-p">
+        Dès l'adolescence, il trouve dans le rap un outil d'expression pour raconter la réalité
+        de sa génération. Mais c'est en fusionnant les percussions enracinées du <strong>Mbalax</strong>
+        sénégalais à ses textes et en portant un message profondément <strong>Gospel</strong> qu'il forge
+        son identité unique : une trinité musicale rare qui transcende les frontières des genres.
+      </p>
+      <div class="bio-highlight">
+        <p class="bio-highlight-text">
+          « Le rap, c'est ma rue. Le Mbalax, c'est mes ancêtres.
+          Le Gospel, c'est <em>mon âme</em>. Je ne choisis pas entre les trois — je suis les trois. »
+        </p>
+      </div>
+      <p class="bio-p">
+        Ses albums parcourent un chemin spirituel autant qu'artistique, touchant des milliers
+        d'auditeurs au Sénégal et dans la diaspora africaine. Sur scène, ses performances sont
+        des expériences totales — énergie du hip-hop, groove du sabar, élévation du gospel.
+      </p>
+      <div class="bio-genres">
+        <span class="bio-genre g-rap">Rap Sénégalais</span>
+        <span class="bio-genre g-mbalax">Mbalax</span>
+        <span class="bio-genre g-gospel">Gospel</span>
+        <span class="bio-genre g-live">Live Performance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ DISCOGRAPHIE (rendu par JS) ═══════ -->
+<section class="disco" id="disco">
+  <div class="disco-top">
+    <div>
+      <div class="s-label">Discographie</div>
+      <h2 style="color:white;">Albums &amp; <em>Singles</em></h2>
+    </div>
+    <a href="#" class="btn-ghost">Tout voir</a>
+  </div>
+  <div class="disco-grid"><!-- injecté par script.js --></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ ÉVÉNEMENTS (rendu par JS) ═══════ -->
+<section class="events" id="events">
+  <div class="events-top">
+    <div class="s-label">Agenda 2025</div>
+    <h2 style="color:white;">Prochains <em>Événements</em></h2>
+  </div>
+  <div class="event-list"><!-- injecté par script.js --></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ CONTACT ═══════ -->
+<section class="contact" id="contact">
+  <div class="contact-left">
+    <div class="s-label">Newsletter &amp; Réseaux</div>
+    <h2>Restez <em>connectés</em></h2>
+    <p class="contact-sub">
+      Soyez les premiers informés des nouvelles sorties, des concerts
+      et des messages exclusifs de M.A.C Jamais Assez.
+    </p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="Votre adresse email..." autocomplete="email">
+      <button class="nl-btn" type="button">S'abonner</button>
+    </div>
+    <div class="socials">
+      <a href="#" class="social-btn" rel="noopener">Facebook</a>
+      <a href="#" class="social-btn" rel="noopener">Instagram</a>
+      <a href="#" class="social-btn" rel="noopener">YouTube</a>
+      <a href="#" class="social-btn" rel="noopener">Spotify</a>
+      <a href="#" class="social-btn" rel="noopener">TikTok</a>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo-wrap">
+      <span class="footer-mac">M.A.C JAMAIS ASSEZ</span>
+      <span class="footer-mac-sub">Artiste Sénégalais · Dakar</span>
+    </div>
+    <div class="footer-copy">© 2025 M.A.C Jamais Assez · Tous droits réservés</div>
+  </div>
+  <div class="footer-bottom">
+    <a href="admin.html" class="footer-admin">Admin</a>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     MODAL ACHAT ALBUM
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalAchat" role="dialog" aria-modal="true" aria-labelledby="buyModalTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <div class="modal-pretitle">Commande album</div>
+        <div class="modal-title" id="buyModalTitle">
+          <span id="buyAlbumTitle">Album</span>
+        </div>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('modalAchat')" aria-label="Fermer">✕</button>
+    </div>
+    <div class="modal-summary">
+      <div class="modal-sum-item">
+        <div class="modal-sum-label">Album</div>
+        <div class="modal-sum-value" id="buyAlbumYear"></div>
+      </div>
+      <div class="modal-sum-item">
+        <div class="modal-sum-label">Prix unitaire</div>
+        <div class="modal-sum-value price" id="buyAlbumPrice"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div id="buyForm">
+        <p class="modal-required-note">Les champs marqués <span>*</span> sont obligatoires.</p>
+        <div class="modal-section-title">Vos informations</div>
+        <div class="form-row">
+          <div class="form-group-m">
+            <label for="buyNom">Nom <span style="color:var(--or)">*</span></label>
+            <input type="text" id="buyNom" placeholder="Diallo" autocomplete="family-name">
+          </div>
+          <div class="form-group-m">
+            <label for="buyPrenom">Prénom <span style="color:var(--or)">*</span></label>
+            <input type="text" id="buyPrenom" placeholder="Moussa" autocomplete="given-name">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group-m">
+            <label for="buyEmail">Email <span style="color:var(--or)">*</span></label>
+            <input type="email" id="buyEmail" placeholder="moussa@email.com" autocomplete="email">
+          </div>
+          <div class="form-group-m">
+            <label for="buyTel">Téléphone</label>
+            <input type="tel" id="buyTel" placeholder="+221 77 000 00 00" autocomplete="tel">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group-m">
+            <label for="buyVille">Ville</label>
+            <input type="text" id="buyVille" placeholder="Dakar">
+          </div>
+          <div class="form-group-m">
+            <label for="buyQty">Quantité <span style="color:var(--or)">*</span></label>
+            <select id="buyQty">
+              <option value="1">1 exemplaire</option>
+              <option value="2">2 exemplaires</option>
+              <option value="3">3 exemplaires</option>
+              <option value="5">5 exemplaires</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="modal-terms">En confirmant votre commande, vous acceptez d'être contacté pour organiser la livraison ou le retrait de votre album. Vos données sont utilisées uniquement dans ce cadre.</p>
+      <button class="btn-modal-submit" id="btnSubmitAchat" onclick="submitAchat()">Confirmer la commande</button>
+      <button class="btn-modal-cancel" onclick="closeModal('modalAchat')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL RÉSERVATION BILLET
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalTicket" role="dialog" aria-modal="true" aria-labelledby="ticketModalTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <div class="modal-pretitle">Réservation de billet</div>
+        <div class="modal-title" id="ticketModalTitle">
+          <span id="ticketEventTitle">Événement</span>
+        </div>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal('modalTicket')" aria-label="Fermer">✕</button>
+    </div>
+    <div class="modal-summary">
+      <div class="modal-sum-item">
+        <div class="modal-sum-label">Date</div>
+        <div class="modal-sum-value" id="ticketEventDate"></div>
+      </div>
+      <div class="modal-sum-item">
+        <div class="modal-sum-label">Lieu</div>
+        <div class="modal-sum-value" id="ticketEventLieu"></div>
+      </div>
+      <div class="modal-sum-item">
+        <div class="modal-sum-label">Prix / billet</div>
+        <div class="modal-sum-value price" id="ticketEventPrix"></div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div id="ticketForm">
+        <p class="modal-required-note">Les champs marqués <span>*</span> sont obligatoires.</p>
+        <div class="modal-section-title">Vos informations</div>
+        <div class="form-row">
+          <div class="form-group-m">
+            <label for="ticketNom">Nom <span style="color:var(--or)">*</span></label>
+            <input type="text" id="ticketNom" placeholder="Diallo" autocomplete="family-name">
+          </div>
+          <div class="form-group-m">
+            <label for="ticketPrenom">Prénom <span style="color:var(--or)">*</span></label>
+            <input type="text" id="ticketPrenom" placeholder="Moussa" autocomplete="given-name">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group-m">
+            <label for="ticketEmail">Email <span style="color:var(--or)">*</span></label>
+            <input type="email" id="ticketEmail" placeholder="moussa@email.com" autocomplete="email">
+          </div>
+          <div class="form-group-m">
+            <label for="ticketTel">Téléphone <span style="color:var(--or)">*</span></label>
+            <input type="tel" id="ticketTel" placeholder="+221 77 000 00 00" autocomplete="tel">
+          </div>
+        </div>
+        <div class="form-row single">
+          <div class="form-group-m">
+            <label for="ticketQty">Nombre de billets <span style="color:var(--or)">*</span></label>
+            <select id="ticketQty">
+              <option value="1">1 billet</option>
+              <option value="2">2 billets</option>
+              <option value="3">3 billets</option>
+              <option value="4">4 billets</option>
+              <option value="5">5 billets</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="modal-terms">La réservation sera confirmée après contact pour le règlement. Votre numéro de téléphone est requis pour vous joindre. Données traitées confidentiellement.</p>
+      <button class="btn-modal-submit" id="btnSubmitTicket" onclick="submitTicket()">Confirmer la réservation</button>
+      <button class="btn-modal-cancel" onclick="closeModal('modalTicket')">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     OVERLAY CONFIRMATION SUCCÈS
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="successOverlay" role="dialog" aria-modal="true">
+  <div class="success-box">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Confirmé !</div>
+    <div class="success-subtitle">
+      Votre demande a bien été enregistrée.<br>
+      Vous serez contacté très prochainement.
+    </div>
+    <div class="success-details">
+      <div class="success-row">
+        <span class="success-row-label">Type</span>
+        <span class="success-row-val" id="successType"></span>
+      </div>
+      <div class="success-row">
+        <span class="success-row-label">Référence</span>
+        <span class="success-row-val success-ref" id="successRef"></span>
+      </div>
+      <div class="success-row">
+        <span class="success-row-label">Nom</span>
+        <span class="success-row-val" id="successNom"></span>
+      </div>
+      <div class="success-row">
+        <span class="success-row-label">Email</span>
+        <span class="success-row-val" id="successEmail"></span>
+      </div>
+      <div class="success-row">
+        <span class="success-row-label">Détail</span>
+        <span class="success-row-val" id="successDetail"></span>
+      </div>
+    </div>
+    <button class="btn-success-close" onclick="closeModal('successOverlay')">Fermer</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
