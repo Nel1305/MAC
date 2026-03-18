@@ -275,6 +275,9 @@ footer { padding:2.5rem 5rem; border-top:1px solid rgba(248,244,238,0.06); displ
 .footer-nav     { display:flex; gap:2rem; }
 .footer-nav a   { font-size:0.68rem; color:rgba(168,168,168,0.5); text-decoration:none; letter-spacing:0.1em; }
 .footer-nav a:hover { color:var(--or); }
+.footer-admin-wrap { display:flex; align-items:center; }
+.admin-btn { font-size:0.9rem; color:rgba(168,168,168,0.3); text-decoration:none; transition:all 0.3s ease; display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:50%; border:1px solid rgba(168,168,168,0.1); }
+.admin-btn:hover { color:var(--or); border-color:rgba(201,168,76,0.3); background:rgba(201,168,76,0.05); }
 
 /* ═══════════════════════════════════════════
    MODALS — ACHAT & RÉSERVATION
@@ -443,6 +446,8 @@ textarea:focus-visible {
   section { padding: 5rem 1.5rem; }
   footer  { padding: 2rem 1.5rem; flex-direction: column; gap: 1rem; text-align: center; }
   .footer-nav { justify-content: center; }
+  .footer-center { order: 2; }
+  .footer-admin-wrap { justify-content: center; order: 3; }
   .divider { margin: 0 1.5rem; }
 
   /* Hero */
@@ -603,4 +608,6 @@ textarea:focus-visible {
 
   /* Footer simplifié */
   .footer-copy { display: none; }
+  .footer-center { display: none; }
+  .admin-btn { width:28px; height:28px; font-size:0.8rem; }
 }

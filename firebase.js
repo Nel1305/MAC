@@ -18,13 +18,15 @@
    ⚙️  REMPLACEZ CES VALEURS PAR LES VÔTRES
    (copiées depuis la console Firebase)
 ───────────────────────────────────────── */
-const FIREBASE_CONFIG = {
-  apiKey:            "VOTRE_API_KEY",
-  authDomain:        "VOTRE_PROJECT.firebaseapp.com",
-  projectId:         "VOTRE_PROJECT_ID",
-  storageBucket:     "VOTRE_PROJECT.appspot.com",
-  messagingSenderId: "VOTRE_SENDER_ID",
-  appId:             "VOTRE_APP_ID"
+ const firebaseConfig = {
+
+    apiKey: "AIzaSyAiY89Ec1CoMqDFNtRk157qDszWl1geUUM",
+    authDomain: "m-a-c-5980d.firebaseapp.com",
+    projectId: "m-a-c-5980d",
+    storageBucket: "m-a-c-5980d.firebasestorage.app",
+    messagingSenderId: "468456297219",
+    appId: "1:468456297219:web:45d1d565d05fc50bfd8f36",
+    measurementId: "G-FTW9V1LCZZ"
 };
 
 /* ─────────────────────────────────────────

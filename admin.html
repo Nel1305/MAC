@@ -425,37 +425,46 @@ body{background:var(--bg);color:var(--blanc);font-family:'Space Grotesk',sans-se
     </div>
   </div>
 
-  <!-- CONFIG -->
   <div class="panel" id="panel-config">
-    <div class="panel-title">Firebase &amp; Email</div>
-    <div class="panel-sub">Configuration de la base de données et des notifications.</div>
+    <div class="panel-title">Configuration</div>
+    <div class="panel-sub">Statut de la base de données et des notifications email.</div>
 
     <div class="cfg-box">
-      <div class="cfg-title">Statut Firebase</div>
-      <div class="cfg-status"><div class="cfg-dot" id="cfgDot"></div><span id="cfgStatus">—</span></div>
+      <div class="cfg-title">Statut Netlify Blobs</div>
+      <div class="cfg-status"><div class="cfg-dot ok" id="cfgDot"></div><span id="cfgStatus">Netlify Blobs actif — données persistantes sur votre site Netlify.</span></div>
     </div>
 
     <div class="card">
-      <div class="card-header"><div class="card-title">Guide Firebase (étape par étape)</div></div>
+      <div class="card-header"><div class="card-title">Comment fonctionne le stockage</div></div>
       <div class="steps">
-        <p>1. Allez sur <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> → <strong>Créer un projet</strong></p>
-        <p>2. Dans votre projet → cliquez l'icône <code>&lt;/&gt;</code> (Web) → nommez l'app → <strong>Enregistrer</strong></p>
-        <p>3. Copiez l'objet <code>firebaseConfig</code> affiché et collez-le dans <code>firebase.js</code></p>
-        <p>4. Menu gauche → <strong>Build → Firestore Database</strong> → Créer → <strong>Mode test</strong></p>
-        <p>5. Choisissez la région <strong>eur3</strong> (Europe) → Terminé</p>
-        <p>6. Rechargez cette page : le point vert s'allume ✓</p>
+        <p>Toutes les données (commandes, réservations, messages, newsletter, albums, événements) sont stockées dans <strong>Netlify Blobs</strong>, directement sur votre hébergement Netlify.</p>
+        <p>Aucune configuration externe n'est nécessaire — Netlify gère tout automatiquement.</p>
+        <p>Pour inspecter ou supprimer des données via la CLI :</p>
+        <p><code>netlify blobs:list commandes</code></p>
+        <p><code>netlify blobs:delete commandes &lt;id&gt;</code></p>
+        <p>Pour consulter visuellement : <a href="https://app.netlify.com" target="_blank">app.netlify.com</a> → votre site → <strong>Blobs</strong></p>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-header"><div class="card-title">Guide EmailJS</div></div>
+      <div class="card-header"><div class="card-title">Configuration EmailJS</div></div>
       <div class="steps">
         <p>1. Créez un compte gratuit sur <a href="https://www.emailjs.com" target="_blank">emailjs.com</a></p>
         <p>2. <strong>Email Services</strong> → Add Service → Gmail → Connect Account</p>
-        <p>3. <strong>Email Templates</strong> → Create → utilisez ces variables dans le corps :<br>
-           <code>{{type}}</code> <code>{{reference}}</code> <code>{{client}}</code> <code>{{email}}</code> <code>{{tel}}</code> <code>{{detail}}</code> <code>{{prix}}</code> <code>{{date}}</code></p>
+        <p>3. <strong>Email Templates</strong> → Create → utilisez ces variables :<br>
+           <code>{{name}}</code> <code>{{time}}</code> <code>{{message}}</code></p>
         <p>4. <strong>Account → API Keys</strong> → copiez la Public Key</p>
         <p>5. Collez les 3 valeurs dans <code>script.js</code> → section <code>EMAILJS_CONFIG</code></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">Variable d'environnement sécurité</div></div>
+      <div class="steps">
+        <p>Pour protéger l'API admin, définissez <code>ADMIN_SECRET</code> dans Netlify :</p>
+        <p><strong>app.netlify.com</strong> → votre site → <strong>Site configuration → Environment variables</strong> → Add variable</p>
+        <p>Nom : <code>ADMIN_SECRET</code> — Valeur : votre mot de passe admin (<code>mac2025!</code> ou autre)</p>
+        <p>Ce secret est vérifié par les Functions pour autoriser les lectures/écritures sensibles.</p>
       </div>
     </div>
   </div>
@@ -529,14 +538,22 @@ body{background:var(--bg);color:var(--blanc);font-family:'Space Grotesk',sans-se
 
 <div class="toast" id="toast"><div class="td"></div><span id="toastMsg"></span></div>
 
-<script src="firebase.js"></script>
 <script>
 'use strict';
+
+/* ══════════════════════════════════════════════════
+   ADMIN — Utilise Netlify Functions + Netlify Blobs
+   Toutes les données passent par /api/*
+══════════════════════════════════════════════════ */
 
 /* ── AUTH ── */
 const H_USER = 'YWRtaW4=', H_PASS = 'bWFjMjAyNSE='; // admin / mac2025!
 let attempts = +sessionStorage.getItem('mac_att')||0;
 let lockUntil= +sessionStorage.getItem('mac_lock')||0;
+
+// Token admin envoyé dans les headers des appels API sensibles
+// Définissez ADMIN_SECRET dans les variables d'env Netlify, puis entrez-le ici au login
+let _adminToken = '';
 
 function doLogin(){
   const now=Date.now();
@@ -546,6 +563,7 @@ function doLogin(){
   if(btoa(u)===H_USER&&btoa(p)===H_PASS){
     attempts=0;sessionStorage.removeItem('mac_att');
     sessionStorage.setItem('mac_admin','1');
+    _adminToken = p; // utilise le mot de passe comme token (doit correspondre à ADMIN_SECRET)
     document.getElementById('loginScreen').style.display='none';
     boot();
   } else {
@@ -555,58 +573,65 @@ function doLogin(){
   }
 }
 function showErr(m){const e=document.getElementById('lErr');e.textContent=m;e.style.display='block';}
-function doLogout(){sessionStorage.removeItem('mac_admin');location.reload();}
+function doLogout(){sessionStorage.removeItem('mac_admin');_adminToken='';location.reload();}
 ['lUser','lPass'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();}));
 if(sessionStorage.getItem('mac_admin')==='1'){document.getElementById('loginScreen').style.display='none';boot();}
 
+/* ── HELPERS API ── */
+async function apiGet(store){
+  try{
+    const res=await fetch(`/api/get-data?store=${store}`,{headers:{'X-Admin-Token':_adminToken}});
+    if(!res.ok)return[];
+    const d=await res.json();
+    return d.items||[];
+  }catch{return[];}
+}
+async function apiPost(endpoint,data){
+  try{
+    const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Token':_adminToken},body:JSON.stringify(data)});
+    return await res.json();
+  }catch(e){return{error:String(e)};}
+}
+async function apiPatch(endpoint,data){
+  try{
+    const res=await fetch(endpoint,{method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Token':_adminToken},body:JSON.stringify(data)});
+    return await res.json();
+  }catch(e){return{error:String(e)};}
+}
+
 /* ── BOOT ── */
 let _cmds=[], _res=[], _msgs=[], _nl=[], _albums=[], _events=[];
-let _unsubCmds=()=>{}, _unsubRes=()=>{};
 let _cmdFilter='all', _resFilter='all';
 
 async function boot(){
-  // Init Firebase
-  const ok = await initFirebase();
-  updateFbStatus(ok);
-
-  // Charge les données
-  _albums  = await DB.getAlbums();
-  _events  = await DB.getEvents();
-  _msgs    = await DB.getMessages();
-  const nlRaw = await DB.getNewsletter();
-  _nl = nlRaw;
-
-  // Écoute temps réel commandes & réservations
-  _unsubCmds = DB.listenCommandes(data=>{ _cmds=data; renderCmds(); renderDashboard(); updateBadges(); });
-  _unsubRes  = DB.listenReservations(data=>{ _res=data; renderRes(); renderDashboard(); updateBadges(); });
-
-  // Si pas Firebase (pas de listener), charge quand même
-  if(!window._firestore){
-    _cmds = await DB.getCommandes();
-    _res  = await DB.getReservations();
-    renderCmds(); renderRes();
-  }
-
+  updateApiStatus();
+  await Promise.all([loadAlbums(), loadEvents(), loadCmds(), loadRes(), loadMessages(), loadNewsletter()]);
   renderDashboard();
   renderAlbumsGrid();
   renderEventsGrid();
+  renderCmds();
+  renderRes();
   renderMessages();
   renderNewsletter();
   renderPhotoPanel();
   updateBadges();
 }
 
-function updateFbStatus(ok){
+function updateApiStatus(){
   const dot=document.getElementById('fbDot'),lbl=document.getElementById('fbLabel');
+  if(dot){dot.className='fb-dot ok';}
+  if(lbl){lbl.textContent='Netlify Blobs connecté';}
   const dot2=document.getElementById('cfgDot'),s=document.getElementById('cfgStatus');
-  if(ok){
-    dot.className='fb-dot ok';lbl.textContent='Firebase connecté';
-    if(dot2){dot2.className='cfg-dot ok';s.textContent='Firebase actif — données en temps réel.';}
-  } else {
-    dot.className='fb-dot error';lbl.textContent='localStorage (config manquante)';
-    if(dot2){dot2.className='cfg-dot';s.textContent='Firebase non configuré — mode localStorage.';}
-  }
+  if(dot2){dot2.className='cfg-dot ok';}
+  if(s){s.textContent='Netlify Blobs actif — données persistantes.';}
 }
+
+async function loadAlbums(){ const d=await apiGet('albums'); _albums=d.length?d:window._DEFAULT_ALBUMS||[]; }
+async function loadEvents(){ const d=await apiGet('events'); _events=d.length?d:window._DEFAULT_EVENTS||[]; }
+async function loadCmds()  { _cmds=await apiGet('commandes'); }
+async function loadRes()   { _res=await apiGet('reservations'); }
+async function loadMessages(){ _msgs=await apiGet('messages'); }
+async function loadNewsletter(){ _nl=await apiGet('newsletter'); }
 
 /* ── NAV ── */
 function show(name){
@@ -653,10 +678,11 @@ function updateBadges(){
   if(br){br.textContent=pr;br.style.display=pr?'inline':'none';}
 }
 
-/* ── PHOTO ── */
+/* ── PHOTO (localStorage) ── */
 let _pendingPhoto=null;
 function renderPhotoPanel(){
-  const z=document.getElementById('photoZone'),photo=DB.getPhoto();
+  const z=document.getElementById('photoZone');
+  let photo=null;try{photo=localStorage.getItem('mac_photo');}catch{}
   z.querySelector('.photo-icon').style.display=photo?'none':'';
   z.querySelector('.photo-lbl').style.display=photo?'none':'';
   const ei=z.querySelector('img');if(ei)ei.remove();
@@ -668,8 +694,15 @@ function handlePhoto(e){
   if(f.size>3*1024*1024){toast('Image trop lourde (max 3 Mo).','error');return;}
   const r=new FileReader();r.onload=ev=>{_pendingPhoto=ev.target.result;const z=document.getElementById('photoZone');z.querySelector('.photo-icon').style.display='none';z.querySelector('.photo-lbl').style.display='none';const ei=z.querySelector('img');if(ei)ei.remove();const img=document.createElement('img');img.src=_pendingPhoto;z.appendChild(img);document.getElementById('photoInfo').textContent=`📎 ${f.name} — cliquez Sauvegarder`;};r.readAsDataURL(f);
 }
-function savePhoto(){if(!_pendingPhoto){toast('Choisissez d\'abord une photo.','error');return;}DB.savePhoto(_pendingPhoto);_pendingPhoto=null;flashSaved();toast('Photo sauvegardée !','success');renderPhotoPanel();}
-function removePhoto(){DB.removePhoto();_pendingPhoto=null;toast('Photo supprimée.','success');renderPhotoPanel();}
+function savePhoto(){
+  if(!_pendingPhoto){toast('Choisissez d\'abord une photo.','error');return;}
+  try{localStorage.setItem('mac_photo',_pendingPhoto);}catch{toast('Erreur de sauvegarde.','error');return;}
+  _pendingPhoto=null;flashSaved();toast('Photo sauvegardée !','success');renderPhotoPanel();
+}
+function removePhoto(){
+  try{localStorage.removeItem('mac_photo');}catch{}
+  _pendingPhoto=null;toast('Photo supprimée.','success');renderPhotoPanel();
+}
 
 /* ── ALBUMS ── */
 function renderAlbumsGrid(){
@@ -689,15 +722,18 @@ function renderAlbumsGrid(){
   `).join('')||'<div class="empty"><div class="empty-icon">○</div><div class="empty-txt">Aucun album.</div></div>';
 }
 async function toggleAlbum(uid){
-  const a=_albums.find(x=>(x.firestoreId||x.id)==uid||String(x.id)===String(uid));
+  const a=_albums.find(x=>(x.id)==uid||String(x.id)===String(uid));
   if(!a)return;a.visible=!a.visible;
-  await DB.saveAlbum(a);_albums=await DB.getAlbums();renderAlbumsGrid();renderDashboard();flashSaved();
+  await apiPost('/api/save-catalog',{store:'albums',action:'set',item:a});
+  await loadAlbums();renderAlbumsGrid();renderDashboard();flashSaved();
   toast(`"${a.titre}" ${a.visible?'visible':'masqué'}.`,'success');
 }
 async function delAlbum(uid){
   if(!confirm('Supprimer cet album ?'))return;
-  const a=_albums.find(x=>(x.firestoreId||x.id)==uid||String(x.id)===String(uid));
-  if(!a)return;await DB.deleteAlbum(a);_albums=await DB.getAlbums();renderAlbumsGrid();flashSaved();toast('Album supprimé.','success');
+  const a=_albums.find(x=>String(x.id)===String(uid));
+  if(!a)return;
+  await apiPost('/api/save-catalog',{store:'albums',action:'delete',item:a});
+  await loadAlbums();renderAlbumsGrid();flashSaved();toast('Album supprimé.','success');
 }
 function openAlbumModal(){
   document.getElementById('mAlbumTitle').textContent='Nouvel Album';
@@ -730,7 +766,8 @@ async function saveAlbum(){
     badgeLabel:{new:'Nouveau',gospel:'Gospel'}[bv]||'',visible:true
   };
   if(uid){const ex=_albums.find(x=>(x.firestoreId||x.id)==uid||String(x.id)===String(uid));if(ex){payload.visible=ex.visible;payload.firestoreId=ex.firestoreId;}}
-  await DB.saveAlbum(payload);_albums=await DB.getAlbums();closeM('mAlbum');renderAlbumsGrid();flashSaved();
+  await apiPost('/api/save-catalog',{store:'albums',action:'set',item:payload});
+  await loadAlbums();closeM('mAlbum');renderAlbumsGrid();flashSaved();
   toast(`"${titre}" sauvegardé.`,'success');
 }
 
@@ -755,9 +792,9 @@ function renderEventsGrid(){
     </div>
   `).join('')||'<div class="empty"><div class="empty-icon">○</div><div class="empty-txt">Aucun événement.</div></div>';
 }
-async function toggleEv(uid){const ev=_events.find(x=>(x.firestoreId||x.id)==uid||String(x.id)===String(uid));if(!ev)return;ev.visible=!ev.visible;await DB.saveEvent(ev);_events=await DB.getEvents();renderEventsGrid();renderDashboard();flashSaved();}
-async function toggleEvStatut(uid){const ev=_events.find(x=>(x.firestoreId||x.id)==uid||String(x.id)===String(uid));if(!ev)return;ev.statut=ev.statut==='complet'?'dispo':'complet';await DB.saveEvent(ev);_events=await DB.getEvents();renderEventsGrid();flashSaved();toast(`Statut → ${ev.statut}.`,'success');}
-async function delEv(uid){if(!confirm('Supprimer ?'))return;const ev=_events.find(x=>(x.firestoreId||x.id)==uid||String(x.id)===String(uid));if(!ev)return;await DB.deleteEvent(ev);_events=await DB.getEvents();renderEventsGrid();flashSaved();toast('Événement supprimé.','success');}
+async function toggleEv(uid){const ev=_events.find(x=>String(x.id)===String(uid));if(!ev)return;ev.visible=!ev.visible;await apiPost('/api/save-catalog',{store:'events',action:'set',item:ev});await loadEvents();renderEventsGrid();renderDashboard();flashSaved();}
+async function toggleEvStatut(uid){const ev=_events.find(x=>String(x.id)===String(uid));if(!ev)return;ev.statut=ev.statut==='complet'?'dispo':'complet';await apiPost('/api/save-catalog',{store:'events',action:'set',item:ev});await loadEvents();renderEventsGrid();flashSaved();toast(`Statut → ${ev.statut}.`,'success');}
+async function delEv(uid){if(!confirm('Supprimer ?'))return;const ev=_events.find(x=>String(x.id)===String(uid));if(!ev)return;await apiPost('/api/save-catalog',{store:'events',action:'delete',item:ev});await loadEvents();renderEventsGrid();flashSaved();toast('Événement supprimé.','success');}
 function openEventModal(){
   document.getElementById('mEventTitle').textContent='Nouvel Événement';
   document.getElementById('eId').value='';
@@ -782,7 +819,7 @@ async function saveEvent(){
   const tv=document.getElementById('eType').value;
   const payload={id:uid?parseInt(uid)||uid:Date.now(),titre,lieu:document.getElementById('eLieu').value.trim(),jour:document.getElementById('eJour').value.trim(),mois:document.getElementById('eMois').value.trim(),annee:document.getElementById('eAnnee').value.trim(),prix:document.getElementById('ePrix').value.trim(),type:tv,typeLabel:{concert:'Concert',festival:'Festival',gospel:'Gospel'}[tv]||tv,statut:document.getElementById('eStatut').value,visible:true};
   if(uid){const ex=_events.find(x=>(x.firestoreId||x.id)==uid||String(x.id)===String(uid));if(ex){payload.visible=ex.visible;payload.firestoreId=ex.firestoreId;}}
-  await DB.saveEvent(payload);_events=await DB.getEvents();closeM('mEvent');renderEventsGrid();flashSaved();toast(`"${titre}" sauvegardé.`,'success');
+  await apiPost('/api/save-catalog',{store:'events',action:'set',item:payload});await loadEvents();closeM('mEvent');renderEventsGrid();flashSaved();toast(`"${titre}" sauvegardé.`,'success');
 }
 
 /* ── COMMANDES ── */
@@ -808,7 +845,10 @@ function renderCmds(){
     </div>
   `).join(''):'<div class="empty"><div class="empty-icon">○</div><div class="empty-txt">Aucune commande.</div></div>';
 }
-async function updCmd(uid,val){await DB.updateCommandeStatut(uid,val);_cmds=await DB.getCommandes();renderCmds();updateBadges();toast('Statut mis à jour.','success');}
+async function updCmd(uid,val){
+  await apiPatch('/api/update-statut',{store:'commandes',id:uid,statut:val});
+  await loadCmds();renderCmds();updateBadges();toast('Statut mis à jour.','success');
+}
 function filterCmd(f){_cmdFilter=f;renderCmds();document.querySelectorAll('#panel-commandes .f-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes(`'${f}'`)));}
 
 /* ── RÉSERVATIONS ── */
@@ -834,12 +874,15 @@ function renderRes(){
     </div>
   `).join(''):'<div class="empty"><div class="empty-icon">○</div><div class="empty-txt">Aucune réservation.</div></div>';
 }
-async function updRes(uid,val){await DB.updateReservationStatut(uid,val);_res=await DB.getReservations();renderRes();updateBadges();toast('Statut mis à jour.','success');}
+async function updRes(uid,val){
+  await apiPatch('/api/update-statut',{store:'reservations',id:uid,statut:val});
+  await loadRes();renderRes();updateBadges();toast('Statut mis à jour.','success');
+}
 function filterRes(f){_resFilter=f;renderRes();document.querySelectorAll('#panel-reservations .f-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes(`'${f}'`)));}
 
 /* ── MESSAGES ── */
 async function renderMessages(){
-  _msgs=await DB.getMessages();
+  await loadMessages();
   document.getElementById('msgCount').textContent=_msgs.length;
   document.getElementById('msgList').innerHTML=_msgs.length?_msgs.map(m=>`
     <div class="msg-card">
@@ -852,28 +895,28 @@ async function renderMessages(){
 
 /* ── NEWSLETTER ── */
 async function renderNewsletter(){
-  const data=await DB.getNewsletter();_nl=data;
-  document.getElementById('nlCount').textContent=data.length;
-  document.getElementById('nlGrid').innerHTML=data.length?data.map(n=>`
-    <div class="nl-item"><span class="nl-email">${n.email}</span><button class="btn btn-red" style="padding:0.2rem 0.5rem;font-size:0.6rem;" onclick="delNL('${n.firestoreId||n.email}')">✕</button></div>
+  await loadNewsletter();
+  document.getElementById('nlCount').textContent=_nl.length;
+  document.getElementById('nlGrid').innerHTML=_nl.length?_nl.map(n=>`
+    <div class="nl-item"><span class="nl-email">${n.email}</span><button class="btn btn-red" style="padding:0.2rem 0.5rem;font-size:0.6rem;" onclick="delNL('${n.email}')">✕</button></div>
   `).join(''):'<div class="empty" style="grid-column:1/-1"><div class="empty-icon">○</div><div class="empty-txt">Aucun abonné.</div></div>';
 }
-async function delNL(uid){await DB.deleteNewsletter(uid);await renderNewsletter();toast('Email retiré.','success');}
+async function delNL(email){
+  // Netlify Blobs : on ne peut pas supprimer directement depuis le front
+  // On marque comme supprimé via l'API save-catalog (action delete)
+  await apiPost('/api/save-catalog',{store:'newsletter',action:'delete',item:{id:email.replace(/[@.]/g,'_')}});
+  await renderNewsletter();toast('Email retiré.','success');
+}
 
 /* ── CLEAR / RESET ── */
 async function clearData(key,panel){
   if(!confirm(`Effacer toutes les données de "${panel}" ?`))return;
-  Store.set(key,[]);
-  if(panel==='commandes'){_cmds=[];renderCmds();}
-  if(panel==='reservations'){_res=[];renderRes();}
-  if(panel==='messages'){_msgs=[];await renderMessages();}
-  if(panel==='newsletter'){_nl=[];await renderNewsletter();}
-  renderDashboard();updateBadges();toast('Données effacées.','success');
+  // Note : Netlify Blobs ne supporte pas le delete en masse depuis le front.
+  // Contactez le support Netlify ou utilisez la CLI : netlify blobs:delete <store>
+  toast('Pour vider complètement un store, utilisez : netlify blobs:delete '+key,'error');
 }
 function resetAll(){
-  if(!confirm('Réinitialiser TOUTES les données ? Irréversible.'))return;
-  ['mac_albums','mac_events','mac_photo','mac_commandes','mac_reservations','mac_messages','mac_newsletter'].forEach(k=>localStorage.removeItem(k));
-  toast('Réinitialisé.','success');location.reload();
+  toast('Pour réinitialiser, utilisez la CLI Netlify : netlify blobs:delete <store>','error');
 }
 
 /* ── EXPORT ── */
