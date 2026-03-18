@@ -1,15 +1,15 @@
 /* ═══════════════════════════════════════════════════════
-   M.A.C JAMAIS ASSEZ — script.js  v4.0
-   • Utilise firebase.js pour toutes les données
-   • Fallback automatique sur localStorage
-   • Formulaires d'achat & réservation sécurisés
-   • EmailJS pour les notifications
+   M.A.C JAMAIS ASSEZ — script.js  v5.0
+   • Données chargées via Netlify Functions (/api/*)
+   • Plus de Firebase ni localStorage pour les données
+   • localStorage uniquement pour la photo (base64)
+   • EmailJS pour les notifications email
 ═══════════════════════════════════════════════════════ */
 'use strict';
 
 /* ─────────────────────────────────────────
    CONFIG EMAILJS
-   Remplissez après configuration sur emailjs.com
+   Remplissez vos 3 valeurs depuis emailjs.com
 ───────────────────────────────────────── */
 const EMAILJS_CONFIG = {
   publicKey:  'C6F_StHUlgq2eIluh',
@@ -18,7 +18,25 @@ const EMAILJS_CONFIG = {
 };
 
 /* ─────────────────────────────────────────
-   SÉCURITÉ
+   DONNÉES PAR DÉFAUT (affichées si l'API
+   ne répond pas encore)
+───────────────────────────────────────── */
+const DEFAULT_ALBUMS = [
+  { id:1, titre:'Jamais Assez Vol.1', annee:'2024', genre:'Rap / Gospel',    prix:'12 000 FCFA', badge:'new',    badgeLabel:'Nouveau', code:'JA',  theme:'a1', visible:true },
+  { id:2, titre:'Foi & Lumière',      annee:'2022', genre:'Gospel / Mbalax', prix:'10 000 FCFA', badge:'gospel', badgeLabel:'Gospel',  code:'FOI', theme:'a2', visible:true },
+  { id:3, titre:'Dakar Debout',       annee:'2020', genre:'Rap / Mbalax',    prix:'8 000 FCFA',  badge:'',       badgeLabel:'',        code:'DKR', theme:'a3', visible:true },
+  { id:4, titre:'Rue de la Médina',   annee:'2017', genre:'Rap Sénégalais',  prix:'6 000 FCFA',  badge:'',       badgeLabel:'',        code:'RUE', theme:'a4', visible:true }
+];
+const DEFAULT_EVENTS = [
+  { id:1, jour:'18', mois:'Avr', annee:'2025', titre:'Concert de Lancement — Jamais Assez Vol.1', lieu:'CCBM — Centre Culturel Blaise Senghor, Dakar', type:'concert', typeLabel:'Concert',  prix:'7 500 FCFA', statut:'dispo',   visible:true },
+  { id:2, jour:'02', mois:'Mai', annee:'2025', titre:'Soirée Gospel & Louange',                   lieu:'Église Évangélique de Dakar-Plateau',           type:'gospel',  typeLabel:'Gospel',   prix:'Gratuit',    statut:'dispo',   visible:true },
+  { id:3, jour:'24', mois:'Mai', annee:'2025', titre:'Festival Hip-Hop Sénégal',                  lieu:'Stade Iba Mar Diop, Dakar',                     type:'festival',typeLabel:'Festival', prix:'5 000 FCFA', statut:'dispo',   visible:true },
+  { id:4, jour:'07', mois:'Jun', annee:'2025', titre:'Nuit du Mbalax — Spécial M.A.C',            lieu:'Thiossane Club, Dakar',                         type:'festival',typeLabel:'Mbalax',   prix:'—',          statut:'complet', visible:true },
+  { id:5, jour:'19', mois:'Jul', annee:'2025', titre:'Tournée Diaspora — Paris',                  lieu:'La Cigale, Paris, France',                      type:'concert', typeLabel:'Concert',  prix:'28 €',       statut:'dispo',   visible:true }
+];
+
+/* ─────────────────────────────────────────
+   SÉCURITÉ — Sanitisation & Rate-limit
 ───────────────────────────────────────── */
 function sanitize(str) {
   if (typeof str !== 'string') return '';
@@ -29,7 +47,7 @@ function sanitize(str) {
     .substring(0, 300);
 }
 function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e); }
-function isValidPhone(p) { return /^[\d\s\+\-\(\)]{7,20}$/.test(p); }
+function isValidPhone(p) { return /^[\d\s+\-()\x20]{7,20}$/.test(p); }
 
 const _rateMap = {};
 function rateCheck(key) {
@@ -42,18 +60,46 @@ function rateCheck(key) {
 }
 
 /* ─────────────────────────────────────────
-   EMAILJS
+   API — Appels vers les Netlify Functions
+───────────────────────────────────────── */
+async function apiPost(endpoint, data) {
+  const res = await fetch(endpoint, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify(data)
+  });
+  return res.json();
+}
+
+async function apiGet(store) {
+  try {
+    const res = await fetch(`/api/get-data.php?store=${store}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.items || null;
+  } catch {
+    return null;
+  }
+}
+
+/* ─────────────────────────────────────────
+   EMAILJS — Notification email
 ───────────────────────────────────────── */
 function sendEmail(params) {
   if (!window.emailjs || EMAILJS_CONFIG.publicKey === 'VOTRE_PUBLIC_KEY')
     return Promise.resolve({ skipped: true });
-  return emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, params, EMAILJS_CONFIG.publicKey);
+  return emailjs.send(
+    EMAILJS_CONFIG.serviceId,
+    EMAILJS_CONFIG.templateId,
+    params,
+    EMAILJS_CONFIG.publicKey
+  );
 }
 
 /* ─────────────────────────────────────────
    MODALS
 ───────────────────────────────────────── */
-function openModal(id)  {
+function openModal(id) {
   const m = document.getElementById(id);
   if (m) { m.classList.add('open'); document.body.style.overflow = 'hidden'; }
 }
@@ -76,7 +122,12 @@ async function renderAlbums() {
   const grid = document.querySelector('.disco-grid');
   if (!grid) return;
   grid.innerHTML = '<p style="color:var(--argent);grid-column:1/-1;text-align:center;padding:3rem 0;">Chargement…</p>';
-  const albums = (await DB.getAlbums()).filter(a => a.visible);
+
+  // Essaie de charger depuis l'API, fallback sur les données par défaut
+  const fromApi = await apiGet('albums');
+  const all     = fromApi || DEFAULT_ALBUMS;
+  const albums  = all.filter(a => a.visible);
+
   if (!albums.length) {
     grid.innerHTML = '<p style="color:var(--argent);grid-column:1/-1;text-align:center;padding:3rem 0;">Aucun album disponible.</p>';
     return;
@@ -96,7 +147,6 @@ async function renderAlbums() {
       <button class="btn-acheter" data-album-id="${a.id}">Acheter l'album</button>
     </div>
   `).join('');
-  // Stocke la liste pour les modals
   window._albumsList = albums;
   bindBuyButtons();
 }
@@ -108,7 +158,11 @@ async function renderEvents() {
   const list = document.querySelector('.event-list');
   if (!list) return;
   list.innerHTML = '<p style="color:var(--argent);text-align:center;padding:2rem 0;">Chargement…</p>';
-  const events = (await DB.getEvents()).filter(e => e.visible);
+
+  const fromApi = await apiGet('events');
+  const all     = fromApi || DEFAULT_EVENTS;
+  const events  = all.filter(e => e.visible);
+
   if (!events.length) {
     list.innerHTML = '<p style="color:var(--argent);text-align:center;padding:3rem 0;">Aucun événement à venir.</p>';
     return;
@@ -135,7 +189,7 @@ async function renderEvents() {
 }
 
 /* ─────────────────────────────────────────
-   PHOTO
+   PHOTO (localStorage — base64)
 ───────────────────────────────────────── */
 function renderPhoto() {
   const photoEl  = document.querySelector('.bio-photo');
@@ -143,7 +197,8 @@ function renderPhoto() {
   const monogram = photoEl.querySelector('.bio-photo-monogram');
   const existing = photoEl.querySelector('.bio-real-photo');
   if (existing) existing.remove();
-  const photo = DB.getPhoto();
+  let photo = null;
+  try { photo = localStorage.getItem('mac_photo'); } catch {}
   if (photo) {
     if (monogram) monogram.style.display = 'none';
     const img = document.createElement('img');
@@ -179,7 +234,7 @@ function bindTicketButtons() {
 }
 
 /* ─────────────────────────────────────────
-   MODAL ACHAT
+   MODAL ACHAT ALBUM
 ───────────────────────────────────────── */
 let _currentAlbum = null;
 
@@ -206,43 +261,47 @@ async function submitAchat() {
 
   clearErrors('buyForm');
   let ok = true;
-  if (!nom)                    { showError('buyNom',    'Nom obligatoire'); ok = false; }
-  if (!prenom)                 { showError('buyPrenom', 'Prénom obligatoire'); ok = false; }
-  if (!isValidEmail(email))    { showError('buyEmail',  'Email invalide'); ok = false; }
-  if (tel && !isValidPhone(tel)) { showError('buyTel',  'Numéro invalide'); ok = false; }
+  if (!nom)                      { showError('buyNom',    'Nom obligatoire'); ok = false; }
+  if (!prenom)                   { showError('buyPrenom', 'Prénom obligatoire'); ok = false; }
+  if (!isValidEmail(email))      { showError('buyEmail',  'Email invalide'); ok = false; }
+  if (tel && !isValidPhone(tel)) { showError('buyTel',    'Numéro invalide'); ok = false; }
   if (!ok) return;
-  if (!rateCheck('achat')) { showFormMsg('buyForm','Trop de tentatives. Réessayez dans 10 minutes.','error'); return; }
-
-  const order = {
-    id: 'CMD-' + Date.now(), type:'achat',
-    album: sanitize(_currentAlbum.titre), prix: sanitize(_currentAlbum.prix),
-    nom: sanitize(nom), prenom: sanitize(prenom),
-    email: sanitize(email), tel: sanitize(tel), ville: sanitize(ville),
-    quantite: qty, date: new Date().toLocaleString('fr-FR'), statut: 'en_attente'
-  };
+  if (!rateCheck('achat')) { showFormMsg('buyForm', 'Trop de tentatives. Réessayez dans 10 minutes.', 'error'); return; }
 
   const btn = document.getElementById('btnSubmitAchat');
   btn.disabled = true; btn.textContent = 'Envoi en cours…';
 
-  await DB.addCommande(order);
+  // Appel vers la Netlify Function
+  const result = await apiPost('/api/save-commande.php', {
+    nom: sanitize(nom), prenom: sanitize(prenom),
+    email: sanitize(email), tel: sanitize(tel), ville: sanitize(ville),
+    album: sanitize(_currentAlbum.titre), prix: sanitize(_currentAlbum.prix),
+    quantite: qty
+  });
+
+  if (!result.success) {
+    showFormMsg('buyForm', result.error || 'Erreur. Réessayez.', 'error');
+    btn.disabled = false; btn.textContent = 'Confirmer la commande';
+    return;
+  }
+
+  // Notification email
   sendEmail({
-    name:    `${order.prenom} ${order.nom} (${order.email})`,
-    time:    order.date,
-    message: `🛒 COMMANDE ALBUM\n`
-           + `Référence : ${order.id}\n`
-           + `Album : ${order.album} × ${order.quantite}\n`
-           + `Prix : ${order.prix}\n`
-           + `Téléphone : ${order.tel || '—'}\n`
-           + `Ville : ${order.ville || '—'}`
+    name:    `${sanitize(prenom)} ${sanitize(nom)} (${sanitize(email)})`,
+    time:    new Date().toLocaleString('fr-FR'),
+    message: `🛒 COMMANDE ALBUM\nRéférence : ${result.id}\nAlbum : ${_currentAlbum.titre} × ${qty}\nPrix : ${_currentAlbum.prix}\nTéléphone : ${tel || '—'}\nVille : ${ville || '—'}`
   }).catch(() => {});
 
   closeModal('modalAchat');
-  showSuccessOverlay('achat', order);
+  showSuccessOverlay('achat', {
+    id: result.id, prenom: sanitize(prenom), nom: sanitize(nom),
+    email: sanitize(email), album: _currentAlbum.titre, quantite: qty
+  });
   btn.disabled = false; btn.textContent = 'Confirmer la commande';
 }
 
 /* ─────────────────────────────────────────
-   MODAL RÉSERVATION
+   MODAL RÉSERVATION BILLET
 ───────────────────────────────────────── */
 let _currentEvent = null;
 
@@ -275,36 +334,39 @@ async function submitTicket() {
   if (!tel)                 { showError('ticketTel',    'Téléphone obligatoire'); ok = false; }
   else if (!isValidPhone(tel)) { showError('ticketTel', 'Numéro invalide'); ok = false; }
   if (!ok) return;
-  if (!rateCheck('reservation')) { showFormMsg('ticketForm','Trop de tentatives. Réessayez dans 10 minutes.','error'); return; }
-
-  const reservation = {
-    id: 'RES-'+Date.now(), type:'reservation',
-    evenement: sanitize(_currentEvent.titre),
-    date_event: _currentEvent.jour+' '+_currentEvent.mois+' '+_currentEvent.annee,
-    lieu: sanitize(_currentEvent.lieu), prix: sanitize(_currentEvent.prix),
-    nom: sanitize(nom), prenom: sanitize(prenom),
-    email: sanitize(email), tel: sanitize(tel),
-    quantite: qty, date: new Date().toLocaleString('fr-FR'), statut: 'confirmee'
-  };
+  if (!rateCheck('reservation')) { showFormMsg('ticketForm', 'Trop de tentatives. Réessayez dans 10 minutes.', 'error'); return; }
 
   const btn = document.getElementById('btnSubmitTicket');
   btn.disabled = true; btn.textContent = 'Envoi en cours…';
 
-  await DB.addReservation(reservation);
+  const result = await apiPost('/api/save-reservation.php', {
+    nom: sanitize(nom), prenom: sanitize(prenom),
+    email: sanitize(email), tel: sanitize(tel),
+    evenement:  sanitize(_currentEvent.titre),
+    date_event: _currentEvent.jour+' '+_currentEvent.mois+' '+_currentEvent.annee,
+    lieu:       sanitize(_currentEvent.lieu),
+    prix:       sanitize(_currentEvent.prix),
+    quantite:   qty
+  });
+
+  if (!result.success) {
+    showFormMsg('ticketForm', result.error || 'Erreur. Réessayez.', 'error');
+    btn.disabled = false; btn.textContent = 'Confirmer la réservation';
+    return;
+  }
+
   sendEmail({
-    name:    `${reservation.prenom} ${reservation.nom} (${reservation.email})`,
-    time:    reservation.date,
-    message: `🎫 RÉSERVATION BILLET\n`
-           + `Référence : ${reservation.id}\n`
-           + `Événement : ${reservation.evenement}\n`
-           + `Date : ${reservation.date_event}\n`
-           + `Lieu : ${reservation.lieu}\n`
-           + `Billets : ${reservation.quantite} × ${reservation.prix}\n`
-           + `Téléphone : ${reservation.tel}`
+    name:    `${sanitize(prenom)} ${sanitize(nom)} (${sanitize(email)})`,
+    time:    new Date().toLocaleString('fr-FR'),
+    message: `🎫 RÉSERVATION BILLET\nRéférence : ${result.id}\nÉvénement : ${_currentEvent.titre}\nDate : ${_currentEvent.jour} ${_currentEvent.mois} ${_currentEvent.annee}\nLieu : ${_currentEvent.lieu}\nBillets : ${qty} × ${_currentEvent.prix}\nTéléphone : ${tel}`
   }).catch(() => {});
 
   closeModal('modalTicket');
-  showSuccessOverlay('ticket', reservation);
+  showSuccessOverlay('ticket', {
+    id: result.id, prenom: sanitize(prenom), nom: sanitize(nom),
+    email: sanitize(email), evenement: _currentEvent.titre,
+    date_event: _currentEvent.jour+' '+_currentEvent.mois+' '+_currentEvent.annee
+  });
   btn.disabled = false; btn.textContent = 'Confirmer la réservation';
 }
 
@@ -379,15 +441,22 @@ if (nlBtn && nlInput) {
     }
     if (!rateCheck('newsletter')) return;
     const orig = this.textContent;
-    this.textContent = '✓ Inscrit !'; this.style.background = '#2D7A50';
-    await DB.addNewsletter(sanitize(email));
-    nlInput.value = '';
+    this.textContent = '⏳ Inscription…'; this.style.background = 'rgba(201,168,76,0.3)';
+    const result = await apiPost('/api/save-newsletter.php', { email });
+    if (result.success) {
+      this.textContent = '✓ Inscrit !'; this.style.background = '#2D7A50';
+      nlInput.value = '';
+    } else {
+      this.textContent = orig; this.style.background = '';
+      nlInput.style.borderColor = 'rgba(196,48,48,0.6)';
+      setTimeout(() => nlInput.style.borderColor = '', 2000);
+    }
     setTimeout(() => { this.textContent = orig; this.style.background = ''; }, 3000);
   });
 }
 
 /* ─────────────────────────────────────────
-   CONTACT
+   FORMULAIRE CONTACT
 ───────────────────────────────────────── */
 const sendBtn = document.getElementById('sendBtn');
 if (sendBtn) {
@@ -402,27 +471,28 @@ if (sendBtn) {
       return;
     }
     if (!rateCheck('contact')) return;
-    const msg = { nom: sanitize(nom), email: sanitize(email), message: sanitize(message), date: new Date().toLocaleString('fr-FR') };
-    await DB.addMessage(msg);
-    sendEmail({
-      name:    `${msg.nom} (${msg.email})`,
-      time:    msg.date,
-      message: msg.message
-    }).catch(() => {});
-    const orig = this.textContent;
-    this.textContent = '✓ Message envoyé !'; this.style.background = '#2D7A50';
-    document.querySelector('[data-contact="nom"]').value = '';
-    document.querySelector('[data-contact="email"]').value = '';
-    document.querySelector('[data-contact="message"]').value = '';
-    setTimeout(() => { this.textContent = orig; this.style.background = ''; }, 3000);
+    this.textContent = '⏳ Envoi…'; this.style.background = 'rgba(201,168,76,0.3)';
+    const result = await apiPost('/api/save-message.php', {
+      nom: sanitize(nom), email: sanitize(email), message: sanitize(message)
+    });
+    if (result.success) {
+      sendEmail({ name: `${sanitize(nom)} (${sanitize(email)})`, time: new Date().toLocaleString('fr-FR'), message: sanitize(message) }).catch(() => {});
+      document.querySelector('[data-contact="nom"]').value = '';
+      document.querySelector('[data-contact="email"]').value = '';
+      document.querySelector('[data-contact="message"]').value = '';
+      this.textContent = '✓ Message envoyé !'; this.style.background = '#2D7A50';
+    } else {
+      this.textContent = 'Erreur. Réessayez.'; this.style.background = 'rgba(139,26,26,0.8)';
+    }
+    setTimeout(() => { this.textContent = 'Envoyer le Message'; this.style.background = ''; }, 3000);
   });
 }
 
 /* ─────────────────────────────────────────
    INIT
 ───────────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', async () => {
-  // EmailJS
+document.addEventListener('DOMContentLoaded', () => {
+  // Charge EmailJS
   const ejs = document.createElement('script');
   ejs.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
   ejs.onload = () => {
@@ -430,9 +500,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       emailjs.init(EMAILJS_CONFIG.publicKey);
   };
   document.head.appendChild(ejs);
-
-  // Firebase
-  await initFirebase();
 
   // Rendu
   renderPhoto();

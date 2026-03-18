@@ -83,7 +83,6 @@ body{background:var(--bg);color:var(--blanc);font-family:'Space Grotesk',sans-se
 .ev-badge{text-align:center;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.18);padding:0.4rem;}
 .ev-day{font-family:'Oswald',sans-serif;font-size:1.6rem;color:var(--or);line-height:1;}
 .ev-mon{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gris);}
-.ev-main{}
 .ev-titre{font-size:0.85rem;font-weight:500;margin-bottom:0.15rem;}
 .ev-lieu{font-size:0.7rem;color:var(--gris);}
 .ev-tags{display:flex;gap:0.4rem;margin-top:0.4rem;flex-wrap:wrap;}
@@ -580,7 +579,7 @@ if(sessionStorage.getItem('mac_admin')==='1'){document.getElementById('loginScre
 /* ── HELPERS API ── */
 async function apiGet(store){
   try{
-    const res=await fetch(`/api/get-data?store=${store}`,{headers:{'X-Admin-Token':_adminToken}});
+    const res=await fetch(`/api/get-data.php?store=${store}`,{headers:{'X-Admin-Token':_adminToken}});
     if(!res.ok)return[];
     const d=await res.json();
     return d.items||[];
@@ -724,7 +723,7 @@ function renderAlbumsGrid(){
 async function toggleAlbum(uid){
   const a=_albums.find(x=>(x.id)==uid||String(x.id)===String(uid));
   if(!a)return;a.visible=!a.visible;
-  await apiPost('/api/save-catalog',{store:'albums',action:'set',item:a});
+  await apiPost('/api/save-catalog.php',{store:'albums',action:'set',item:a});
   await loadAlbums();renderAlbumsGrid();renderDashboard();flashSaved();
   toast(`"${a.titre}" ${a.visible?'visible':'masqué'}.`,'success');
 }
@@ -732,7 +731,7 @@ async function delAlbum(uid){
   if(!confirm('Supprimer cet album ?'))return;
   const a=_albums.find(x=>String(x.id)===String(uid));
   if(!a)return;
-  await apiPost('/api/save-catalog',{store:'albums',action:'delete',item:a});
+  await apiPost('/api/save-catalog.php',{store:'albums',action:'delete',item:a});
   await loadAlbums();renderAlbumsGrid();flashSaved();toast('Album supprimé.','success');
 }
 function openAlbumModal(){
@@ -766,7 +765,7 @@ async function saveAlbum(){
     badgeLabel:{new:'Nouveau',gospel:'Gospel'}[bv]||'',visible:true
   };
   if(uid){const ex=_albums.find(x=>(x.firestoreId||x.id)==uid||String(x.id)===String(uid));if(ex){payload.visible=ex.visible;payload.firestoreId=ex.firestoreId;}}
-  await apiPost('/api/save-catalog',{store:'albums',action:'set',item:payload});
+  await apiPost('/api/save-catalog.php',{store:'albums',action:'set',item:payload});
   await loadAlbums();closeM('mAlbum');renderAlbumsGrid();flashSaved();
   toast(`"${titre}" sauvegardé.`,'success');
 }
@@ -792,9 +791,9 @@ function renderEventsGrid(){
     </div>
   `).join('')||'<div class="empty"><div class="empty-icon">○</div><div class="empty-txt">Aucun événement.</div></div>';
 }
-async function toggleEv(uid){const ev=_events.find(x=>String(x.id)===String(uid));if(!ev)return;ev.visible=!ev.visible;await apiPost('/api/save-catalog',{store:'events',action:'set',item:ev});await loadEvents();renderEventsGrid();renderDashboard();flashSaved();}
-async function toggleEvStatut(uid){const ev=_events.find(x=>String(x.id)===String(uid));if(!ev)return;ev.statut=ev.statut==='complet'?'dispo':'complet';await apiPost('/api/save-catalog',{store:'events',action:'set',item:ev});await loadEvents();renderEventsGrid();flashSaved();toast(`Statut → ${ev.statut}.`,'success');}
-async function delEv(uid){if(!confirm('Supprimer ?'))return;const ev=_events.find(x=>String(x.id)===String(uid));if(!ev)return;await apiPost('/api/save-catalog',{store:'events',action:'delete',item:ev});await loadEvents();renderEventsGrid();flashSaved();toast('Événement supprimé.','success');}
+async function toggleEv(uid){const ev=_events.find(x=>String(x.id)===String(uid));if(!ev)return;ev.visible=!ev.visible;await apiPost('/api/save-catalog.php',{store:'events',action:'set',item:ev});await loadEvents();renderEventsGrid();renderDashboard();flashSaved();}
+async function toggleEvStatut(uid){const ev=_events.find(x=>String(x.id)===String(uid));if(!ev)return;ev.statut=ev.statut==='complet'?'dispo':'complet';await apiPost('/api/save-catalog.php',{store:'events',action:'set',item:ev});await loadEvents();renderEventsGrid();flashSaved();toast(`Statut → ${ev.statut}.`,'success');}
+async function delEv(uid){if(!confirm('Supprimer ?'))return;const ev=_events.find(x=>String(x.id)===String(uid));if(!ev)return;await apiPost('/api/save-catalog.php',{store:'events',action:'delete',item:ev});await loadEvents();renderEventsGrid();flashSaved();toast('Événement supprimé.','success');}
 function openEventModal(){
   document.getElementById('mEventTitle').textContent='Nouvel Événement';
   document.getElementById('eId').value='';
@@ -819,7 +818,7 @@ async function saveEvent(){
   const tv=document.getElementById('eType').value;
   const payload={id:uid?parseInt(uid)||uid:Date.now(),titre,lieu:document.getElementById('eLieu').value.trim(),jour:document.getElementById('eJour').value.trim(),mois:document.getElementById('eMois').value.trim(),annee:document.getElementById('eAnnee').value.trim(),prix:document.getElementById('ePrix').value.trim(),type:tv,typeLabel:{concert:'Concert',festival:'Festival',gospel:'Gospel'}[tv]||tv,statut:document.getElementById('eStatut').value,visible:true};
   if(uid){const ex=_events.find(x=>(x.firestoreId||x.id)==uid||String(x.id)===String(uid));if(ex){payload.visible=ex.visible;payload.firestoreId=ex.firestoreId;}}
-  await apiPost('/api/save-catalog',{store:'events',action:'set',item:payload});await loadEvents();closeM('mEvent');renderEventsGrid();flashSaved();toast(`"${titre}" sauvegardé.`,'success');
+  await apiPost('/api/save-catalog.php',{store:'events',action:'set',item:payload});await loadEvents();closeM('mEvent');renderEventsGrid();flashSaved();toast(`"${titre}" sauvegardé.`,'success');
 }
 
 /* ── COMMANDES ── */
@@ -846,7 +845,7 @@ function renderCmds(){
   `).join(''):'<div class="empty"><div class="empty-icon">○</div><div class="empty-txt">Aucune commande.</div></div>';
 }
 async function updCmd(uid,val){
-  await apiPatch('/api/update-statut',{store:'commandes',id:uid,statut:val});
+  await apiPatch('/api/update-statut.php',{store:'commandes',id:uid,statut:val});
   await loadCmds();renderCmds();updateBadges();toast('Statut mis à jour.','success');
 }
 function filterCmd(f){_cmdFilter=f;renderCmds();document.querySelectorAll('#panel-commandes .f-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes(`'${f}'`)));}
@@ -875,7 +874,7 @@ function renderRes(){
   `).join(''):'<div class="empty"><div class="empty-icon">○</div><div class="empty-txt">Aucune réservation.</div></div>';
 }
 async function updRes(uid,val){
-  await apiPatch('/api/update-statut',{store:'reservations',id:uid,statut:val});
+  await apiPatch('/api/update-statut.php',{store:'reservations',id:uid,statut:val});
   await loadRes();renderRes();updateBadges();toast('Statut mis à jour.','success');
 }
 function filterRes(f){_resFilter=f;renderRes();document.querySelectorAll('#panel-reservations .f-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes(`'${f}'`)));}
@@ -904,7 +903,7 @@ async function renderNewsletter(){
 async function delNL(email){
   // Netlify Blobs : on ne peut pas supprimer directement depuis le front
   // On marque comme supprimé via l'API save-catalog (action delete)
-  await apiPost('/api/save-catalog',{store:'newsletter',action:'delete',item:{id:email.replace(/[@.]/g,'_')}});
+  await apiPost('/api/save-catalog.php',{store:'newsletter',action:'delete',item:{id:email.replace(/[@.]/g,'_')}});
   await renderNewsletter();toast('Email retiré.','success');
 }
 
