@@ -6,3 +6,9 @@
     "@netlify/blobs": "^8.1.0"
   }
 }
+
+{
+  "dependencies": {
+    "@netlify/neon": "latest"
+  }
+}
