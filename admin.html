@@ -622,22 +622,20 @@ let _cmdFilter='all', _resFilter='all';
 
 async function boot(){
   updateApiStatus();
-  // Affiche les panneaux immédiatement (skeletons)
   renderDashboard();
   renderAlbumsGrid();
   renderEventsGrid();
   renderCmds();
   renderRes();
-  renderPhotoPanel();
 
-  // Charge toutes les données en parallèle
+  // Chargement en parallèle
   await Promise.all([
     loadAlbums(), loadEvents(),
     loadCmds(), loadRes(),
-    loadMessages(), loadNewsletter()
+    loadMessages(), loadNewsletter(),
+    renderPhotoPanel() // async — lit la photo depuis Neon
   ]);
 
-  // Re-rendu avec les vraies données
   renderDashboard();
   renderAlbumsGrid();
   renderEventsGrid();
@@ -709,11 +707,15 @@ function updateBadges(){
   if(br){br.textContent=pr;br.style.display=pr?'inline':'none';}
 }
 
-/* ── PHOTO (localStorage) ── */
+/* ── PHOTO (Neon via API) ── */
 let _pendingPhoto=null;
-function renderPhotoPanel(){
+async function renderPhotoPanel(){
   const z=document.getElementById('photoZone');
-  let photo=null;try{photo=localStorage.getItem('mac_photo');}catch{}
+  let photo=null;
+  try{
+    const res=await fetch('/api/save-photo');
+    if(res.ok) photo=(await res.json()).photo||null;
+  }catch{}
   z.querySelector('.photo-icon').style.display=photo?'none':'';
   z.querySelector('.photo-lbl').style.display=photo?'none':'';
   const ei=z.querySelector('img');if(ei)ei.remove();
@@ -725,13 +727,14 @@ function handlePhoto(e){
   if(f.size>3*1024*1024){toast('Image trop lourde (max 3 Mo).','error');return;}
   const r=new FileReader();r.onload=ev=>{_pendingPhoto=ev.target.result;const z=document.getElementById('photoZone');z.querySelector('.photo-icon').style.display='none';z.querySelector('.photo-lbl').style.display='none';const ei=z.querySelector('img');if(ei)ei.remove();const img=document.createElement('img');img.src=_pendingPhoto;z.appendChild(img);document.getElementById('photoInfo').textContent=`📎 ${f.name} — cliquez Sauvegarder`;};r.readAsDataURL(f);
 }
-function savePhoto(){
+async function savePhoto(){
   if(!_pendingPhoto){toast('Choisissez d\'abord une photo.','error');return;}
-  try{localStorage.setItem('mac_photo',_pendingPhoto);}catch{toast('Erreur de sauvegarde.','error');return;}
-  _pendingPhoto=null;flashSaved();toast('Photo sauvegardée !','success');renderPhotoPanel();
+  const res=await apiPost('/api/save-photo',{action:'save',photo:_pendingPhoto});
+  if(res.success){_pendingPhoto=null;flashSaved();toast('Photo sauvegardée sur tous les appareils !','success');renderPhotoPanel();}
+  else{toast(res.error||'Erreur de sauvegarde.','error');}
 }
-function removePhoto(){
-  try{localStorage.removeItem('mac_photo');}catch{}
+async function removePhoto(){
+  await apiPost('/api/save-photo',{action:'delete',photo:null});
   _pendingPhoto=null;toast('Photo supprimée.','success');renderPhotoPanel();
 }
 

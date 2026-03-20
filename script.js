@@ -150,15 +150,20 @@ async function renderEvents() {
   bindTicketButtons();
 }
 
-/* ── PHOTO (localStorage) ── */
-function renderPhoto() {
+/* ── PHOTO ARTISTE (Neon via API) ── */
+async function renderPhoto() {
   const photoEl  = document.querySelector('.bio-photo');
   if (!photoEl) return;
   const monogram = photoEl.querySelector('.bio-photo-monogram');
   const existing = photoEl.querySelector('.bio-real-photo');
   if (existing) existing.remove();
+
   let photo = null;
-  try { photo = localStorage.getItem('mac_photo'); } catch {}
+  try {
+    const res = await fetch('/api/save-photo');
+    if (res.ok) photo = (await res.json()).photo || null;
+  } catch {}
+
   if (photo) {
     if (monogram) monogram.style.display = 'none';
     const img = document.createElement('img');
@@ -434,7 +439,7 @@ if (sendBtn) {
 
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded', () => {
-  // EmailJS
+  // Charge EmailJS
   const ejs = document.createElement('script');
   ejs.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
   ejs.onload = () => {
@@ -442,7 +447,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   document.head.appendChild(ejs);
 
-  // Chargement en parallèle
-  renderPhoto();
-  Promise.all([renderAlbums(), renderEvents()]);
+  // Chargement en parallèle — photo depuis Neon, albums et événements depuis Neon
+  Promise.all([renderPhoto(), renderAlbums(), renderEvents()]);
 });
