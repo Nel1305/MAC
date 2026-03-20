@@ -84,6 +84,15 @@ export default async (req) => {
       )
     `;
 
+    // ── Settings (photo artiste, etc.) ──
+    await sql`
+      CREATE TABLE IF NOT EXISTS settings (
+        key        VARCHAR(100) PRIMARY KEY,
+        value      TEXT,
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      )
+    `;
+
     // ── Événements ──
     await sql`
       CREATE TABLE IF NOT EXISTS evenements (
