@@ -1,7 +1,7 @@
 // M.A.C JAMAIS ASSEZ — save-message.js
 // POST /api/save-message
 
-import { sql, json, cors, clean, isEmail, parseBody } from './_shared.js';
+import { supabase, json, cors, clean, isEmail, parseBody } from './_shared.js';
 
 export default async (req) => {
   if (req.method === 'OPTIONS') return cors();
@@ -21,13 +21,10 @@ export default async (req) => {
   const id   = 'MSG-' + Date.now();
   const date = new Date().toLocaleString('fr-FR', { timeZone: 'Africa/Dakar' });
 
-  try {
-    await sql`
-      INSERT INTO messages (id, nom, email, message, date)
-      VALUES (${id}, ${nom}, ${email}, ${message}, ${date})
-    `;
-  } catch (err) {
-    console.error('[save-message]', err?.message);
+  const { error } = await supabase.from('messages').insert({ id, nom, email, message, date });
+
+  if (error) {
+    console.error('[save-message]', error.message);
     return json({ error: 'Erreur serveur' }, 500);
   }
 

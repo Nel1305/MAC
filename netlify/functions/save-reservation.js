@@ -1,7 +1,7 @@
 // M.A.C JAMAIS ASSEZ — save-reservation.js
 // POST /api/save-reservation
 
-import { sql, json, cors, clean, isEmail, isPhone, parseBody } from './_shared.js';
+import { supabase, json, cors, clean, isEmail, isPhone, parseBody } from './_shared.js';
 
 export default async (req) => {
   if (req.method === 'OPTIONS') return cors();
@@ -29,13 +29,14 @@ export default async (req) => {
   const id   = 'RES-' + Date.now();
   const date = new Date().toLocaleString('fr-FR', { timeZone: 'Africa/Dakar' });
 
-  try {
-    await sql`
-      INSERT INTO reservations (id, nom, prenom, email, tel, evenement, date_event, lieu, prix, quantite, statut, date)
-      VALUES (${id}, ${nom}, ${prenom}, ${email}, ${tel}, ${evenement}, ${date_ev}, ${lieu}, ${prix}, ${qty}, 'confirmee', ${date})
-    `;
-  } catch (err) {
-    console.error('[save-reservation]', err?.message);
+  const { error } = await supabase.from('reservations').insert({
+    id, nom, prenom, email, tel,
+    evenement, date_event: date_ev, lieu, prix,
+    quantite: qty, statut: 'confirmee', date
+  });
+
+  if (error) {
+    console.error('[save-reservation]', error.message);
     return json({ error: 'Erreur serveur' }, 500);
   }
 

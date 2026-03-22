@@ -1,7 +1,7 @@
 // M.A.C JAMAIS ASSEZ — save-commande.js
 // POST /api/save-commande
 
-import { sql, json, cors, clean, isEmail, isPhone, parseBody } from './_shared.js';
+import { supabase, json, cors, clean, isEmail, isPhone, parseBody } from './_shared.js';
 
 export default async (req) => {
   if (req.method === 'OPTIONS') return cors();
@@ -27,13 +27,13 @@ export default async (req) => {
   const id   = 'CMD-' + Date.now();
   const date = new Date().toLocaleString('fr-FR', { timeZone: 'Africa/Dakar' });
 
-  try {
-    await sql`
-      INSERT INTO commandes (id, nom, prenom, email, tel, ville, album, prix, quantite, statut, date)
-      VALUES (${id}, ${nom}, ${prenom}, ${email}, ${tel}, ${ville}, ${album}, ${prix}, ${qty}, 'en_attente', ${date})
-    `;
-  } catch (err) {
-    console.error('[save-commande]', err?.message);
+  const { error } = await supabase.from('commandes').insert({
+    id, nom, prenom, email, tel, ville, album, prix,
+    quantite: qty, statut: 'en_attente', date
+  });
+
+  if (error) {
+    console.error('[save-commande]', error.message);
     return json({ error: 'Erreur serveur' }, 500);
   }
 

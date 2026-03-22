@@ -1,10 +1,14 @@
 // M.A.C JAMAIS ASSEZ — _shared.js
-// Utilitaires partagés par toutes les Functions
+// Utilitaires partagés + connexion Supabase
 
-import { neon } from '@netlify/neon';
+import { createClient } from '@supabase/supabase-js';
 
-// ── Connexion Neon (NETLIFY_DATABASE_URL injectée automatiquement) ──
-export const sql = neon();
+// ── Connexion Supabase ──
+// Ces variables sont définies dans Netlify → Environment variables
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY; // service_role key (côté serveur uniquement)
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── Réponse JSON + CORS ──
 export function json(data, status = 200) {

@@ -1,9 +1,9 @@
 // M.A.C JAMAIS ASSEZ — get-data.js
 // GET /api/get-data?store=<n>  →  protégé X-Admin-Token
 
-import { sql, json, cors, checkAdmin } from './_shared.js';
+import { supabase, json, cors, checkAdmin } from './_shared.js';
 
-const TABLES = {
+const STORES = {
   commandes:    'commandes',
   reservations: 'reservations',
   messages:     'messages',
@@ -18,37 +18,51 @@ export default async (req) => {
   if (!checkAdmin(req))         return json({ error: 'Non autorisé' }, 401);
 
   const store = new URL(req.url).searchParams.get('store') ?? '';
-  if (!TABLES[store]) return json({ error: `Store invalide` }, 400);
+  if (!STORES[store]) return json({ error: 'Store invalide' }, 400);
 
-  const table = TABLES[store];
+  const table = STORES[store];
 
-  try {
-    let rows;
+  let query;
 
-    if (store === 'albums') {
-      rows = await sql`
-        SELECT id, titre, annee, genre, prix, badge, badge_label AS "badgeLabel",
-               code, theme, visible
-        FROM albums ORDER BY id ASC
-      `;
-    } else if (store === 'events') {
-      rows = await sql`
-        SELECT id, jour, mois, annee, titre, lieu, type,
-               type_label AS "typeLabel", prix, statut, visible
-        FROM evenements ORDER BY id ASC
-      `;
-    } else if (store === 'newsletter') {
-      rows = await sql`SELECT email, created_at FROM newsletter ORDER BY created_at DESC`;
-    } else {
-      rows = await sql`SELECT * FROM ${sql(table)} ORDER BY created_at DESC`;
-    }
+  if (store === 'albums') {
+    query = supabase
+      .from(table)
+      .select('id, titre, annee, genre, prix, badge, badge_label, code, theme, visible')
+      .order('id', { ascending: true });
+  } else if (store === 'events') {
+    query = supabase
+      .from(table)
+      .select('id, jour, mois, annee, titre, lieu, type, type_label, prix, statut, visible')
+      .order('id', { ascending: true });
+  } else if (store === 'newsletter') {
+    query = supabase
+      .from(table)
+      .select('email, created_at')
+      .order('created_at', { ascending: false });
+  } else {
+    query = supabase
+      .from(table)
+      .select('*')
+      .order('created_at', { ascending: false });
+  }
 
-    return json({ items: rows, total: rows.length });
+  const { data, error } = await query;
 
-  } catch (err) {
-    console.error(`[get-data:${store}]`, err?.message);
+  if (error) {
+    console.error(`[get-data:${store}]`, error.message);
     return json({ error: 'Erreur serveur' }, 500);
   }
+
+  // Normalise les noms de colonnes pour le JS (badge_label → badgeLabel, type_label → typeLabel)
+  let items = data;
+  if (store === 'albums') {
+    items = data.map(r => ({ ...r, badgeLabel: r.badge_label }));
+  }
+  if (store === 'events') {
+    items = data.map(r => ({ ...r, typeLabel: r.type_label }));
+  }
+
+  return json({ items, total: items.length });
 };
 
 export const config = { path: '/api/get-data' };

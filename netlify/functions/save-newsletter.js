@@ -1,7 +1,7 @@
 // M.A.C JAMAIS ASSEZ — save-newsletter.js
 // POST /api/save-newsletter
 
-import { sql, json, cors, isEmail, parseBody } from './_shared.js';
+import { supabase, json, cors, isEmail, parseBody } from './_shared.js';
 
 export default async (req) => {
   if (req.method === 'OPTIONS') return cors();
@@ -12,21 +12,19 @@ export default async (req) => {
 
   if (!isEmail(email)) return json({ error: 'Email invalide' }, 400);
 
-  try {
-    // INSERT OR IGNORE via ON CONFLICT (email est PRIMARY KEY)
-    const result = await sql`
-      INSERT INTO newsletter (email)
-      VALUES (${email})
-      ON CONFLICT (email) DO NOTHING
-    `;
+  // upsert avec ignoreDuplicates → pas d'erreur si l'email existe déjà
+  const { error, data } = await supabase
+    .from('newsletter')
+    .upsert({ email }, { onConflict: 'email', ignoreDuplicates: true })
+    .select();
 
-    const inserted = result.count > 0;
-    return json({ success: true, alreadySubscribed: !inserted });
-
-  } catch (err) {
-    console.error('[save-newsletter]', err?.message);
+  if (error) {
+    console.error('[save-newsletter]', error.message);
     return json({ error: 'Erreur serveur' }, 500);
   }
+
+  const inserted = data && data.length > 0;
+  return json({ success: true, alreadySubscribed: !inserted });
 };
 
 export const config = { path: '/api/save-newsletter' };

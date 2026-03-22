@@ -1,142 +1,138 @@
 // M.A.C JAMAIS ASSEZ — init-db.js
-// GET /api/init-db  →  crée les tables si elles n'existent pas encore
-// À appeler UNE SEULE FOIS après le premier déploiement
+// GET /api/init-db  →  crée les tables Supabase (1 seule fois)
 // Protégé par X-Admin-Token
 
-import { sql, json, cors, checkAdmin } from './_shared.js';
+import { supabase, json, cors, checkAdmin } from './_shared.js';
 
 export default async (req) => {
   if (req.method === 'OPTIONS') return cors();
   if (!checkAdmin(req))         return json({ error: 'Non autorisé' }, 401);
 
   try {
-    // ── Commandes (achats albums) ──
-    await sql`
-      CREATE TABLE IF NOT EXISTS commandes (
-        id          VARCHAR(30)  PRIMARY KEY,
-        nom         VARCHAR(100) NOT NULL,
-        prenom      VARCHAR(100) NOT NULL,
-        email       VARCHAR(150) NOT NULL,
-        tel         VARCHAR(30)  DEFAULT '',
-        ville       VARCHAR(100) DEFAULT '',
-        album       VARCHAR(200) NOT NULL,
-        prix        VARCHAR(50)  DEFAULT '',
-        quantite    INT          DEFAULT 1,
-        statut      VARCHAR(20)  DEFAULT 'en_attente',
-        date        VARCHAR(50)  NOT NULL,
-        created_at  TIMESTAMPTZ  DEFAULT NOW()
-      )
-    `;
+    // Supabase permet d'exécuter du SQL brut via rpc('exec_sql')
+    // On crée toutes les tables avec CREATE TABLE IF NOT EXISTS
+    const queries = [
 
-    // ── Réservations (billets) ──
-    await sql`
-      CREATE TABLE IF NOT EXISTS reservations (
-        id          VARCHAR(30)  PRIMARY KEY,
-        nom         VARCHAR(100) NOT NULL,
-        prenom      VARCHAR(100) NOT NULL,
-        email       VARCHAR(150) NOT NULL,
-        tel         VARCHAR(30)  NOT NULL,
-        evenement   VARCHAR(200) NOT NULL,
-        date_event  VARCHAR(100) DEFAULT '',
-        lieu        VARCHAR(200) DEFAULT '',
-        prix        VARCHAR(50)  DEFAULT '',
-        quantite    INT          DEFAULT 1,
-        statut      VARCHAR(20)  DEFAULT 'confirmee',
-        date        VARCHAR(50)  NOT NULL,
-        created_at  TIMESTAMPTZ  DEFAULT NOW()
-      )
-    `;
+      // Commandes
+      `CREATE TABLE IF NOT EXISTS commandes (
+        id          TEXT        PRIMARY KEY,
+        nom         TEXT        NOT NULL,
+        prenom      TEXT        NOT NULL,
+        email       TEXT        NOT NULL,
+        tel         TEXT        DEFAULT '',
+        ville       TEXT        DEFAULT '',
+        album       TEXT        NOT NULL,
+        prix        TEXT        DEFAULT '',
+        quantite    INT         DEFAULT 1,
+        statut      TEXT        DEFAULT 'en_attente',
+        date        TEXT        NOT NULL,
+        created_at  TIMESTAMPTZ DEFAULT NOW()
+      )`,
 
-    // ── Messages de contact ──
-    await sql`
-      CREATE TABLE IF NOT EXISTS messages (
-        id          VARCHAR(30)  PRIMARY KEY,
-        nom         VARCHAR(100) NOT NULL,
-        email       VARCHAR(150) NOT NULL,
-        message     TEXT         NOT NULL,
-        date        VARCHAR(50)  NOT NULL,
-        created_at  TIMESTAMPTZ  DEFAULT NOW()
-      )
-    `;
+      // Réservations
+      `CREATE TABLE IF NOT EXISTS reservations (
+        id          TEXT        PRIMARY KEY,
+        nom         TEXT        NOT NULL,
+        prenom      TEXT        NOT NULL,
+        email       TEXT        NOT NULL,
+        tel         TEXT        NOT NULL,
+        evenement   TEXT        NOT NULL,
+        date_event  TEXT        DEFAULT '',
+        lieu        TEXT        DEFAULT '',
+        prix        TEXT        DEFAULT '',
+        quantite    INT         DEFAULT 1,
+        statut      TEXT        DEFAULT 'confirmee',
+        date        TEXT        NOT NULL,
+        created_at  TIMESTAMPTZ DEFAULT NOW()
+      )`,
 
-    // ── Newsletter ──
-    await sql`
-      CREATE TABLE IF NOT EXISTS newsletter (
-        email       VARCHAR(150) PRIMARY KEY,
-        created_at  TIMESTAMPTZ  DEFAULT NOW()
-      )
-    `;
+      // Messages
+      `CREATE TABLE IF NOT EXISTS messages (
+        id          TEXT        PRIMARY KEY,
+        nom         TEXT        NOT NULL,
+        email       TEXT        NOT NULL,
+        message     TEXT        NOT NULL,
+        date        TEXT        NOT NULL,
+        created_at  TIMESTAMPTZ DEFAULT NOW()
+      )`,
 
-    // ── Albums ──
-    await sql`
-      CREATE TABLE IF NOT EXISTS albums (
-        id          INT          PRIMARY KEY,
-        titre       VARCHAR(200) NOT NULL,
-        annee       VARCHAR(10)  DEFAULT '',
-        genre       VARCHAR(100) DEFAULT '',
-        prix        VARCHAR(50)  DEFAULT '',
-        badge       VARCHAR(20)  DEFAULT '',
-        badge_label VARCHAR(30)  DEFAULT '',
-        code        VARCHAR(10)  DEFAULT '',
-        theme       VARCHAR(5)   DEFAULT 'a1',
-        visible     BOOLEAN      DEFAULT TRUE,
-        updated_at  TIMESTAMPTZ  DEFAULT NOW()
-      )
-    `;
+      // Newsletter
+      `CREATE TABLE IF NOT EXISTS newsletter (
+        email       TEXT        PRIMARY KEY,
+        created_at  TIMESTAMPTZ DEFAULT NOW()
+      )`,
 
-    // ── Settings (photo artiste, etc.) ──
-    await sql`
-      CREATE TABLE IF NOT EXISTS settings (
-        key        VARCHAR(100) PRIMARY KEY,
-        value      TEXT,
-        updated_at TIMESTAMPTZ DEFAULT NOW()
-      )
-    `;
+      // Albums
+      `CREATE TABLE IF NOT EXISTS albums (
+        id          INT         PRIMARY KEY,
+        titre       TEXT        NOT NULL,
+        annee       TEXT        DEFAULT '',
+        genre       TEXT        DEFAULT '',
+        prix        TEXT        DEFAULT '',
+        badge       TEXT        DEFAULT '',
+        badge_label TEXT        DEFAULT '',
+        code        TEXT        DEFAULT '',
+        theme       TEXT        DEFAULT 'a1',
+        visible     BOOLEAN     DEFAULT TRUE,
+        updated_at  TIMESTAMPTZ DEFAULT NOW()
+      )`,
 
-    // ── Événements ──
-    await sql`
-      CREATE TABLE IF NOT EXISTS evenements (
-        id          INT          PRIMARY KEY,
-        jour        VARCHAR(5)   DEFAULT '',
-        mois        VARCHAR(10)  DEFAULT '',
-        annee       VARCHAR(10)  DEFAULT '',
-        titre       VARCHAR(200) NOT NULL,
-        lieu        VARCHAR(200) DEFAULT '',
-        type        VARCHAR(20)  DEFAULT 'concert',
-        type_label  VARCHAR(30)  DEFAULT 'Concert',
-        prix        VARCHAR(50)  DEFAULT '',
-        statut      VARCHAR(20)  DEFAULT 'dispo',
-        visible     BOOLEAN      DEFAULT TRUE,
-        updated_at  TIMESTAMPTZ  DEFAULT NOW()
-      )
-    `;
+      // Événements
+      `CREATE TABLE IF NOT EXISTS evenements (
+        id          INT         PRIMARY KEY,
+        jour        TEXT        DEFAULT '',
+        mois        TEXT        DEFAULT '',
+        annee       TEXT        DEFAULT '',
+        titre       TEXT        NOT NULL,
+        lieu        TEXT        DEFAULT '',
+        type        TEXT        DEFAULT 'concert',
+        type_label  TEXT        DEFAULT 'Concert',
+        prix        TEXT        DEFAULT '',
+        statut      TEXT        DEFAULT 'dispo',
+        visible     BOOLEAN     DEFAULT TRUE,
+        updated_at  TIMESTAMPTZ DEFAULT NOW()
+      )`,
 
-    // ── Données de départ albums ──
-    await sql`
-      INSERT INTO albums (id,titre,annee,genre,prix,badge,badge_label,code,theme,visible) VALUES
-        (1,'Jamais Assez Vol.1','2024','Rap / Gospel',   '12 000 FCFA','new',   'Nouveau','JA', 'a1',true),
-        (2,'Foi & Lumière',     '2022','Gospel / Mbalax','10 000 FCFA','gospel','Gospel', 'FOI','a2',true),
-        (3,'Dakar Debout',      '2020','Rap / Mbalax',   '8 000 FCFA', '',      '',       'DKR','a3',true),
-        (4,'Rue de la Médina',  '2017','Rap Sénégalais',  '6 000 FCFA', '',      '',       'RUE','a4',true)
-      ON CONFLICT (id) DO NOTHING
-    `;
+      // Settings (photo artiste, etc.)
+      `CREATE TABLE IF NOT EXISTS settings (
+        key         TEXT        PRIMARY KEY,
+        value       TEXT,
+        updated_at  TIMESTAMPTZ DEFAULT NOW()
+      )`
+    ];
 
-    // ── Données de départ événements ──
-    await sql`
-      INSERT INTO evenements (id,jour,mois,annee,titre,lieu,type,type_label,prix,statut,visible) VALUES
-        (1,'18','Avr','2025','Concert de Lancement — Jamais Assez Vol.1','CCBM — Centre Culturel Blaise Senghor, Dakar','concert','Concert', '7 500 FCFA','dispo',  true),
-        (2,'02','Mai','2025','Soirée Gospel & Louange',                  'Église Évangélique de Dakar-Plateau',         'gospel', 'Gospel',  'Gratuit',  'dispo',  true),
-        (3,'24','Mai','2025','Festival Hip-Hop Sénégal',                 'Stade Iba Mar Diop, Dakar',                   'festival','Festival','5 000 FCFA','dispo',  true),
-        (4,'07','Jun','2025','Nuit du Mbalax — Spécial M.A.C',           'Thiossane Club, Dakar',                       'festival','Mbalax',  '—',        'complet',true),
-        (5,'19','Jul','2025','Tournée Diaspora — Paris',                 'La Cigale, Paris, France',                    'concert','Concert',  '28 €',     'dispo',  true)
-      ON CONFLICT (id) DO NOTHING
-    `;
+    // Exécute chaque requête via Supabase RPC
+    for (const query of queries) {
+      const { error } = await supabase.rpc('exec_sql', { query });
+      if (error) throw new Error(error.message);
+    }
+
+    // Données de départ — Albums
+    await supabase.from('albums').upsert([
+      { id:1, titre:'Jamais Assez Vol.1', annee:'2024', genre:'Rap / Gospel',    prix:'12 000 FCFA', badge:'new',    badge_label:'Nouveau', code:'JA',  theme:'a1', visible:true },
+      { id:2, titre:'Foi & Lumière',      annee:'2022', genre:'Gospel / Mbalax', prix:'10 000 FCFA', badge:'gospel', badge_label:'Gospel',  code:'FOI', theme:'a2', visible:true },
+      { id:3, titre:'Dakar Debout',       annee:'2020', genre:'Rap / Mbalax',    prix:'8 000 FCFA',  badge:'',       badge_label:'',        code:'DKR', theme:'a3', visible:true },
+      { id:4, titre:'Rue de la Médina',   annee:'2017', genre:'Rap Sénégalais',  prix:'6 000 FCFA',  badge:'',       badge_label:'',        code:'RUE', theme:'a4', visible:true }
+    ], { onConflict: 'id', ignoreDuplicates: true });
+
+    // Données de départ — Événements
+    await supabase.from('evenements').upsert([
+      { id:1, jour:'18', mois:'Avr', annee:'2025', titre:'Concert de Lancement — Jamais Assez Vol.1', lieu:'CCBM — Centre Culturel Blaise Senghor, Dakar', type:'concert', type_label:'Concert',  prix:'7 500 FCFA', statut:'dispo',   visible:true },
+      { id:2, jour:'02', mois:'Mai', annee:'2025', titre:'Soirée Gospel & Louange',                   lieu:'Église Évangélique de Dakar-Plateau',           type:'gospel',  type_label:'Gospel',   prix:'Gratuit',    statut:'dispo',   visible:true },
+      { id:3, jour:'24', mois:'Mai', annee:'2025', titre:'Festival Hip-Hop Sénégal',                  lieu:'Stade Iba Mar Diop, Dakar',                     type:'festival',type_label:'Festival', prix:'5 000 FCFA', statut:'dispo',   visible:true },
+      { id:4, jour:'07', mois:'Jun', annee:'2025', titre:'Nuit du Mbalax — Spécial M.A.C',            lieu:'Thiossane Club, Dakar',                         type:'festival',type_label:'Mbalax',   prix:'—',          statut:'complet', visible:true },
+      { id:5, jour:'19', mois:'Jul', annee:'2025', titre:'Tournée Diaspora — Paris',                  lieu:'La Cigale, Paris, France',                      type:'concert', type_label:'Concert',  prix:'28 €',       statut:'dispo',   visible:true }
+    ], { onConflict: 'id', ignoreDuplicates: true });
 
     return json({ success: true, message: 'Tables créées et données de départ insérées.' });
 
   } catch (err) {
     console.error('[init-db]', err?.message);
-    return json({ error: err?.message || 'Erreur serveur' }, 500);
+    // Fallback : Supabase Dashboard → SQL Editor est plus simple
+    return json({
+      error: err?.message,
+      tip: 'Si exec_sql échoue, créez les tables manuellement dans Supabase Dashboard → SQL Editor.'
+    }, 500);
   }
 };
 
