@@ -1,8 +1,0 @@
-{
-  "name": "mac-jamais-assez",
-  "version": "1.0.0",
-  "type": "module",
-  "dependencies": {
-    "@netlify/neon": "latest"
-  }
-}
