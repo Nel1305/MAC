@@ -5,8 +5,8 @@ import { createClient } from '@supabase/supabase-js';
 
 // ── Connexion Supabase ──
 // Ces variables sont définies dans Netlify → Environment variables
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY; // service_role key (côté serveur uniquement)
+const SUPABASE_URL = https://iszoodumwzpovxotisnm.supabase.co;
+const SUPABASE_KEY = sb_publishable_Lml4ABUXc8PIkxpC3WsF9Q_hwXwBd2k; // service_role key (côté serveur uniquement)
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
