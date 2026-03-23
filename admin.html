@@ -642,22 +642,8 @@ function updateApiStatus(){
   if(s){s.textContent='Supabase connecté — données persistantes.';}
 }
 
-const DEFAULT_ALBUMS_ADMIN = [
-  { id:1, titre:'Jamais Assez Vol.1', annee:'2024', genre:'Rap / Gospel',    prix:'12 000 FCFA', badge:'new',    badgeLabel:'Nouveau', code:'JA',  theme:'a1', visible:true },
-  { id:2, titre:'Foi & Lumière',      annee:'2022', genre:'Gospel / Mbalax', prix:'10 000 FCFA', badge:'gospel', badgeLabel:'Gospel',  code:'FOI', theme:'a2', visible:true },
-  { id:3, titre:'Dakar Debout',       annee:'2020', genre:'Rap / Mbalax',    prix:'8 000 FCFA',  badge:'',       badgeLabel:'',        code:'DKR', theme:'a3', visible:true },
-  { id:4, titre:'Rue de la Médina',   annee:'2017', genre:'Rap Sénégalais',  prix:'6 000 FCFA',  badge:'',       badgeLabel:'',        code:'RUE', theme:'a4', visible:true }
-];
-const DEFAULT_EVENTS_ADMIN = [
-  { id:1, jour:'18', mois:'Avr', annee:'2025', titre:'Concert de Lancement — Jamais Assez Vol.1', lieu:'CCBM — Centre Culturel Blaise Senghor, Dakar', type:'concert', typeLabel:'Concert',  prix:'7 500 FCFA', statut:'dispo',  visible:true },
-  { id:2, jour:'02', mois:'Mai', annee:'2025', titre:'Soirée Gospel & Louange',                   lieu:'Église Évangélique de Dakar-Plateau',           type:'gospel',  typeLabel:'Gospel',   prix:'Gratuit',    statut:'dispo',  visible:true },
-  { id:3, jour:'24', mois:'Mai', annee:'2025', titre:'Festival Hip-Hop Sénégal',                  lieu:'Stade Iba Mar Diop, Dakar',                     type:'festival',typeLabel:'Festival', prix:'5 000 FCFA', statut:'dispo',  visible:true },
-  { id:4, jour:'07', mois:'Jun', annee:'2025', titre:'Nuit du Mbalax — Spécial M.A.C',            lieu:'Thiossane Club, Dakar',                         type:'festival',typeLabel:'Mbalax',   prix:'—',          statut:'complet',visible:true },
-  { id:5, jour:'19', mois:'Jul', annee:'2025', titre:'Tournée Diaspora — Paris',                  lieu:'La Cigale, Paris, France',                      type:'concert', typeLabel:'Concert',  prix:'28 €',       statut:'dispo',  visible:true }
-];
-
-async function loadAlbums(){ const d=await apiGet('albums'); _albums=d.length?d:DEFAULT_ALBUMS_ADMIN; }
-async function loadEvents(){ const d=await apiGet('events'); _events=d.length?d:DEFAULT_EVENTS_ADMIN; }
+async function loadAlbums(){ _albums=await apiGet('albums'); }
+async function loadEvents(){ _events=await apiGet('events'); }
 async function loadCmds()  { _cmds=await apiGet('commandes'); }
 async function loadRes()   { _res=await apiGet('reservations'); }
 async function loadMessages(){ _msgs=await apiGet('messages'); }

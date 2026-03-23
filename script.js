@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    M.A.C JAMAIS ASSEZ — script.js  v6.0
-   Optimisé Netlify Blobs
+   Netlify + Supabase + EmailJS
 ═══════════════════════════════════════════════════════ */
 'use strict';
 
@@ -10,21 +10,6 @@ const EMAILJS_CONFIG = {
   serviceId:  'service_ezxfwzg',
   templateId: 'template_c0yitid'
 };
-
-/* ── DONNÉES PAR DÉFAUT (fallback si API indisponible) ── */
-const DEFAULT_ALBUMS = [
-  { id:1, titre:'Jamais Assez Vol.1', annee:'2024', genre:'Rap / Gospel',    prix:'12 000 FCFA', badge:'new',    badgeLabel:'Nouveau', code:'JA',  theme:'a1', visible:true },
-  { id:2, titre:'Foi & Lumière',      annee:'2022', genre:'Gospel / Mbalax', prix:'10 000 FCFA', badge:'gospel', badgeLabel:'Gospel',  code:'FOI', theme:'a2', visible:true },
-  { id:3, titre:'Dakar Debout',       annee:'2020', genre:'Rap / Mbalax',    prix:'8 000 FCFA',  badge:'',       badgeLabel:'',        code:'DKR', theme:'a3', visible:true },
-  { id:4, titre:'Rue de la Médina',   annee:'2017', genre:'Rap Sénégalais',  prix:'6 000 FCFA',  badge:'',       badgeLabel:'',        code:'RUE', theme:'a4', visible:true }
-];
-const DEFAULT_EVENTS = [
-  { id:1, jour:'18', mois:'Avr', annee:'2025', titre:'Concert de Lancement — Jamais Assez Vol.1', lieu:'CCBM — Centre Culturel Blaise Senghor, Dakar', type:'concert', typeLabel:'Concert',  prix:'7 500 FCFA', statut:'dispo',   visible:true },
-  { id:2, jour:'02', mois:'Mai', annee:'2025', titre:'Soirée Gospel & Louange',                   lieu:'Église Évangélique de Dakar-Plateau',           type:'gospel',  typeLabel:'Gospel',   prix:'Gratuit',    statut:'dispo',   visible:true },
-  { id:3, jour:'24', mois:'Mai', annee:'2025', titre:'Festival Hip-Hop Sénégal',                  lieu:'Stade Iba Mar Diop, Dakar',                     type:'festival',typeLabel:'Festival', prix:'5 000 FCFA', statut:'dispo',   visible:true },
-  { id:4, jour:'07', mois:'Jun', annee:'2025', titre:'Nuit du Mbalax — Spécial M.A.C',            lieu:'Thiossane Club, Dakar',                         type:'festival',typeLabel:'Mbalax',   prix:'—',          statut:'complet', visible:true },
-  { id:5, jour:'19', mois:'Jul', annee:'2025', titre:'Tournée Diaspora — Paris',                  lieu:'La Cigale, Paris, France',                      type:'concert', typeLabel:'Concert',  prix:'28 €',       statut:'dispo',   visible:true }
-];
 
 /* ── SÉCURITÉ ── */
 function sanitize(str) {
@@ -95,9 +80,10 @@ async function renderAlbums() {
   const grid = document.querySelector('.disco-grid');
   if (!grid) return;
   grid.innerHTML = '<p style="color:var(--argent);grid-column:1/-1;text-align:center;padding:3rem 0;">Chargement…</p>';
-  const albums = ((await apiGet('albums')) || DEFAULT_ALBUMS).filter(a => a.visible);
+  const fromApi = await apiGet('albums');
+  const albums  = (fromApi || []).filter(a => a.visible);
   if (!albums.length) {
-    grid.innerHTML = '<p style="color:var(--argent);grid-column:1/-1;text-align:center;padding:3rem 0;">Aucun album disponible.</p>';
+    grid.innerHTML = '<p style="color:var(--argent);grid-column:1/-1;text-align:center;padding:3rem 0;">Aucun album disponible pour le moment.</p>';
     return;
   }
   grid.innerHTML = albums.map(a => `
@@ -124,9 +110,10 @@ async function renderEvents() {
   const list = document.querySelector('.event-list');
   if (!list) return;
   list.innerHTML = '<p style="color:var(--argent);text-align:center;padding:2rem 0;">Chargement…</p>';
-  const events = ((await apiGet('events')) || DEFAULT_EVENTS).filter(e => e.visible);
+  const fromApi = await apiGet('events');
+  const events  = (fromApi || []).filter(e => e.visible);
   if (!events.length) {
-    list.innerHTML = '<p style="color:var(--argent);text-align:center;padding:3rem 0;">Aucun événement à venir.</p>';
+    list.innerHTML = '<p style="color:var(--argent);text-align:center;padding:3rem 0;">Aucun événement à venir pour le moment.</p>';
     return;
   }
   list.innerHTML = events.map(ev => `
