@@ -5,8 +5,8 @@ const { createClient } = require('@supabase/supabase-js');
 
 // ── Supabase (variables d'env Vercel) ──
 const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
+NEXT_PUBLIC_SUPABASE_URL=https://hbrundqsoymqqzyttenu.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=sb_publishable_UcjT-wTwuO5rF_Fup4768A_rsWBtuKX
 );
 
 // ── Headers CORS ──
