@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="M.A.C Jamais Assez — Artiste Rap, Mbalax et Gospel sénégalais. Albums, concerts et réservations.">
+  <title>M.A.C Jamais Assez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <a href="#accueil" class="nav-logo">M.A.C<span>.</span></a>
+  <div class="nav-links">
+    <a href="#musique">Musique</a>
+    <a href="#evenements">Événements</a>
+    <a href="#galerie">Galerie</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#musique" onclick="closeMenu()">Musique</a>
+  <a href="#evenements" onclick="closeMenu()">Événements</a>
+  <a href="#galerie" onclick="closeMenu()">Galerie</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="accueil">
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-tag">🎵 Artiste Sénégalais</div>
+    <h1 class="hero-title">
+      M.A.C<br>
+      <em>Jamais Assez</em>
+    </h1>
+    <p class="hero-sub">Rap · Mbalax · Gospel</p>
+    <p class="hero-quote" id="heroQuote"></p>
+    <div class="hero-actions">
+      <a href="#musique" class="btn-primary">Découvrir la musique</a>
+      <a href="#evenements" class="btn-outline-hero">Prochains concerts</a>
+    </div>
+  </div>
+  <div class="hero-photo-wrap">
+    <div class="hero-photo" id="heroPhoto">
+      <div class="hero-photo-mono">MAC</div>
+    </div>
+    <div class="hero-deco-1"></div>
+    <div class="hero-deco-2"></div>
+  </div>
+  <div class="hero-scroll">
+    <span>↓</span>
+  </div>
+</section>
+
+<!-- ═══ BIOGRAPHIE ═══ -->
+<section class="bio" id="bio">
+  <div class="container">
+    <div class="bio-inner">
+      <div class="section-tag">À propos</div>
+      <h2 class="section-title">L'Artiste</h2>
+      <div class="bio-text" id="bioText">
+        <p>Chargement...</p>
+      </div>
+      <div class="bio-stats">
+        <div class="stat"><span id="statAlbums">—</span><small>Albums</small></div>
+        <div class="stat"><span id="statConcerts">—</span><small>Concerts</small></div>
+        <div class="stat"><span id="statAnnees">—</span><small>Années</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MUSIQUE ═══ -->
+<section class="musique" id="musique">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Discographie</div>
+      <h2 class="section-title">Albums & Projets</h2>
+    </div>
+    <div class="albums-grid" id="albumsGrid">
+      <div class="loading-state">Chargement des albums...</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ÉVÉNEMENTS ═══ -->
+<section class="evenements" id="evenements">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Agenda</div>
+      <h2 class="section-title">Prochains Événements</h2>
+    </div>
+    <div class="events-list" id="eventsList">
+      <div class="loading-state">Chargement des événements...</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GALERIE PHOTOS ═══ -->
+<section class="galerie" id="galerie">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Galerie</div>
+      <h2 class="section-title">Photos d'Événements</h2>
+    </div>
+    <div class="galerie-grid" id="galerieGrid">
+      <div class="loading-state">Chargement des photos...</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NEWSLETTER ═══ -->
+<section class="newsletter-band">
+  <div class="container">
+    <div class="nl-inner">
+      <div>
+        <h3>Restez connecté</h3>
+        <p>Recevez les actualités, sorties et dates de concerts en avant-première.</p>
+      </div>
+      <div class="nl-form">
+        <input type="email" id="nlEmail" placeholder="votre@email.com" class="nl-input">
+        <button onclick="submitNewsletter()" class="btn-primary" id="nlBtn">S'inscrire</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Contact</div>
+      <h2 class="section-title">Écrivez-nous</h2>
+    </div>
+    <div class="contact-inner">
+      <div class="contact-info">
+        <div class="contact-item">
+          <span class="contact-icon">📍</span>
+          <div>
+            <strong>Localisation</strong>
+            <p>Dakar, Sénégal</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🎤</span>
+          <div>
+            <strong>Booking & Collaborations</strong>
+            <p>Pour toute demande de concert ou collaboration artistique.</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📧</span>
+          <div>
+            <strong>Presse & Médias</strong>
+            <p>Pour interviews et couverture médiatique.</p>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prénom *</label>
+            <input type="text" id="cPrenom" placeholder="Votre prénom" required>
+          </div>
+          <div class="form-group">
+            <label>Nom *</label>
+            <input type="text" id="cNom" placeholder="Votre nom" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="cEmail" placeholder="votre@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Sujet</label>
+          <select id="cSujet">
+            <option value="general">Général</option>
+            <option value="booking">Booking / Concert</option>
+            <option value="presse">Presse / Média</option>
+            <option value="collaboration">Collaboration artistique</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message *</label>
+          <textarea id="cMessage" placeholder="Votre message..." rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary btn-full" id="contactBtn">Envoyer le message</button>
+        <div id="contactMsg" class="form-msg"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">M.A.C<span>.</span></div>
+        <p>Jamais Assez</p>
+        <small>Dakar, Sénégal</small>
+      </div>
+      <div class="footer-links">
+        <a href="#musique">Musique</a>
+        <a href="#evenements">Événements</a>
+        <a href="#galerie">Galerie</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 BUABEY Arold Yves Nel'si · Tous droits réservés</span>
+      <a href="admin.html" class="admin-link" title="Administration">⚙</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ MODAL ACHAT ALBUM ═══ -->
+<div class="modal-overlay" id="modalAchat">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-tag">Acheter</div>
+        <h3 id="buyAlbumTitle">—</h3>
+        <div class="modal-sub" id="buyAlbumMeta">—</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalAchat')">✕</button>
+    </div>
+    <form id="buyForm" onsubmit="submitAchat(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Prénom *</label>
+          <input type="text" id="buyPrenom" placeholder="Votre prénom" required>
+        </div>
+        <div class="form-group">
+          <label>Nom *</label>
+          <input type="text" id="buyNom" placeholder="Votre nom" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="buyEmail" placeholder="votre@email.com" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Téléphone</label>
+          <input type="tel" id="buyTel" placeholder="+221 XX XXX XX XX">
+        </div>
+        <div class="form-group">
+          <label>Quantité</label>
+          <input type="number" id="buyQty" value="1" min="1" max="10">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ville / Pays</label>
+        <input type="text" id="buyVille" placeholder="Ex: Dakar, Sénégal">
+      </div>
+      <div class="modal-prix">
+        Prix unitaire : <strong id="buyAlbumPrix">—</strong>
+      </div>
+      <div id="buyMsg" class="form-msg"></div>
+      <button type="submit" class="btn-primary btn-full" id="buyBtn">Confirmer la commande</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══ MODAL RÉSERVATION ═══ -->
+<div class="modal-overlay" id="modalTicket">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-tag">Réservation</div>
+        <h3 id="ticketEvTitle">—</h3>
+        <div class="modal-sub" id="ticketEvMeta">—</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modalTicket')">✕</button>
+    </div>
+    <form id="ticketForm" onsubmit="submitTicket(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Prénom *</label>
+          <input type="text" id="ticketPrenom" placeholder="Votre prénom" required>
+        </div>
+        <div class="form-group">
+          <label>Nom *</label>
+          <input type="text" id="ticketNom" placeholder="Votre nom" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="ticketEmail" placeholder="votre@email.com" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Téléphone *</label>
+          <input type="tel" id="ticketTel" placeholder="+221 XX XXX XX XX" required>
+        </div>
+        <div class="form-group">
+          <label>Nombre de places</label>
+          <input type="number" id="ticketQty" value="1" min="1" max="10">
+        </div>
+      </div>
+      <div class="modal-prix">
+        Prix / place : <strong id="ticketEvPrix">—</strong>
+      </div>
+      <div id="ticketMsg" class="form-msg"></div>
+      <button type="submit" class="btn-primary btn-full" id="ticketBtn">Confirmer la réservation</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══ MODAL PHOTO GALERIE ═══ -->
+<div class="modal-overlay" id="modalPhoto">
+  <div class="modal-box modal-box-photo">
+    <button class="modal-close modal-close-photo" onclick="closeModal('modalPhoto')">✕</button>
+    <img id="modalPhotoImg" src="" alt="">
+    <div class="modal-photo-caption" id="modalPhotoCaption"></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL SUCCÈS ═══ -->
+<div class="modal-overlay" id="modalSuccess">
+  <div class="modal-box modal-box-success">
+    <div class="success-icon">✓</div>
+    <h3 id="successTitle">Confirmé !</h3>
+    <p id="successRef"></p>
+    <p id="successDetail"></p>
+    <button class="btn-primary" onclick="closeModal('modalSuccess')">Fermer</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin — M.A.C Jamais Assez</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D0A07;--bg2:#141008;--bg3:#1C1510;--bg4:#221A12;
+  --terra:#C4622D;--terra2:#E07840;--or:#D4A843;
+  --blanc:#FAF7F2;--gris:#8C8070;--gris2:#3D3328;
+  --vert:#2A6B4A;--vert2:#3D9668;--rouge:#8B2020;--rouge2:#C43030;
+  --border:rgba(212,168,67,0.12);--border2:rgba(212,168,67,0.06);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--blanc);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;}
+/* SIDEBAR */
+.sidebar{width:220px;min-height:100vh;background:var(--bg2);border-right:1px solid var(--border2);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;}
+.sb-brand{padding:1.6rem 1.4rem 1.2rem;border-bottom:1px solid var(--border2);}
+.sb-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.1em;color:var(--blanc);}
+.sb-logo span{color:var(--terra);}
+.sb-sub{font-size:0.6rem;color:var(--gris);letter-spacing:0.2em;text-transform:uppercase;margin-top:2px;}
+.sb-section{font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gris);padding:1.2rem 1.4rem 0.4rem;opacity:0.6;}
+.nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.65rem 1.4rem;cursor:pointer;font-size:0.78rem;color:rgba(250,247,242,0.55);transition:all 0.2s;text-decoration:none;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--blanc);background:rgba(255,255,255,0.02);}
+.nav-item.active{color:var(--terra2);border-left-color:var(--terra);background:rgba(196,98,45,0.06);}
+.nav-item .ico{font-size:0.85rem;width:16px;text-align:center;flex-shrink:0;}
+.nav-badge{margin-left:auto;background:var(--rouge2);color:#fff;font-size:0.55rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:10px;display:none;}
+.sb-footer{padding:1rem 1.4rem;border-top:1px solid var(--border2);margin-top:auto;}
+.back-link{font-size:0.72rem;color:var(--gris);text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s;}
+.back-link:hover{color:var(--terra2);}
+/* MAIN */
+.main{margin-left:220px;flex:1;min-height:100vh;}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border2);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;}
+.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.15em;color:var(--blanc);}
+.topbar-title span{color:var(--terra);}
+.topbar-right{display:flex;gap:0.6rem;align-items:center;}
+.saved-badge{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(42,107,74,0.2);color:var(--vert2);border:1px solid rgba(61,150,104,0.3);padding:0.25rem 0.7rem;display:none;}
+/* PANELS */
+.panel{display:none;padding:2rem;}
+.panel.active{display:block;}
+.panel-title{font-size:1.4rem;font-weight:500;color:var(--blanc);margin-bottom:0.3rem;}
+.panel-sub{font-size:0.8rem;color:var(--gris);margin-bottom:2rem;}
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border2);padding:1.5rem;margin-bottom:1rem;}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border2);}
+.card-title{font-size:0.72rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--blanc);}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+.stat-card{background:var(--bg2);border:1px solid var(--border2);padding:1.2rem;}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--terra);line-height:1;}
+.stat-n.alert{color:var(--rouge2);}
+.stat-l{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gris);margin-top:0.3rem;}
+/* BUTTONS */
+.btn{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.85rem;cursor:pointer;border:1px solid;transition:all 0.2s;font-weight:500;min-height:36px;}
+.btn-terra{background:var(--terra);color:var(--blanc);border-color:var(--terra);}
+.btn-terra:hover{background:var(--terra2);}
+.btn-outline{background:transparent;color:var(--gris);border-color:var(--gris2);}
+.btn-outline:hover,.btn-outline.on{border-color:var(--terra2);color:var(--terra2);}
+.btn-red{background:transparent;color:var(--rouge2);border-color:rgba(196,48,48,0.3);}
+.btn-red:hover{background:var(--rouge2);color:#fff;}
+.btn-green{background:var(--vert);color:#fff;border-color:var(--vert);}
+.btn-green:hover{background:var(--vert2);}
+.btn-blue{background:transparent;color:#6A9ED4;border-color:rgba(26,46,74,0.4);}
+.btn-blue:hover{background:rgba(26,46,74,0.3);}
+/* FORMS */
+.fg{display:flex;flex-direction:column;gap:0.3rem;margin-bottom:0.8rem;}
+.fg label{font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gris);}
+.fg input,.fg select,.fg textarea{background:var(--bg3);border:1px solid var(--border);color:var(--blanc);padding:0.6rem 0.85rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;transition:border-color 0.2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--terra);}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(140,128,112,0.45);}
+.fg select option{background:var(--bg3);}
+.fg textarea{height:70px;resize:vertical;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
+.form-grid .full{grid-column:1/-1;}
+.form-actions{display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border2);}
+/* TABLE / LIST */
+.item-row{background:var(--bg3);border:1px solid var(--border2);padding:1rem 1.2rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:1rem;transition:border-color 0.2s;}
+.item-row:hover{border-color:rgba(196,98,45,0.25);}
+.item-row.hidden-item{opacity:0.4;}
+.item-id{font-size:0.6rem;color:var(--terra);font-family:'Bebas Neue',sans-serif;letter-spacing:0.1em;min-width:80px;}
+.item-main{flex:1;}
+.item-title{font-size:0.88rem;font-weight:500;}
+.item-meta{font-size:0.72rem;color:var(--gris);margin-top:0.15rem;}
+.item-actions{display:flex;gap:0.4rem;flex-wrap:wrap;}
+/* COMMANDES */
+.order-card{background:var(--bg3);border:1px solid var(--border2);padding:1rem 1.2rem;margin-bottom:0.5rem;display:grid;grid-template-columns:1fr auto;gap:1rem;}
+.order-ref{font-size:0.65rem;color:var(--terra);letter-spacing:0.1em;margin-bottom:0.3rem;}
+.order-name{font-size:0.88rem;font-weight:500;margin-bottom:0.15rem;}
+.order-detail{font-size:0.75rem;color:rgba(250,247,242,0.65);}
+.order-meta{font-size:0.62rem;color:rgba(140,128,112,0.55);margin-top:0.2rem;}
+.order-right{display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end;}
+.pill{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.2rem 0.6rem;font-weight:500;}
+.pill.en_attente{background:rgba(212,168,67,0.1);color:var(--or);border:1px solid rgba(212,168,67,0.3);}
+.pill.confirmee{background:rgba(42,107,74,0.15);color:var(--vert2);border:1px solid rgba(42,107,74,0.3);}
+.pill.traite{background:rgba(26,46,74,0.15);color:#6A9ED4;border:1px solid rgba(26,46,74,0.3);}
+.pill.annule{background:rgba(139,32,32,0.12);color:var(--rouge2);border:1px solid rgba(196,48,48,0.25);}
+.statut-sel{background:var(--bg4);border:1px solid var(--border);color:var(--blanc);padding:0.28rem 0.5rem;font-family:'DM Sans';font-size:0.62rem;outline:none;cursor:pointer;}
+.statut-sel option{background:var(--bg3);}
+/* FILTERS */
+.filters{display:flex;gap:0.4rem;margin-bottom:1rem;flex-wrap:wrap;}
+.f-btn{background:transparent;border:1px solid var(--gris2);color:var(--gris);padding:0.28rem 0.7rem;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans';transition:all 0.2s;}
+.f-btn:hover,.f-btn.active{border-color:var(--terra);color:var(--terra2);background:rgba(196,98,45,0.06);}
+/* PHOTO */
+.photo-zone{width:180px;aspect-ratio:3/4;background:var(--bg3);border:2px dashed var(--gris2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color 0.25s;position:relative;overflow:hidden;flex-shrink:0;}
+.photo-zone:hover{border-color:var(--terra);}
+.photo-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.photo-row{display:flex;gap:1.5rem;align-items:flex-start;}
+.photo-info p{font-size:0.78rem;color:var(--gris);line-height:1.7;margin-bottom:0.6rem;}
+/* GALERIE */
+.galerie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.6rem;}
+.galerie-item{aspect-ratio:4/3;overflow:hidden;position:relative;background:var(--bg3);border:1px solid var(--border2);}
+.galerie-item img{width:100%;height:100%;object-fit:cover;}
+.galerie-item-overlay{position:absolute;inset:0;background:rgba(13,10,7,0.6);display:flex;align-items:center;justify-content:center;gap:0.4rem;opacity:0;transition:opacity 0.2s;}
+.galerie-item:hover .galerie-item-overlay{opacity:1;}
+/* NL */
+.nl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.4rem;}
+.nl-item{background:var(--bg3);border:1px solid var(--border2);padding:0.5rem 0.9rem;font-size:0.78rem;display:flex;justify-content:space-between;align-items:center;}
+.nl-email{color:var(--terra2);}
+/* EMPTY */
+.empty{text-align:center;padding:2.5rem;color:var(--gris);}
+.empty-ico{font-size:2rem;opacity:0.25;margin-bottom:0.5rem;}
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:var(--bg3);border:1px solid var(--border);padding:0.75rem 1.2rem;font-size:0.78rem;display:flex;align-items:center;gap:0.6rem;transform:translateY(60px);opacity:0;transition:all 0.3s;max-width:320px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(61,150,104,0.4);}
+.toast.error{border-color:rgba(196,48,48,0.4);}
+.toast-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.toast.success .toast-dot{background:var(--vert2);}
+.toast.error .toast-dot{background:var(--rouge2);}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(13,10,7,0.85);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-bg.open{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid var(--border);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;padding:1.6rem;}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;}
+.modal-ttl{font-size:0.9rem;font-weight:500;color:var(--terra2);letter-spacing:0.05em;}
+.modal-x{background:none;border:none;color:var(--gris);font-size:1.1rem;cursor:pointer;}
+.modal-x:hover{color:var(--blanc);}
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.login-box{width:100%;max-width:340px;padding:2.5rem;background:var(--bg2);border:1px solid var(--border);}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--blanc);letter-spacing:0.15em;margin-bottom:0.2rem;}
+.login-logo span{color:var(--terra);}
+.login-sub{font-size:0.65rem;color:var(--gris);letter-spacing:0.15em;margin-bottom:1.8rem;}
+.login-field{margin-bottom:0.9rem;}
+.login-field label{display:block;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gris);margin-bottom:0.3rem;}
+.login-field input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--blanc);padding:0.72rem 1rem;font-family:'DM Sans';font-size:0.88rem;outline:none;}
+.login-field input:focus{border-color:var(--terra);}
+.login-btn{width:100%;background:var(--terra);color:var(--blanc);border:none;padding:0.82rem;font-family:'DM Sans';font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-weight:500;margin-top:0.4rem;transition:background 0.2s;}
+.login-btn:hover{background:var(--terra2);}
+.login-err{font-size:0.72rem;color:var(--rouge2);margin-top:0.6rem;display:none;}
+@media(max-width:800px){.sidebar{width:180px;}.main{margin-left:180px;}.stats-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">M.A.C<span>.</span></div>
+    <div class="login-sub">Administration</div>
+    <div class="login-field"><label>Identifiant</label><input type="text" id="lUser" autocomplete="username"></div>
+    <div class="login-field"><label>Mot de passe</label><input type="password" id="lPass" autocomplete="current-password"></div>
+    <button class="login-btn" onclick="doLogin()">Connexion</button>
+    <div class="login-err" id="lErr"></div>
+  </div>
+</div>
+
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">M.A.C<span>.</span></div>
+    <div class="sb-sub">Administration</div>
+  </div>
+  <div class="sb-section">Contenu</div>
+  <a class="nav-item active" href="#" onclick="show('dashboard')"><span class="ico">◈</span>Dashboard</a>
+  <a class="nav-item" href="#" onclick="show('artiste')"><span class="ico">◉</span>Artiste</a>
+  <a class="nav-item" href="#" onclick="show('albums')"><span class="ico">◎</span>Albums</a>
+  <a class="nav-item" href="#" onclick="show('events')"><span class="ico">◷</span>Événements</a>
+  <a class="nav-item" href="#" onclick="show('galerie')"><span class="ico">◫</span>Galerie Photos</a>
+  <div class="sb-section">Transactions</div>
+  <a class="nav-item" href="#" onclick="show('commandes')"><span class="ico">🛒</span>Commandes<span class="nav-badge" id="badgeCmd"></span></a>
+  <a class="nav-item" href="#" onclick="show('reservations')"><span class="ico">🎫</span>Réservations<span class="nav-badge" id="badgeRes"></span></a>
+  <a class="nav-item" href="#" onclick="show('messages')"><span class="ico">✉</span>Messages</a>
+  <a class="nav-item" href="#" onclick="show('newsletter')"><span class="ico">◌</span>Newsletter</a>
+  <div class="sb-footer">
+    <a href="index.html" target="_blank" class="back-link">↗ Voir le site</a>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">Admin <span>M.A.C</span></div>
+    <div class="topbar-right">
+      <div class="saved-badge" id="savedBadge">✓ Sauvegardé</div>
+      <button class="btn btn-blue" onclick="exportAll()">↓ Export JSON</button>
+      <button class="btn btn-red" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="panel active" id="panel-dashboard">
+    <div class="panel-title">Dashboard</div>
+    <div class="panel-sub">Vue d'ensemble en temps réel.</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-n" id="sAlbums">—</div><div class="stat-l">Albums</div></div>
+      <div class="stat-card"><div class="stat-n" id="sEvents">—</div><div class="stat-l">Événements</div></div>
+      <div class="stat-card"><div class="stat-n" id="sCmds">—</div><div class="stat-l" id="sCmdsSub">Commandes</div></div>
+      <div class="stat-card"><div class="stat-n" id="sRes">—</div><div class="stat-l" id="sResSub">Réservations</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Actions rapides</div></div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <button class="btn btn-terra" onclick="show('albums');openAlbumModal()">+ Album</button>
+        <button class="btn btn-terra" onclick="show('events');openEventModal()">+ Événement</button>
+        <button class="btn btn-terra" onclick="show('galerie');openGalerieModal()">+ Photo</button>
+        <button class="btn btn-outline" onclick="show('commandes')">Commandes</button>
+        <button class="btn btn-outline" onclick="show('reservations')">Réservations</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Dernière activité</div></div>
+      <div id="recentActivity"></div>
+    </div>
+  </div>
+
+  <!-- ARTISTE -->
+  <div class="panel" id="panel-artiste">
+    <div class="panel-title">Profil Artiste</div>
+    <div class="panel-sub">Photo, biographie et statistiques affichées sur le site.</div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Photo principale</div></div>
+      <div class="photo-row">
+        <div>
+          <div class="photo-zone" id="photoZone" onclick="document.getElementById('photoInput').click()">
+            <span style="font-size:1.5rem;opacity:0.3">⊕</span>
+            <small style="font-size:0.65rem;color:var(--gris);text-align:center;margin-top:0.5rem;">Cliquer pour<br>choisir</small>
+          </div>
+          <input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(event)" style="display:none">
+        </div>
+        <div class="photo-info">
+          <p>JPG · PNG · WEBP · Max 3 Mo<br>Ratio portrait recommandé</p>
+          <p id="photoInfoTxt" style="color:var(--terra2);font-size:0.75rem;margin-bottom:0.8rem;"></p>
+          <div style="display:flex;gap:0.5rem;">
+            <button class="btn btn-green" onclick="savePhoto()">Sauvegarder</button>
+            <button class="btn btn-red" onclick="deletePhoto()">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Biographie</div></div>
+      <div class="fg full">
+        <label>Texte de biographie (une phrase par ligne)</label>
+        <textarea id="bioInput" rows="6" placeholder="Écrivez la biographie de l'artiste..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-green" onclick="saveSetting('bio', document.getElementById('bioInput').value)">Sauvegarder</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Citation Hero</div></div>
+      <div class="fg full">
+        <label>Citation affichée sur la page d'accueil</label>
+        <input type="text" id="quoteInput" placeholder="Ex: Le rap, c'est ma rue...">
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-green" onclick="saveSetting('hero_quote', document.getElementById('quoteInput').value)">Sauvegarder</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Statistiques</div></div>
+      <div class="form-grid">
+        <div class="fg"><label>Albums</label><input type="text" id="statAlbumsInput" placeholder="Ex: 4"></div>
+        <div class="fg"><label>Concerts</label><input type="text" id="statConcertsInput" placeholder="Ex: 50+"></div>
+        <div class="fg"><label>Années de carrière</label><input type="text" id="statAnneesInput" placeholder="Ex: 8"></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-green" onclick="saveStats()">Sauvegarder</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALBUMS -->
+  <div class="panel" id="panel-albums">
+    <div class="panel-title">Albums</div>
+    <div class="panel-sub">Gérez le catalogue musical affiché sur le site.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Albums (<span id="albumCount">0</span>)</div>
+        <button class="btn btn-terra" onclick="openAlbumModal()">+ Ajouter</button>
+      </div>
+      <div id="albumsList"></div>
+    </div>
+  </div>
+
+  <!-- ÉVÉNEMENTS -->
+  <div class="panel" id="panel-events">
+    <div class="panel-title">Événements</div>
+    <div class="panel-sub">Concerts, festivals et événements à venir.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Événements (<span id="eventCount">0</span>)</div>
+        <button class="btn btn-terra" onclick="openEventModal()">+ Ajouter</button>
+      </div>
+      <div id="eventsList"></div>
+    </div>
+  </div>
+
+  <!-- GALERIE -->
+  <div class="panel" id="panel-galerie">
+    <div class="panel-title">Galerie Photos</div>
+    <div class="panel-sub">Photos d'événements et de concerts affichées sur le site.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Photos (<span id="galerieCount">0</span>)</div>
+        <button class="btn btn-terra" onclick="openGalerieModal()">+ Ajouter une photo</button>
+      </div>
+      <div class="galerie-grid" id="galerieGrid"></div>
+    </div>
+  </div>
+
+  <!-- COMMANDES -->
+  <div class="panel" id="panel-commandes">
+    <div class="panel-title">Commandes Albums</div>
+    <div class="panel-sub">Commandes reçues depuis le site.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Commandes (<span id="cmdCount">0</span>)</div>
+        <div style="display:flex;gap:0.4rem;">
+          <button class="btn btn-blue" onclick="exportCSV('commandes')">↓ CSV</button>
+        </div>
+      </div>
+      <div class="filters">
+        <button class="f-btn active" onclick="filterCmd('all')">Tous</button>
+        <button class="f-btn" onclick="filterCmd('en_attente')">En attente</button>
+        <button class="f-btn" onclick="filterCmd('traite')">Traités</button>
+        <button class="f-btn" onclick="filterCmd('annule')">Annulés</button>
+      </div>
+      <div id="cmdList"></div>
+    </div>
+  </div>
+
+  <!-- RÉSERVATIONS -->
+  <div class="panel" id="panel-reservations">
+    <div class="panel-title">Réservations Billets</div>
+    <div class="panel-sub">Réservations reçues depuis le site.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Réservations (<span id="resCount">0</span>)</div>
+        <button class="btn btn-blue" onclick="exportCSV('reservations')">↓ CSV</button>
+      </div>
+      <div class="filters">
+        <button class="f-btn active" onclick="filterRes('all')">Tous</button>
+        <button class="f-btn" onclick="filterRes('confirmee')">Confirmées</button>
+        <button class="f-btn" onclick="filterRes('traite')">Traitées</button>
+        <button class="f-btn" onclick="filterRes('annule')">Annulées</button>
+      </div>
+      <div id="resList"></div>
+    </div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div class="panel" id="panel-messages">
+    <div class="panel-title">Messages</div>
+    <div class="panel-sub">Messages reçus via le formulaire de contact.</div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Messages (<span id="msgCount">0</span>)</div></div>
+      <div id="msgList"></div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="panel" id="panel-newsletter">
+    <div class="panel-title">Newsletter</div>
+    <div class="panel-sub">Abonnés inscrits depuis le site.</div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Abonnés (<span id="nlCount">0</span>)</div>
+        <button class="btn btn-blue" onclick="exportCSV('newsletter')">↓ CSV</button>
+      </div>
+      <div class="nl-grid" id="nlGrid"></div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL ALBUM -->
+<div class="modal-bg" id="mAlbum">
+  <div class="modal-box">
+    <div class="modal-head"><div class="modal-ttl" id="mAlbumTtl">Nouvel Album</div><button class="modal-x" onclick="closeM('mAlbum')">✕</button></div>
+    <input type="hidden" id="aId">
+    <div class="form-grid">
+      <div class="fg full"><label>Titre *</label><input type="text" id="aTitre" placeholder="Titre de l'album"></div>
+      <div class="fg"><label>Année</label><input type="text" id="aAnnee" placeholder="2025"></div>
+      <div class="fg"><label>Genre</label><input type="text" id="aGenre" placeholder="Rap / Gospel"></div>
+      <div class="fg"><label>Prix</label><input type="text" id="aPrix" placeholder="12 000 FCFA"></div>
+      <div class="fg"><label>Code (2-5 lettres)</label><input type="text" id="aCode" placeholder="JA" maxlength="5"></div>
+      <div class="fg"><label>Thème couleur</label>
+        <select id="aTheme">
+          <option value="terra">Terracotta</option>
+          <option value="or">Doré</option>
+          <option value="vert">Vert</option>
+          <option value="sable">Sable</option>
+        </select>
+      </div>
+      <div class="fg"><label>Badge</label>
+        <select id="aBadge">
+          <option value="">Aucun</option>
+          <option value="new">Nouveau</option>
+          <option value="gospel">Gospel</option>
+          <option value="single">Single</option>
+        </select>
+      </div>
+      <div class="fg full"><label>URL de la pochette (optionnel)</label><input type="url" id="aCoverUrl" placeholder="https://..."></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeM('mAlbum')">Annuler</button>
+      <button class="btn btn-green" onclick="saveAlbum()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ÉVÉNEMENT -->
+<div class="modal-bg" id="mEvent">
+  <div class="modal-box">
+    <div class="modal-head"><div class="modal-ttl" id="mEventTtl">Nouvel Événement</div><button class="modal-x" onclick="closeM('mEvent')">✕</button></div>
+    <input type="hidden" id="eId">
+    <div class="form-grid">
+      <div class="fg full"><label>Titre *</label><input type="text" id="eTitre" placeholder="Nom de l'événement"></div>
+      <div class="fg full"><label>Lieu *</label><input type="text" id="eLieu" placeholder="Salle, Ville, Pays"></div>
+      <div class="fg"><label>Jour</label><input type="text" id="eJour" placeholder="18" maxlength="2"></div>
+      <div class="fg"><label>Mois (abrégé)</label><input type="text" id="eMois" placeholder="Avr" maxlength="4"></div>
+      <div class="fg"><label>Année</label><input type="text" id="eAnnee" placeholder="2025" maxlength="4"></div>
+      <div class="fg"><label>Prix</label><input type="text" id="ePrix" placeholder="5 000 FCFA"></div>
+      <div class="fg"><label>Type</label>
+        <select id="eType">
+          <option value="concert">Concert</option>
+          <option value="festival">Festival</option>
+          <option value="gospel">Gospel</option>
+          <option value="mbalax">Mbalax</option>
+        </select>
+      </div>
+      <div class="fg"><label>Statut</label>
+        <select id="eStatut">
+          <option value="dispo">Disponible</option>
+          <option value="complet">Complet</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeM('mEvent')">Annuler</button>
+      <button class="btn btn-green" onclick="saveEvent()">Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GALERIE -->
+<div class="modal-bg" id="mGalerie">
+  <div class="modal-box">
+    <div class="modal-head"><div class="modal-ttl" id="mGalerieTtl">Ajouter une photo</div><button class="modal-x" onclick="closeM('mGalerie')">✕</button></div>
+    <input type="hidden" id="gId">
+    <div class="fg full"><label>URL de la photo *</label><input type="url" id="gUrl" placeholder="https://... (Imgur, Cloudinary, etc.)"></div>
+    <div class="fg full"><label>Légende</label><input type="text" id="gLegende" placeholder="Ex: Concert CCBM — Avril 2025"></div>
+    <p style="font-size:0.72rem;color:var(--gris);margin-bottom:0.8rem;">Conseil : hébergez vos photos sur <a href="https://imgur.com" target="_blank" style="color:var(--terra2)">imgur.com</a> ou <a href="https://cloudinary.com" target="_blank" style="color:var(--terra2)">cloudinary.com</a> et copiez l'URL directe.</p>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeM('mGalerie')">Annuler</button>
+      <button class="btn btn-green" onclick="saveGaleriePhoto()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><div class="toast-dot"></div><span id="toastMsg"></span></div>
+
+<script>
+'use strict';
+
+/* ── AUTH ── */
+const H_U='YWRtaW4=', H_P='bWFjMjAyNSE=';
+let _att=+sessionStorage.getItem('mac_att')||0;
+let _lock=+sessionStorage.getItem('mac_lock')||0;
+let _tok=sessionStorage.getItem('mac_tok')||'';
+
+function doLogin(){
+  const now=Date.now();
+  if(now<_lock){showErr(`Bloqué ${Math.ceil((_lock-now)/1000)}s.`);return;}
+  const u=document.getElementById('lUser').value.trim();
+  const p=document.getElementById('lPass').value;
+  if(btoa(u)===H_U&&btoa(p)===H_P){
+    _att=0;sessionStorage.removeItem('mac_att');
+    sessionStorage.setItem('mac_admin','1');
+    sessionStorage.setItem('mac_tok',p);
+    _tok=p;
+    document.getElementById('loginScreen').style.display='none';
+    boot();
+  } else {
+    _att++;sessionStorage.setItem('mac_att',_att);
+    if(_att>=5){const t=Date.now()+300000;sessionStorage.setItem('mac_lock',t);_lock=t;showErr('5 erreurs — bloqué 5 min.');}
+    else showErr(`Identifiant ou mot de passe incorrect (${5-_att} essais restants).`);
+  }
+}
+function showErr(m){const e=document.getElementById('lErr');e.textContent=m;e.style.display='block';}
+function doLogout(){sessionStorage.clear();location.reload();}
+['lUser','lPass'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();}));
+if(sessionStorage.getItem('mac_admin')==='1'){document.getElementById('loginScreen').style.display='none';boot();}
+
+/* ── API ── */
+async function apiGet(store){
+  try{
+    const r=await fetch(`/api/get-data?store=${store}`,{headers:{'X-Admin-Token':_tok},cache:'no-store'});
+    if(r.status===401){doLogout();return[];}
+    if(!r.ok)return[];
+    return(await r.json()).items||[];
+  }catch{return[];}
+}
+async function apiPost(ep,data){
+  try{
+    const r=await fetch(ep,{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Token':_tok},body:JSON.stringify(data)});
+    return await r.json();
+  }catch(e){return{error:String(e)};}
+}
+async function apiPatch(ep,data){
+  try{
+    const r=await fetch(ep,{method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Token':_tok},body:JSON.stringify(data)});
+    return await r.json();
+  }catch(e){return{error:String(e)};}
+}
+
+/* ── STATE ── */
+let _albums=[],_events=[],_galerie=[],_cmds=[],_res=[],_msgs=[],_nl=[];
+let _cmdFilter='all',_resFilter='all';
+
+/* ── BOOT ── */
+async function boot(){
+  await Promise.all([
+    loadAlbums(),loadEvents(),loadGalerie(),
+    loadCmds(),loadRes(),loadMsgs(),loadNl(),
+    loadArtiste()
+  ]);
+  renderDashboard();renderAlbums();renderEvents();renderGalerie();
+  renderCmds();renderRes();renderMsgs();renderNl();
+  updateBadges();
+}
+
+async function loadAlbums()  { _albums  = await apiGet('albums'); }
+async function loadEvents()  { _events  = await apiGet('events'); }
+async function loadGalerie() { _galerie = await apiGet('galerie'); }
+async function loadCmds()    { _cmds    = await apiGet('commandes'); }
+async function loadRes()     { _res     = await apiGet('reservations'); }
+async function loadMsgs()    { _msgs    = await apiGet('messages'); }
+async function loadNl()      { _nl      = await apiGet('newsletter'); }
+
+async function loadArtiste(){
+  const items = await apiGet('settings_public');
+  const get = k => items.find(i=>i.key===k)?.value||'';
+  const bio   = get('bio');
+  const quote = get('hero_quote');
+  const stats = get('stats');
+  if(bio)   document.getElementById('bioInput').value   = bio;
+  if(quote) document.getElementById('quoteInput').value = quote;
+  if(stats){try{const s=JSON.parse(stats);document.getElementById('statAlbumsInput').value=s.albums||'';document.getElementById('statConcertsInput').value=s.concerts||'';document.getElementById('statAnneesInput').value=s.annees||'';}catch{}}
+  // Photo
+  const {photo}=await fetch('/api/save-photo').then(r=>r.json()).catch(()=>({}));
+  if(photo) showPhotoPreview(photo);
+}
+
+/* ── NAV ── */
+function show(name){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')?.includes(`'${name}'`))n.classList.add('active');});
+}
+function flashSaved(){const b=document.getElementById('savedBadge');b.style.display='block';clearTimeout(b._t);b._t=setTimeout(()=>b.style.display='none',2500);}
+
+/* ── DASHBOARD ── */
+function renderDashboard(){
+  const pc=_cmds.filter(c=>c.statut==='en_attente').length;
+  const pr=_res.filter(r=>r.statut==='confirmee').length;
+  document.getElementById('sAlbums').textContent=_albums.length;
+  document.getElementById('sEvents').textContent=_events.filter(e=>e.visible).length;
+  document.getElementById('sCmds').textContent=_cmds.length;
+  document.getElementById('sCmdsSub').textContent=`Commandes${pc?` (${pc} nouvelles)`:''}`;
+  document.getElementById('sRes').textContent=_res.length;
+  document.getElementById('sResSub').textContent=`Réservations${pr?` (${pr} nouvelles)`:''}`;
+  document.getElementById('sCmds').className=`stat-n${pc?' alert':''}`;
+  document.getElementById('sRes').className=`stat-n${pr?' alert':''}`;
+  const all=[..._cmds.map(x=>({...x,_t:'cmd'})),..._res.map(x=>({...x,_t:'res'})),..._msgs.map(x=>({...x,_t:'msg'}))];
+  all.sort((a,b)=>(b.created_at||'').localeCompare(a.created_at||''));
+  const el=document.getElementById('recentActivity');
+  el.innerHTML=all.slice(0,5).map(x=>{
+    if(x._t==='cmd')return`<div class="order-card"><div><div class="order-ref">${x.id}</div><div class="order-name">🛒 ${x.prenom} ${x.nom}</div><div class="order-detail">${x.album} × ${x.quantite} — ${x.prix}</div><div class="order-meta">${x.date}</div></div><div class="order-right"><span class="pill ${x.statut}">${sLabel(x.statut)}</span></div></div>`;
+    if(x._t==='res')return`<div class="order-card"><div><div class="order-ref">${x.id}</div><div class="order-name">🎫 ${x.prenom} ${x.nom}</div><div class="order-detail">${x.evenement} — ${x.date_event}</div><div class="order-meta">${x.date}</div></div><div class="order-right"><span class="pill ${x.statut}">${sLabel(x.statut)}</span></div></div>`;
+    return`<div class="item-row"><div class="item-main"><div class="item-title">✉ ${x.nom}</div><div class="item-meta">${(x.message||'').substring(0,80)}</div></div></div>`;
+  }).join('')||'<div class="empty"><div class="empty-ico">○</div><p>Aucune activité récente.</p></div>';
+}
+function sLabel(s){return{en_attente:'En attente',confirmee:'Confirmée',traite:'Traité',annule:'Annulé'}[s]||s;}
+function updateBadges(){
+  const bc=document.getElementById('badgeCmd'),br=document.getElementById('badgeRes');
+  const pc=_cmds.filter(c=>c.statut==='en_attente').length;
+  const pr=_res.filter(r=>r.statut==='confirmee').length;
+  bc.textContent=pc;bc.style.display=pc?'inline':'none';
+  br.textContent=pr;br.style.display=pr?'inline':'none';
+}
+
+/* ── PHOTO ARTISTE ── */
+let _pendingPhoto=null;
+function showPhotoPreview(src){
+  const z=document.getElementById('photoZone');
+  z.querySelectorAll('img,span,small').forEach(el=>el.style.display='none');
+  let img=z.querySelector('img');
+  if(!img){img=document.createElement('img');z.appendChild(img);}
+  img.src=src;img.style.display='block';
+  document.getElementById('photoInfoTxt').textContent='✓ Photo chargée';
+}
+function handlePhoto(e){
+  const f=e.target.files[0];if(!f)return;
+  if(f.size>3*1024*1024){toast('Image trop lourde (max 3 Mo).','error');return;}
+  const r=new FileReader();r.onload=ev=>{_pendingPhoto=ev.target.result;showPhotoPreview(_pendingPhoto);document.getElementById('photoInfoTxt').textContent=`📎 ${f.name} — cliquez Sauvegarder`;};r.readAsDataURL(f);
+}
+async function savePhoto(){
+  if(!_pendingPhoto){toast('Choisissez d\'abord une photo.','error');return;}
+  const r=await apiPost('/api/save-photo',{action:'save',photo:_pendingPhoto});
+  if(r.success){_pendingPhoto=null;flashSaved();toast('Photo sauvegardée !','success');}
+  else toast(r.error||'Erreur.','error');
+}
+async function deletePhoto(){
+  await apiPost('/api/save-photo',{action:'delete',photo:null});
+  const z=document.getElementById('photoZone');
+  const img=z.querySelector('img');if(img)img.style.display='none';
+  z.querySelectorAll('span,small').forEach(el=>el.style.display='');
+  document.getElementById('photoInfoTxt').textContent='';
+  _pendingPhoto=null;toast('Photo supprimée.','success');
+}
+
+/* ── SETTINGS ── */
+async function saveSetting(key,value){
+  if(!value.trim()){toast('Valeur vide — non sauvegardée.','error');return;}
+  const r=await apiPost('/api/save-catalog',{store:'settings',action:'set',item:{id:key,key,value}});
+  if(r.success){flashSaved();toast('Sauvegardé !','success');}
+  else toast(r.error||'Erreur.','error');
+}
+async function saveStats(){
+  const s=JSON.stringify({
+    albums:document.getElementById('statAlbumsInput').value,
+    concerts:document.getElementById('statConcertsInput').value,
+    annees:document.getElementById('statAnneesInput').value
+  });
+  await saveSetting('stats',s);
+}
+
+/* ── ALBUMS ── */
+function renderAlbums(){
+  document.getElementById('albumCount').textContent=_albums.length;
+  const el=document.getElementById('albumsList');
+  el.innerHTML=_albums.map(a=>`
+    <div class="item-row ${!a.visible?'hidden-item':''}">
+      <div class="item-id">#${a.id}</div>
+      <div class="item-main">
+        <div class="item-title">${a.titre} ${a.badge?`<span style="font-size:0.6rem;color:var(--terra2);border:1px solid rgba(196,98,45,0.3);padding:0.1rem 0.4rem;">${a.badge_label||a.badge}</span>`:''}</div>
+        <div class="item-meta">${a.annee||'—'}${a.genre?' · '+a.genre:''} · ${a.prix||'—'}</div>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-outline ${a.visible?'on':''}" onclick="toggleAlbum(${a.id})">${a.visible?'Visible':'Masqué'}</button>
+        <button class="btn btn-outline" onclick="editAlbum(${a.id})">Modifier</button>
+        <button class="btn btn-red" onclick="delAlbum(${a.id})">✕</button>
+      </div>
+    </div>
+  `).join('')||'<div class="empty"><div class="empty-ico">◎</div><p>Aucun album. Cliquez "+ Ajouter".</p></div>';
+}
+function openAlbumModal(){
+  document.getElementById('mAlbumTtl').textContent='Nouvel Album';
+  document.getElementById('aId').value='';
+  ['aTitre','aAnnee','aGenre','aPrix','aCode','aCoverUrl'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('aTheme').value='terra';
+  document.getElementById('aBadge').value='';
+  openM('mAlbum');
+}
+function editAlbum(id){
+  const a=_albums.find(x=>x.id===id);if(!a)return;
+  document.getElementById('mAlbumTtl').textContent='Modifier l\'album';
+  document.getElementById('aId').value=id;
+  document.getElementById('aTitre').value=a.titre;
+  document.getElementById('aAnnee').value=a.annee||'';
+  document.getElementById('aGenre').value=a.genre||'';
+  document.getElementById('aPrix').value=a.prix||'';
+  document.getElementById('aCode').value=a.code||'';
+  document.getElementById('aTheme').value=a.theme||'terra';
+  document.getElementById('aBadge').value=a.badge||'';
+  document.getElementById('aCoverUrl').value=a.cover_url||'';
+  openM('mAlbum');
+}
+async function saveAlbum(){
+  const titre=document.getElementById('aTitre').value.trim();
+  if(!titre){toast('Titre obligatoire.','error');return;}
+  const uid=document.getElementById('aId').value;
+  const ex=uid?_albums.find(x=>String(x.id)===String(uid)):null;
+  const bv=document.getElementById('aBadge').value;
+  const r=await apiPost('/api/save-catalog',{store:'albums',action:'set',item:{
+    id:uid?parseInt(uid):null,titre,
+    annee:document.getElementById('aAnnee').value.trim(),
+    genre:document.getElementById('aGenre').value.trim(),
+    prix:document.getElementById('aPrix').value.trim(),
+    code:document.getElementById('aCode').value.trim().toUpperCase()||titre.slice(0,3).toUpperCase(),
+    theme:document.getElementById('aTheme').value,
+    badge:bv,badgeLabel:{new:'Nouveau',gospel:'Gospel',single:'Single'}[bv]||bv,
+    cover_url:document.getElementById('aCoverUrl').value.trim()||null,
+    visible:ex?ex.visible:true
+  }});
+  if(r.success){await loadAlbums();renderAlbums();renderDashboard();closeM('mAlbum');flashSaved();toast(`"${titre}" sauvegardé.`,'success');}
+  else toast(r.error||'Erreur.','error');
+}
+async function toggleAlbum(id){
+  const a=_albums.find(x=>x.id===id);if(!a)return;
+  const r=await apiPost('/api/save-catalog',{store:'albums',action:'set',item:{...a,visible:!a.visible}});
+  if(r.success){await loadAlbums();renderAlbums();renderDashboard();flashSaved();toast(`${a.visible?'Masqué':'Visible'}.`,'success');}
+}
+async function delAlbum(id){
+  if(!confirm('Supprimer cet album ?'))return;
+  const r=await apiPost('/api/save-catalog',{store:'albums',action:'delete',item:{id}});
+  if(r.success){await loadAlbums();renderAlbums();renderDashboard();flashSaved();toast('Album supprimé.','success');}
+}
+
+/* ── ÉVÉNEMENTS ── */
+function renderEvents(){
+  document.getElementById('eventCount').textContent=_events.length;
+  const el=document.getElementById('eventsList');
+  el.innerHTML=_events.map(ev=>`
+    <div class="item-row ${!ev.visible?'hidden-item':''}">
+      <div class="item-id" style="text-align:center;background:var(--terra);padding:0.4rem;min-width:50px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;line-height:1;">${ev.jour}</div>
+        <div style="font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;">${ev.mois} ${ev.annee}</div>
+      </div>
+      <div class="item-main">
+        <div class="item-title">${ev.titre}</div>
+        <div class="item-meta">📍 ${ev.lieu} · ${ev.prix||'—'} · <span style="color:${ev.statut==='complet'?'var(--rouge2)':'var(--vert2)'}">${ev.statut}</span></div>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-outline" onclick="toggleEventStatut(${ev.id})">${ev.statut==='complet'?'→ Dispo':'→ Complet'}</button>
+        <button class="btn btn-outline ${ev.visible?'on':''}" onclick="toggleEvent(${ev.id})">${ev.visible?'Visible':'Masqué'}</button>
+        <button class="btn btn-outline" onclick="editEvent(${ev.id})">Modifier</button>
+        <button class="btn btn-red" onclick="delEvent(${ev.id})">✕</button>
+      </div>
+    </div>
+  `).join('')||'<div class="empty"><div class="empty-ico">◷</div><p>Aucun événement. Cliquez "+ Ajouter".</p></div>';
+}
+function openEventModal(){
+  document.getElementById('mEventTtl').textContent='Nouvel Événement';
+  document.getElementById('eId').value='';
+  ['eTitre','eLieu','eJour','eMois','ePrix'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('eAnnee').value=new Date().getFullYear();
+  document.getElementById('eType').value='concert';
+  document.getElementById('eStatut').value='dispo';
+  openM('mEvent');
+}
+function editEvent(id){
+  const ev=_events.find(x=>x.id===id);if(!ev)return;
+  document.getElementById('mEventTtl').textContent='Modifier l\'événement';
+  document.getElementById('eId').value=id;
+  document.getElementById('eTitre').value=ev.titre;
+  document.getElementById('eLieu').value=ev.lieu;
+  document.getElementById('eJour').value=ev.jour;
+  document.getElementById('eMois').value=ev.mois;
+  document.getElementById('eAnnee').value=ev.annee;
+  document.getElementById('ePrix').value=ev.prix||'';
+  document.getElementById('eType').value=ev.type;
+  document.getElementById('eStatut').value=ev.statut;
+  openM('mEvent');
+}
+async function saveEvent(){
+  const titre=document.getElementById('eTitre').value.trim();
+  if(!titre){toast('Titre obligatoire.','error');return;}
+  const uid=document.getElementById('eId').value;
+  const ex=uid?_events.find(x=>String(x.id)===String(uid)):null;
+  const tv=document.getElementById('eType').value;
+  const r=await apiPost('/api/save-catalog',{store:'events',action:'set',item:{
+    id:uid?parseInt(uid):null,titre,
+    lieu:document.getElementById('eLieu').value.trim(),
+    jour:document.getElementById('eJour').value.trim(),
+    mois:document.getElementById('eMois').value.trim(),
+    annee:document.getElementById('eAnnee').value.trim(),
+    prix:document.getElementById('ePrix').value.trim(),
+    type:tv,typeLabel:{concert:'Concert',festival:'Festival',gospel:'Gospel',mbalax:'Mbalax'}[tv]||tv,
+    statut:document.getElementById('eStatut').value,
+    visible:ex?ex.visible:true
+  }});
+  if(r.success){await loadEvents();renderEvents();renderDashboard();closeM('mEvent');flashSaved();toast(`"${titre}" sauvegardé.`,'success');}
+  else toast(r.error||'Erreur.','error');
+}
+async function toggleEvent(id){
+  const ev=_events.find(x=>x.id===id);if(!ev)return;
+  await apiPost('/api/save-catalog',{store:'events',action:'set',item:{...ev,visible:!ev.visible}});
+  await loadEvents();renderEvents();renderDashboard();flashSaved();
+}
+async function toggleEventStatut(id){
+  const ev=_events.find(x=>x.id===id);if(!ev)return;
+  await apiPost('/api/save-catalog',{store:'events',action:'set',item:{...ev,statut:ev.statut==='complet'?'dispo':'complet'}});
+  await loadEvents();renderEvents();flashSaved();toast('Statut mis à jour.','success');
+}
+async function delEvent(id){
+  if(!confirm('Supprimer cet événement ?'))return;
+  await apiPost('/api/save-catalog',{store:'events',action:'delete',item:{id}});
+  await loadEvents();renderEvents();renderDashboard();flashSaved();toast('Événement supprimé.','success');
+}
+
+/* ── GALERIE ── */
+function renderGalerie(){
+  document.getElementById('galerieCount').textContent=_galerie.length;
+  const el=document.getElementById('galerieGrid');
+  el.innerHTML=_galerie.map(p=>`
+    <div class="galerie-item">
+      <img src="${p.url}" alt="${p.legende||''}" loading="lazy" onerror="this.style.display='none'">
+      <div class="galerie-item-overlay">
+        <button class="btn btn-outline" style="font-size:0.6rem;padding:0.3rem 0.6rem;" onclick="toggleGalerie(${p.id})">${p.visible?'👁':'🚫'}</button>
+        <button class="btn btn-red" style="font-size:0.6rem;padding:0.3rem 0.6rem;" onclick="delGalerie(${p.id})">✕</button>
+      </div>
+    </div>
+  `).join('')||'<div style="grid-column:1/-1" class="empty"><div class="empty-ico">📷</div><p>Aucune photo. Cliquez "+ Ajouter une photo".</p></div>';
+}
+function openGalerieModal(){
+  document.getElementById('mGalerieTtl').textContent='Ajouter une photo';
+  document.getElementById('gId').value='';
+  document.getElementById('gUrl').value='';
+  document.getElementById('gLegende').value='';
+  openM('mGalerie');
+}
+async function saveGaleriePhoto(){
+  const url=document.getElementById('gUrl').value.trim();
+  if(!url){toast('URL obligatoire.','error');return;}
+  const r=await apiPost('/api/save-catalog',{store:'galerie',action:'set',item:{
+    id:document.getElementById('gId').value?parseInt(document.getElementById('gId').value):null,
+    url, legende:document.getElementById('gLegende').value.trim(), visible:true
+  }});
+  if(r.success){await loadGalerie();renderGalerie();closeM('mGalerie');flashSaved();toast('Photo ajoutée.','success');}
+  else toast(r.error||'Erreur.','error');
+}
+async function toggleGalerie(id){
+  const p=_galerie.find(x=>x.id===id);if(!p)return;
+  await apiPost('/api/save-catalog',{store:'galerie',action:'set',item:{...p,visible:!p.visible}});
+  await loadGalerie();renderGalerie();flashSaved();
+}
+async function delGalerie(id){
+  if(!confirm('Supprimer cette photo ?'))return;
+  await apiPost('/api/save-catalog',{store:'galerie',action:'delete',item:{id}});
+  await loadGalerie();renderGalerie();flashSaved();toast('Photo supprimée.','success');
+}
+
+/* ── COMMANDES ── */
+function renderCmds(){
+  const list=_cmdFilter==='all'?_cmds:_cmds.filter(c=>c.statut===_cmdFilter);
+  document.getElementById('cmdCount').textContent=_cmds.length;
+  document.getElementById('cmdList').innerHTML=list.map(c=>`
+    <div class="order-card">
+      <div>
+        <div class="order-ref">${c.id}</div>
+        <div class="order-name">${c.prenom} ${c.nom}</div>
+        <div class="order-detail">${c.album} × ${c.quantite} — ${c.prix}</div>
+        <div class="order-meta">📧 ${c.email} &nbsp;📞 ${c.tel||'—'} &nbsp;📍 ${c.ville||'—'} &nbsp;🕐 ${c.date}</div>
+      </div>
+      <div class="order-right">
+        <span class="pill ${c.statut}">${sLabel(c.statut)}</span>
+        <select class="statut-sel" onchange="updCmd('${c.id}',this.value)">
+          <option value="en_attente" ${c.statut==='en_attente'?'selected':''}>En attente</option>
+          <option value="traite"     ${c.statut==='traite'?'selected':''}>Traité</option>
+          <option value="annule"     ${c.statut==='annule'?'selected':''}>Annulé</option>
+        </select>
+      </div>
+    </div>
+  `).join('')||'<div class="empty"><div class="empty-ico">🛒</div><p>Aucune commande.</p></div>';
+}
+async function updCmd(id,val){
+  await apiPatch('/api/update-statut',{store:'commandes',id,statut:val});
+  await loadCmds();renderCmds();updateBadges();toast('Statut mis à jour.','success');
+}
+function filterCmd(f){_cmdFilter=f;renderCmds();document.querySelectorAll('#panel-commandes .f-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes(`'${f}'`)));}
+
+/* ── RÉSERVATIONS ── */
+function renderRes(){
+  const list=_resFilter==='all'?_res:_res.filter(r=>r.statut===_resFilter);
+  document.getElementById('resCount').textContent=_res.length;
+  document.getElementById('resList').innerHTML=list.map(r=>`
+    <div class="order-card">
+      <div>
+        <div class="order-ref">${r.id}</div>
+        <div class="order-name">${r.prenom} ${r.nom}</div>
+        <div class="order-detail">${r.evenement} — ${r.date_event}</div>
+        <div class="order-meta">📧 ${r.email} &nbsp;📞 ${r.tel} &nbsp;🎫 ${r.quantite} place(s) · ${r.prix} &nbsp;🕐 ${r.date}</div>
+      </div>
+      <div class="order-right">
+        <span class="pill ${r.statut}">${sLabel(r.statut)}</span>
+        <select class="statut-sel" onchange="updRes('${r.id}',this.value)">
+          <option value="confirmee" ${r.statut==='confirmee'?'selected':''}>Confirmée</option>
+          <option value="traite"    ${r.statut==='traite'?'selected':''}>Traitée</option>
+          <option value="annule"    ${r.statut==='annule'?'selected':''}>Annulée</option>
+        </select>
+      </div>
+    </div>
+  `).join('')||'<div class="empty"><div class="empty-ico">🎫</div><p>Aucune réservation.</p></div>';
+}
+async function updRes(id,val){
+  await apiPatch('/api/update-statut',{store:'reservations',id,statut:val});
+  await loadRes();renderRes();updateBadges();toast('Statut mis à jour.','success');
+}
+function filterRes(f){_resFilter=f;renderRes();document.querySelectorAll('#panel-reservations .f-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes(`'${f}'`)));}
+
+/* ── MESSAGES ── */
+function renderMsgs(){
+  document.getElementById('msgCount').textContent=_msgs.length;
+  document.getElementById('msgList').innerHTML=_msgs.map(m=>`
+    <div class="item-row">
+      <div class="item-main">
+        <div class="item-title">${m.nom} <span style="font-size:0.72rem;color:var(--terra2)">${m.email}</span></div>
+        <div class="item-meta">${m.message}</div>
+        <div class="item-meta" style="opacity:0.5;font-size:0.65rem;">${m.date}</div>
+      </div>
+    </div>
+  `).join('')||'<div class="empty"><div class="empty-ico">✉</div><p>Aucun message.</p></div>';
+}
+
+/* ── NEWSLETTER ── */
+function renderNl(){
+  document.getElementById('nlCount').textContent=_nl.length;
+  document.getElementById('nlGrid').innerHTML=_nl.map(n=>`
+    <div class="nl-item">
+      <span class="nl-email">${n.email}</span>
+      <button class="btn btn-red" style="padding:0.15rem 0.45rem;font-size:0.58rem;" onclick="delNl('${n.email}')">✕</button>
+    </div>
+  `).join('')||'<div style="grid-column:1/-1" class="empty"><div class="empty-ico">◌</div><p>Aucun abonné.</p></div>';
+}
+async function delNl(email){
+  await apiPost('/api/save-catalog',{store:'newsletter',action:'delete',item:{id:email}});
+  await loadNl();renderNl();toast('Retiré.','success');
+}
+
+/* ── EXPORT ── */
+function dl(content,name,type='text/csv'){const b=new Blob(['\uFEFF'+content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
+function toCSV(arr,cols){return[cols.join(';'),...arr.map(r=>cols.map(c=>`"${(r[c]||'').toString().replace(/"/g,'""')}"`).join(';'))].join('\n');}
+function exportCSV(t){
+  if(t==='commandes')    dl(toCSV(_cmds,['id','date','nom','prenom','email','tel','ville','album','quantite','prix','statut']),'commandes_mac.csv');
+  if(t==='reservations') dl(toCSV(_res, ['id','date','nom','prenom','email','tel','evenement','date_event','lieu','quantite','prix','statut']),'reservations_mac.csv');
+  if(t==='newsletter')   dl(_nl.map(n=>n.email).join('\n'),'newsletter_mac.csv');
+  toast('Export téléchargé.','success');
+}
+function exportAll(){
+  dl(JSON.stringify({albums:_albums,events:_events,commandes:_cmds,reservations:_res,messages:_msgs,newsletter:_nl,exported:new Date().toISOString()},null,2),'mac_backup_'+Date.now()+'.json','application/json');
+  toast('Backup téléchargé.','success');
+}
+
+/* ── MODALS ── */
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-bg.open').forEach(m=>m.classList.remove('open'));});
+
+/* ── TOAST ── */
+let _tt;
+function toast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.className=`toast ${type}`;
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');clearTimeout(_tt);
+  _tt=setTimeout(()=>t.classList.remove('show'),3200);
+}
+</script>
+</body>
+</html>
