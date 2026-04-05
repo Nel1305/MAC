@@ -1,13 +1,19 @@
 // M.A.C JAMAIS ASSEZ — api/_shared.js
-// Utilitaires partagés — Vercel Serverless Functions + Supabase
 
 const { createClient } = require('@supabase/supabase-js');
 
-// ── Supabase (variables d'env Vercel) ──
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+// ═══════════════════════════════════════════════
+//  SUPABASE — Remplis tes informations ici
+//  Supabase → Settings → API
+// ═══════════════════════════════════════════════
+const SUPABASE_URL = 'https://hbrundqsoymqqzyttenu.supabase.co';  // ← Project URL
+const SUPABASE_KEY = 'sb_publishable_UcjT-wTwuO5rF_Fup4768A_rsWBtuKX';  // ← service_role key
+// ═══════════════════════════════════════════════
+
+// Admin — mot de passe de connexion à admin.html
+const ADMIN_SECRET = 'mac2025!';  // ← change si tu veux
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── Headers CORS ──
 const CORS_HEADERS = {
@@ -52,13 +58,11 @@ const isPhone = p => /^[\d\s+\-()\x20]{7,20}$/.test(String(p));
 
 // ── Auth admin timing-safe ──
 function checkAdmin(req) {
-  const secret = process.env.ADMIN_SECRET;
-  if (!secret) return true;
   const token = req.headers['x-admin-token'] ?? '';
-  if (token.length !== secret.length) return false;
+  if (token.length !== ADMIN_SECRET.length) return false;
   let diff = 0;
   for (let i = 0; i < token.length; i++) {
-    diff |= token.charCodeAt(i) ^ secret.charCodeAt(i);
+    diff |= token.charCodeAt(i) ^ ADMIN_SECRET.charCodeAt(i);
   }
   return diff === 0;
 }
