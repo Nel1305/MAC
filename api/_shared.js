@@ -7,8 +7,8 @@ const jwt = require('jsonwebtoken');
 //  CONFIGURATION — Remplis uniquement ces 3 valeurs
 //  Supabase → Settings → API pour les deux premières
 // ═══════════════════════════════════════════════════════
-const SUPABASE_URL = 'https://XXXXXXXXXXXXXXXX.supabase.co'; // ← Project URL
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.XXXXX'; // ← service_role key
+const SUPABASE_URL = 'https://hbrundqsoymqqzyttenu.supabase.co'; // ← Project URL
+const SUPABASE_KEY = 'sb_publishable_UcjT-wTwuO5rF_Fup4768A_rsWBtuKX'; // ← service_role key
 const JWT_SECRET   = 'CHANGE_MOI_une_chaine_longue_et_aleatoire_32chars+'; // ← clé secrète JWT (inventée par toi, min 32 caractères)
 // ═══════════════════════════════════════════════════════
 
