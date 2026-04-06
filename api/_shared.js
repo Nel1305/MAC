@@ -6,8 +6,8 @@ const { createClient } = require('@supabase/supabase-js');
 //  SUPABASE — Remplis tes informations ici
 //  Supabase → Settings → API
 // ═══════════════════════════════════════════════
-const SUPABASE_URL = 'https://XXXXXXXXXXXXXXXX.supabase.co';  // ← Project URL
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.XXXXX';  // ← service_role key
+const SUPABASE_URL = 'https://hbrundqsoymqqzyttenu.supabase.co';  // ← Project URL
+const SUPABASE_KEY = 'sb_publishable_UcjT-wTwuO5rF_Fup4768A_rsWBtuKX';  // ← service_role key
 // ═══════════════════════════════════════════════
 
 // Admin — mot de passe de connexion à admin.html
