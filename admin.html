@@ -473,39 +473,86 @@ body{background:var(--bg);color:var(--blanc);font-family:'DM Sans',sans-serif;mi
 <script>
 'use strict';
 
-/* ── AUTH ── */
-const H_U='YWRtaW4=', H_P='bWFjMjAyNSE=';
-let _att=+sessionStorage.getItem('mac_att')||0;
-let _lock=+sessionStorage.getItem('mac_lock')||0;
-let _tok=sessionStorage.getItem('mac_tok')||'';
+/* ── AUTH JWT ──
+   Le mot de passe est vérifié côté serveur (bcrypt).
+   On reçoit un JWT signé, jamais le mot de passe en clair.
+   Le JWT expire après 8h et est stocké en sessionStorage. */
 
-function doLogin(){
-  const now=Date.now();
-  if(now<_lock){showErr(`Bloqué ${Math.ceil((_lock-now)/1000)}s.`);return;}
-  const u=document.getElementById('lUser').value.trim();
-  const p=document.getElementById('lPass').value;
-  if(btoa(u)===H_U&&btoa(p)===H_P){
-    _att=0;sessionStorage.removeItem('mac_att');
-    sessionStorage.setItem('mac_admin','1');
-    sessionStorage.setItem('mac_tok',p);
-    _tok=p;
-    document.getElementById('loginScreen').style.display='none';
-    boot();
-  } else {
-    _att++;sessionStorage.setItem('mac_att',_att);
-    if(_att>=5){const t=Date.now()+300000;sessionStorage.setItem('mac_lock',t);_lock=t;showErr('5 erreurs — bloqué 5 min.');}
-    else showErr(`Identifiant ou mot de passe incorrect (${5-_att} essais restants).`);
+let _tok = sessionStorage.getItem('mac_jwt') || '';
+
+async function doLogin() {
+  const u = document.getElementById('lUser').value.trim();
+  const p = document.getElementById('lPass').value;
+  if (!u || !p) { showErr('Remplissez tous les champs.'); return; }
+
+  const btn = document.querySelector('.login-btn');
+  btn.textContent = 'Connexion…'; btn.disabled = true;
+
+  try {
+    const r = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: u, password: p })
+    });
+    const d = await r.json();
+
+    if (d.success && d.token) {
+      _tok = d.token;
+      sessionStorage.setItem('mac_jwt', _tok);
+      document.getElementById('loginScreen').style.display = 'none';
+      boot();
+    } else {
+      showErr(d.error || 'Identifiant ou mot de passe incorrect.');
+    }
+  } catch {
+    showErr('Erreur réseau. Réessayez.');
+  } finally {
+    btn.textContent = 'Connexion'; btn.disabled = false;
   }
 }
-function showErr(m){const e=document.getElementById('lErr');e.textContent=m;e.style.display='block';}
-function doLogout(){sessionStorage.clear();location.reload();}
-['lUser','lPass'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();}));
-if(sessionStorage.getItem('mac_admin')==='1'){document.getElementById('loginScreen').style.display='none';boot();}
+
+function showErr(m) {
+  const e = document.getElementById('lErr');
+  e.textContent = m; e.style.display = 'block';
+}
+
+function doLogout() {
+  sessionStorage.removeItem('mac_jwt');
+  _tok = '';
+  location.reload();
+}
+
+['lUser','lPass'].forEach(id =>
+  document.getElementById(id).addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  })
+);
+
+// Vérifie le JWT stocké au chargement
+if (_tok) {
+  // Vérifie que le token n'est pas expiré côté client (décode le payload)
+  try {
+    const payload = JSON.parse(atob(_tok.split('.')[1]));
+    if (payload.exp * 1000 > Date.now()) {
+      document.getElementById('loginScreen').style.display = 'none';
+      boot();
+    } else {
+      sessionStorage.removeItem('mac_jwt');
+      _tok = '';
+    }
+  } catch {
+    sessionStorage.removeItem('mac_jwt');
+    _tok = '';
+  }
+}
 
 /* ── API ── */
 async function apiGet(store){
   try{
-    const r=await fetch(`/api/get-data?store=${store}`,{headers:{'X-Admin-Token':_tok},cache:'no-store'});
+    const r=await fetch(`/api/get-data?store=${store}`,{
+      headers:{'Authorization':'Bearer '+_tok},
+      cache:'no-store'
+    });
     if(r.status===401){doLogout();return[];}
     if(!r.ok)return[];
     return(await r.json()).items||[];
@@ -513,13 +560,21 @@ async function apiGet(store){
 }
 async function apiPost(ep,data){
   try{
-    const r=await fetch(ep,{method:'POST',headers:{'Content-Type':'application/json','X-Admin-Token':_tok},body:JSON.stringify(data)});
+    const r=await fetch(ep,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+_tok},
+      body:JSON.stringify(data)
+    });
     return await r.json();
   }catch(e){return{error:String(e)};}
 }
 async function apiPatch(ep,data){
   try{
-    const r=await fetch(ep,{method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Token':_tok},body:JSON.stringify(data)});
+    const r=await fetch(ep,{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+_tok},
+      body:JSON.stringify(data)
+    });
     return await r.json();
   }catch(e){return{error:String(e)};}
 }
