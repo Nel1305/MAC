@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 // ═══════════════════════════════════════════════════════
 const SUPABASE_URL = 'https://hbrundqsoymqqzyttenu.supabase.co'; // ← Project URL
 const SUPABASE_KEY = 'sb_publishable_UcjT-wTwuO5rF_Fup4768A_rsWBtuKX'; // ← service_role key
-const JWT_SECRET   = 'CHANGE_MOI_une_chaine_longue_et_aleatoire_32chars+'; // ← clé secrète JWT (inventée par toi, min 32 caractères)
+const JWT_SECRET   = 'M4C-Jam4is-Ass3z-2025-S3cr3t-K3y-Dakar'; // ← clé secrète JWT (inventée par toi, min 32 caractères)
 // ═══════════════════════════════════════════════════════
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
