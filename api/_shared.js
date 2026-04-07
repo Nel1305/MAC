@@ -7,9 +7,9 @@ const jwt = require('jsonwebtoken');
 // ═══════════════════════════════════════════════════════
 //  CONFIGURATION — Remplis ces 3 valeurs uniquement
 // ═══════════════════════════════════════════════════════
-const SUPABASE_URL = 'https://rsuoabtoofcdyqdtiemr.supabase.co'; // Supabase → Settings → API → Project URL
-const SUPABASE_KEY = 'sb_publishable_fRbZpN5gEuA3YRdAVont1Q_TCLqN8Ka'; // Supabase → Settings → API → service_role
-const JWT_SECRET   = 'vck_061gLr4nHFw0g5Nq8UzGpLL2nnDjQdhW3TsfFMdJb9PnEjPHRh20qi0b'; // invente une clé longue
+const SUPABASE_URL = 'https://xrsnvyhkduglfjpeagie.supabase.co'; // Supabase → Settings → API → Project URL
+const SUPABASE_KEY = 'sb_publishable_o5CIsupL_A3hYruzzPkxwQ_27DVt1e6'; // Supabase → Settings → API → service_role
+const JWT_SECRET   = 'sb_secret_q3-IiLd3Cxs9lQRdlwamWA_2EYBRkdx'; // invente une clé longue
 // ═══════════════════════════════════════════════════════
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
