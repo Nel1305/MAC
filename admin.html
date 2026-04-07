@@ -7,150 +7,198 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0D0A07;--bg2:#141008;--bg3:#1C1510;--bg4:#221A12;
-  --terra:#C4622D;--terra2:#E07840;--or:#D4A843;
-  --blanc:#FAF7F2;--gris:#8C8070;--gris2:#3D3328;
-  --vert:#2A6B4A;--vert2:#3D9668;--rouge:#8B2020;--rouge2:#C43030;
-  --border:rgba(212,168,67,0.12);--border2:rgba(212,168,67,0.06);
+  --bg:#0D0A07;--bg2:#131009;--bg3:#1A1410;--bg4:#221A12;
+  --terra:#C4622D;--terra2:#D9743F;--or:#D4A843;--or2:#E8BE58;
+  --blanc:#FAF7F2;--gris:#8A7860;--gris2:#3D3020;
+  --vert:#2A6B4A;--vert2:#3D9668;--rouge:#C43030;--rouge2:#E05050;
+  --border:rgba(212,168,67,.12);--b2:rgba(212,168,67,.06);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--blanc);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;}
-/* SIDEBAR */
-.sidebar{width:220px;min-height:100vh;background:var(--bg2);border-right:1px solid var(--border2);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;}
-.sb-brand{padding:1.6rem 1.4rem 1.2rem;border-bottom:1px solid var(--border2);}
-.sb-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.1em;color:var(--blanc);}
+html{font-size:15px;}
+body{background:var(--bg);color:var(--blanc);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;font-family:inherit;}
+input,select,textarea{font-family:inherit;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--terra);}
+
+/* ── SIDEBAR ── */
+.sb{width:220px;min-height:100vh;background:var(--bg2);border-right:1px solid var(--b2);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;overflow-y:auto;}
+.sb-brand{padding:1.5rem 1.3rem 1.1rem;border-bottom:1px solid var(--b2);}
+.sb-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.12em;color:var(--blanc);}
 .sb-logo span{color:var(--terra);}
-.sb-sub{font-size:0.6rem;color:var(--gris);letter-spacing:0.2em;text-transform:uppercase;margin-top:2px;}
-.sb-section{font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gris);padding:1.2rem 1.4rem 0.4rem;opacity:0.6;}
-.nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.65rem 1.4rem;cursor:pointer;font-size:0.78rem;color:rgba(250,247,242,0.55);transition:all 0.2s;text-decoration:none;border-left:2px solid transparent;}
-.nav-item:hover{color:var(--blanc);background:rgba(255,255,255,0.02);}
-.nav-item.active{color:var(--terra2);border-left-color:var(--terra);background:rgba(196,98,45,0.06);}
-.nav-item .ico{font-size:0.85rem;width:16px;text-align:center;flex-shrink:0;}
-.nav-badge{margin-left:auto;background:var(--rouge2);color:#fff;font-size:0.55rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:10px;display:none;}
-.sb-footer{padding:1rem 1.4rem;border-top:1px solid var(--border2);margin-top:auto;}
-.back-link{font-size:0.72rem;color:var(--gris);text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s;}
-.back-link:hover{color:var(--terra2);}
-/* MAIN */
-.main{margin-left:220px;flex:1;min-height:100vh;}
-.topbar{background:var(--bg2);border-bottom:1px solid var(--border2);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;}
-.topbar-title{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.15em;color:var(--blanc);}
-.topbar-title span{color:var(--terra);}
-.topbar-right{display:flex;gap:0.6rem;align-items:center;}
-.saved-badge{font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(42,107,74,0.2);color:var(--vert2);border:1px solid rgba(61,150,104,0.3);padding:0.25rem 0.7rem;display:none;}
-/* PANELS */
-.panel{display:none;padding:2rem;}
+.sb-sub{font-size:.55rem;color:var(--gris);letter-spacing:.2em;text-transform:uppercase;margin-top:2px;}
+.sb-section{font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gris);padding:1.1rem 1.3rem .4rem;opacity:.55;}
+.nav-item{display:flex;align-items:center;gap:.65rem;padding:.6rem 1.3rem;cursor:pointer;font-size:.75rem;color:rgba(250,247,242,.5);transition:all .18s;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--blanc);background:rgba(255,255,255,.02);}
+.nav-item.active{color:var(--terra2);border-left-color:var(--terra);background:rgba(196,98,45,.06);}
+.nav-item .ico{width:16px;text-align:center;flex-shrink:0;font-size:.82rem;}
+.nb{margin-left:auto;background:var(--rouge);color:#fff;font-size:.52rem;font-weight:700;padding:.1rem .38rem;border-radius:8px;display:none;}
+.sb-footer{margin-top:auto;padding:1rem 1.3rem;border-top:1px solid var(--b2);}
+.sb-back{font-size:.68rem;color:var(--gris);display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.sb-back:hover{color:var(--terra2);}
+
+/* ── MAIN ── */
+.main{margin-left:220px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--b2);padding:.9rem 1.8rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:40;}
+.topbar-left{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.15em;color:var(--blanc);}
+.topbar-left span{color:var(--terra);}
+.topbar-right{display:flex;gap:.5rem;align-items:center;}
+.saved{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;background:rgba(42,107,74,.2);color:var(--vert2);border:1px solid rgba(61,150,104,.3);padding:.22rem .6rem;display:none;}
+.content{flex:1;padding:1.8rem;}
+
+/* ── PANELS ── */
+.panel{display:none;}
 .panel.active{display:block;}
-.panel-title{font-size:1.4rem;font-weight:500;color:var(--blanc);margin-bottom:0.3rem;}
-.panel-sub{font-size:0.8rem;color:var(--gris);margin-bottom:2rem;}
-/* CARDS */
-.card{background:var(--bg2);border:1px solid var(--border2);padding:1.5rem;margin-bottom:1rem;}
-.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border2);}
-.card-title{font-size:0.72rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--blanc);}
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
-.stat-card{background:var(--bg2);border:1px solid var(--border2);padding:1.2rem;}
-.stat-n{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--terra);line-height:1;}
+.panel-title{font-size:1.3rem;font-weight:500;margin-bottom:.25rem;}
+.panel-sub{font-size:.78rem;color:var(--gris);margin-bottom:1.8rem;}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--b2);padding:1.4rem;margin-bottom:1rem;}
+.card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem;padding-bottom:.8rem;border-bottom:1px solid var(--b2);}
+.card-title{font-size:.68rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;}
+
+/* ── STATS DASHBOARD ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:1.2rem;}
+.stat-c{background:var(--bg2);border:1px solid var(--b2);padding:1.1rem 1.2rem;}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--terra);line-height:1;}
 .stat-n.alert{color:var(--rouge2);}
-.stat-l{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gris);margin-top:0.3rem;}
-/* BUTTONS */
-.btn{font-family:'DM Sans',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.85rem;cursor:pointer;border:1px solid;transition:all 0.2s;font-weight:500;min-height:36px;}
+.stat-l{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gris);margin-top:.25rem;}
+
+/* ── BUTTONS ── */
+.btn{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:.38rem .8rem;cursor:pointer;border:1px solid;transition:all .18s;font-family:'DM Sans',sans-serif;font-weight:500;min-height:34px;}
 .btn-terra{background:var(--terra);color:var(--blanc);border-color:var(--terra);}
 .btn-terra:hover{background:var(--terra2);}
-.btn-outline{background:transparent;color:var(--gris);border-color:var(--gris2);}
-.btn-outline:hover,.btn-outline.on{border-color:var(--terra2);color:var(--terra2);}
-.btn-red{background:transparent;color:var(--rouge2);border-color:rgba(196,48,48,0.3);}
-.btn-red:hover{background:var(--rouge2);color:#fff;}
+.btn-out{background:transparent;color:var(--gris);border-color:var(--gris2);}
+.btn-out:hover,.btn-out.on{border-color:var(--terra2);color:var(--terra2);}
+.btn-red{background:transparent;color:var(--rouge2);border-color:rgba(196,48,48,.3);}
+.btn-red:hover{background:var(--rouge2);color:#fff;border-color:var(--rouge2);}
 .btn-green{background:var(--vert);color:#fff;border-color:var(--vert);}
 .btn-green:hover{background:var(--vert2);}
-.btn-blue{background:transparent;color:#6A9ED4;border-color:rgba(26,46,74,0.4);}
-.btn-blue:hover{background:rgba(26,46,74,0.3);}
-/* FORMS */
-.fg{display:flex;flex-direction:column;gap:0.3rem;margin-bottom:0.8rem;}
-.fg label{font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gris);}
-.fg input,.fg select,.fg textarea{background:var(--bg3);border:1px solid var(--border);color:var(--blanc);padding:0.6rem 0.85rem;font-family:'DM Sans',sans-serif;font-size:0.82rem;outline:none;transition:border-color 0.2s;}
+.btn-blue{background:transparent;color:#7ab4e0;border-color:rgba(26,60,100,.4);}
+.btn-blue:hover{background:rgba(26,60,100,.3);}
+
+/* ── SEARCH ── */
+.search-bar{position:relative;margin-bottom:1rem;}
+.search-bar input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--blanc);padding:.6rem 1rem .6rem 2.3rem;font-size:.82rem;outline:none;transition:border-color .2s;}
+.search-bar input:focus{border-color:var(--terra);}
+.search-bar input::placeholder{color:rgba(138,120,96,.4);}
+.search-bar::before{content:'🔍';position:absolute;left:.75rem;top:50%;transform:translateY(-50%);font-size:.75rem;pointer-events:none;}
+
+/* ── FORMS ── */
+.fg{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.75rem;}
+.fg label{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gris);}
+.fg input,.fg select,.fg textarea{background:var(--bg3);border:1px solid var(--border);color:var(--blanc);padding:.58rem .85rem;font-size:.82rem;outline:none;transition:border-color .2s;}
 .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--terra);}
-.fg input::placeholder,.fg textarea::placeholder{color:rgba(140,128,112,0.45);}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(138,120,96,.4);}
 .fg select option{background:var(--bg3);}
-.fg textarea{height:70px;resize:vertical;}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
+.fg textarea{height:65px;resize:vertical;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
 .form-grid .full{grid-column:1/-1;}
-.form-actions{display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border2);}
-/* TABLE / LIST */
-.item-row{background:var(--bg3);border:1px solid var(--border2);padding:1rem 1.2rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:1rem;transition:border-color 0.2s;}
-.item-row:hover{border-color:rgba(196,98,45,0.25);}
-.item-row.hidden-item{opacity:0.4;}
-.item-id{font-size:0.6rem;color:var(--terra);font-family:'Bebas Neue',sans-serif;letter-spacing:0.1em;min-width:80px;}
-.item-main{flex:1;}
-.item-title{font-size:0.88rem;font-weight:500;}
-.item-meta{font-size:0.72rem;color:var(--gris);margin-top:0.15rem;}
-.item-actions{display:flex;gap:0.4rem;flex-wrap:wrap;}
-/* COMMANDES */
-.order-card{background:var(--bg3);border:1px solid var(--border2);padding:1rem 1.2rem;margin-bottom:0.5rem;display:grid;grid-template-columns:1fr auto;gap:1rem;}
-.order-ref{font-size:0.65rem;color:var(--terra);letter-spacing:0.1em;margin-bottom:0.3rem;}
-.order-name{font-size:0.88rem;font-weight:500;margin-bottom:0.15rem;}
-.order-detail{font-size:0.75rem;color:rgba(250,247,242,0.65);}
-.order-meta{font-size:0.62rem;color:rgba(140,128,112,0.55);margin-top:0.2rem;}
-.order-right{display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end;}
-.pill{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.2rem 0.6rem;font-weight:500;}
-.pill.en_attente{background:rgba(212,168,67,0.1);color:var(--or);border:1px solid rgba(212,168,67,0.3);}
-.pill.confirmee{background:rgba(42,107,74,0.15);color:var(--vert2);border:1px solid rgba(42,107,74,0.3);}
-.pill.traite{background:rgba(26,46,74,0.15);color:#6A9ED4;border:1px solid rgba(26,46,74,0.3);}
-.pill.annule{background:rgba(139,32,32,0.12);color:var(--rouge2);border:1px solid rgba(196,48,48,0.25);}
-.statut-sel{background:var(--bg4);border:1px solid var(--border);color:var(--blanc);padding:0.28rem 0.5rem;font-family:'DM Sans';font-size:0.62rem;outline:none;cursor:pointer;}
-.statut-sel option{background:var(--bg3);}
-/* FILTERS */
-.filters{display:flex;gap:0.4rem;margin-bottom:1rem;flex-wrap:wrap;}
-.f-btn{background:transparent;border:1px solid var(--gris2);color:var(--gris);padding:0.28rem 0.7rem;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans';transition:all 0.2s;}
-.f-btn:hover,.f-btn.active{border-color:var(--terra);color:var(--terra2);background:rgba(196,98,45,0.06);}
-/* PHOTO */
-.photo-zone{width:180px;aspect-ratio:3/4;background:var(--bg3);border:2px dashed var(--gris2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color 0.25s;position:relative;overflow:hidden;flex-shrink:0;}
+.form-actions{display:flex;gap:.5rem;justify-content:flex-end;margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--b2);}
+
+/* ── ITEM ROWS ── */
+.item-row{background:var(--bg3);border:1px solid var(--b2);padding:.9rem 1.1rem;margin-bottom:.45rem;display:flex;align-items:center;gap:1rem;transition:border-color .2s;}
+.item-row:hover{border-color:rgba(196,98,45,.2);}
+.item-row.dimmed{opacity:.4;}
+.item-id{font-size:.58rem;color:var(--terra);font-family:'Bebas Neue',sans-serif;letter-spacing:.1em;min-width:60px;flex-shrink:0;}
+.item-main{flex:1;min-width:0;}
+.item-title{font-size:.85rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.item-meta{font-size:.68rem;color:var(--gris);margin-top:.12rem;}
+.item-actions{display:flex;gap:.35rem;flex-shrink:0;flex-wrap:wrap;}
+
+/* ── ORDERS ── */
+.order-card{background:var(--bg3);border:1px solid var(--b2);padding:.9rem 1.1rem;margin-bottom:.45rem;display:grid;grid-template-columns:1fr auto;gap:1rem;transition:border-color .2s;}
+.order-card:hover{border-color:rgba(196,98,45,.2);}
+.order-ref{font-size:.6rem;color:var(--terra);letter-spacing:.1em;margin-bottom:.25rem;}
+.order-name{font-size:.85rem;font-weight:500;}
+.order-detail{font-size:.72rem;color:rgba(250,247,242,.65);margin:.15rem 0;}
+.order-meta{font-size:.6rem;color:rgba(138,120,96,.5);margin-top:.2rem;}
+.order-right{display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;}
+.pill{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .55rem;font-weight:500;}
+.pill.en_attente{background:rgba(212,168,67,.1);color:var(--or);border:1px solid rgba(212,168,67,.3);}
+.pill.confirmee {background:rgba(42,107,74,.15);color:var(--vert2);border:1px solid rgba(42,107,74,.3);}
+.pill.traite    {background:rgba(26,60,100,.15);color:#7ab4e0;border:1px solid rgba(26,60,100,.3);}
+.pill.annule    {background:rgba(139,32,32,.12);color:var(--rouge2);border:1px solid rgba(196,48,48,.25);}
+.pill.non_lu    {background:rgba(212,168,67,.1);color:var(--or);border:1px solid rgba(212,168,67,.3);}
+.s-sel{background:var(--bg4);border:1px solid var(--border);color:var(--blanc);padding:.25rem .45rem;font-size:.6rem;outline:none;cursor:pointer;}
+.s-sel option{background:var(--bg3);}
+
+/* ── FILTERS ── */
+.filters{display:flex;gap:.35rem;margin-bottom:.9rem;flex-wrap:wrap;}
+.f-btn{background:transparent;border:1px solid var(--gris2);color:var(--gris);padding:.25rem .65rem;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.f-btn:hover,.f-btn.active{border-color:var(--terra);color:var(--terra2);background:rgba(196,98,45,.06);}
+
+/* ── MESSAGE CARD ── */
+.msg-card{background:var(--bg3);border:1px solid var(--b2);padding:1rem 1.1rem;margin-bottom:.45rem;transition:border-color .2s;}
+.msg-card:hover{border-color:rgba(196,98,45,.2);}
+.msg-card.non-lu{border-left:2px solid var(--or);}
+.msg-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem;}
+.msg-sender{font-size:.85rem;font-weight:500;}
+.msg-email{font-size:.68rem;color:var(--terra2);margin-top:.1rem;}
+.msg-meta{font-size:.6rem;color:var(--gris);text-align:right;}
+.msg-sujet{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);margin-bottom:.5rem;}
+.msg-body{font-size:.8rem;color:rgba(250,247,242,.7);line-height:1.6;}
+
+/* ── PHOTO ZONE ── */
+.photo-row{display:flex;gap:1.5rem;align-items:flex-start;}
+.photo-zone{width:160px;aspect-ratio:3/4;background:var(--bg3);border:2px dashed var(--gris2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .25s;position:relative;overflow:hidden;flex-shrink:0;}
 .photo-zone:hover{border-color:var(--terra);}
 .photo-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-.photo-row{display:flex;gap:1.5rem;align-items:flex-start;}
-.photo-info p{font-size:0.78rem;color:var(--gris);line-height:1.7;margin-bottom:0.6rem;}
-/* GALERIE */
-.galerie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.6rem;}
-.galerie-item{aspect-ratio:4/3;overflow:hidden;position:relative;background:var(--bg3);border:1px solid var(--border2);}
-.galerie-item img{width:100%;height:100%;object-fit:cover;}
-.galerie-item-overlay{position:absolute;inset:0;background:rgba(13,10,7,0.6);display:flex;align-items:center;justify-content:center;gap:0.4rem;opacity:0;transition:opacity 0.2s;}
-.galerie-item:hover .galerie-item-overlay{opacity:1;}
-/* NL */
-.nl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.4rem;}
-.nl-item{background:var(--bg3);border:1px solid var(--border2);padding:0.5rem 0.9rem;font-size:0.78rem;display:flex;justify-content:space-between;align-items:center;}
+.photo-info p{font-size:.75rem;color:var(--gris);line-height:1.7;margin-bottom:.6rem;}
+.photo-status{font-size:.72rem;color:var(--terra2);margin-bottom:.7rem;}
+
+/* ── GALERIE ── */
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.55rem;}
+.gal-item{aspect-ratio:4/3;overflow:hidden;position:relative;background:var(--bg3);border:1px solid var(--b2);}
+.gal-item img{width:100%;height:100%;object-fit:cover;}
+.gal-overlay{position:absolute;inset:0;background:rgba(13,10,7,.65);display:flex;align-items:center;justify-content:center;gap:.4rem;opacity:0;transition:opacity .2s;}
+.gal-item:hover .gal-overlay{opacity:1;}
+
+/* ── NL ── */
+.nl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.4rem;}
+.nl-item{background:var(--bg3);border:1px solid var(--b2);padding:.45rem .85rem;font-size:.75rem;display:flex;justify-content:space-between;align-items:center;}
 .nl-email{color:var(--terra2);}
-/* EMPTY */
+
+/* ── EMPTY ── */
 .empty{text-align:center;padding:2.5rem;color:var(--gris);}
-.empty-ico{font-size:2rem;opacity:0.25;margin-bottom:0.5rem;}
-/* TOAST */
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:var(--bg3);border:1px solid var(--border);padding:0.75rem 1.2rem;font-size:0.78rem;display:flex;align-items:center;gap:0.6rem;transform:translateY(60px);opacity:0;transition:all 0.3s;max-width:320px;}
-.toast.show{transform:translateY(0);opacity:1;}
-.toast.success{border-color:rgba(61,150,104,0.4);}
-.toast.error{border-color:rgba(196,48,48,0.4);}
-.toast-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.empty-ico{font-size:1.8rem;opacity:.25;margin-bottom:.4rem;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:var(--bg3);border:1px solid var(--border);padding:.7rem 1.1rem;font-size:.75rem;display:flex;align-items:center;gap:.55rem;transform:translateY(60px);opacity:0;transition:all .28s;max-width:300px;pointer-events:none;}
+.toast.show{transform:none;opacity:1;}
+.toast.success{border-color:rgba(61,150,104,.4);}
+.toast.error{border-color:rgba(196,48,48,.4);}
+.toast-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
 .toast.success .toast-dot{background:var(--vert2);}
 .toast.error .toast-dot{background:var(--rouge2);}
-/* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(13,10,7,0.85);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;}
+
+/* ── MODAL ── */
+.modal-bg{position:fixed;inset:0;background:rgba(13,10,7,.88);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;}
 .modal-bg.open{display:flex;}
-.modal-box{background:var(--bg2);border:1px solid var(--border);width:100%;max-width:500px;max-height:90vh;overflow-y:auto;padding:1.6rem;}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;}
-.modal-ttl{font-size:0.9rem;font-weight:500;color:var(--terra2);letter-spacing:0.05em;}
+.modal-box{background:var(--bg2);border:1px solid var(--border);width:100%;max-width:480px;max-height:90vh;overflow-y:auto;padding:1.5rem;}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem;}
+.modal-ttl{font-size:.85rem;font-weight:500;color:var(--terra2);}
 .modal-x{background:none;border:none;color:var(--gris);font-size:1.1rem;cursor:pointer;}
 .modal-x:hover{color:var(--blanc);}
-/* LOGIN */
+
+/* ── LOGIN ── */
 .login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;}
-.login-box{width:100%;max-width:340px;padding:2.5rem;background:var(--bg2);border:1px solid var(--border);}
-.login-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--blanc);letter-spacing:0.15em;margin-bottom:0.2rem;}
+.login-box{width:100%;max-width:320px;padding:2.5rem;background:var(--bg2);border:1px solid var(--border);}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.15em;color:var(--blanc);margin-bottom:.2rem;}
 .login-logo span{color:var(--terra);}
-.login-sub{font-size:0.65rem;color:var(--gris);letter-spacing:0.15em;margin-bottom:1.8rem;}
-.login-field{margin-bottom:0.9rem;}
-.login-field label{display:block;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gris);margin-bottom:0.3rem;}
-.login-field input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--blanc);padding:0.72rem 1rem;font-family:'DM Sans';font-size:0.88rem;outline:none;}
-.login-field input:focus{border-color:var(--terra);}
-.login-btn{width:100%;background:var(--terra);color:var(--blanc);border:none;padding:0.82rem;font-family:'DM Sans';font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;font-weight:500;margin-top:0.4rem;transition:background 0.2s;}
+.login-sub{font-size:.6rem;color:var(--gris);letter-spacing:.15em;margin-bottom:1.6rem;}
+.lf{display:flex;flex-direction:column;gap:.28rem;margin-bottom:.8rem;}
+.lf label{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gris);}
+.lf input{background:var(--bg3);border:1px solid var(--border);color:var(--blanc);padding:.68rem .9rem;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;}
+.lf input:focus{border-color:var(--terra);}
+.login-btn{width:100%;background:var(--terra);color:var(--blanc);border:none;padding:.8rem;font-family:'DM Sans',sans-serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-weight:500;margin-top:.5rem;transition:background .2s;}
 .login-btn:hover{background:var(--terra2);}
-.login-err{font-size:0.72rem;color:var(--rouge2);margin-top:0.6rem;display:none;}
-@media(max-width:800px){.sidebar{width:180px;}.main{margin-left:180px;}.stats-grid{grid-template-columns:1fr 1fr;}}
+.login-btn:disabled{opacity:.6;cursor:not-allowed;}
+.login-err{font-size:.72rem;color:var(--rouge2);margin-top:.6rem;display:none;}
+
+@media(max-width:768px){.sb{width:180px;}.main{margin-left:180px;}.stats-grid{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
@@ -159,261 +207,245 @@ body{background:var(--bg);color:var(--blanc);font-family:'DM Sans',sans-serif;mi
   <div class="login-box">
     <div class="login-logo">M.A.C<span>.</span></div>
     <div class="login-sub">Administration</div>
-    <div class="login-field"><label>Identifiant</label><input type="text" id="lUser" autocomplete="username"></div>
-    <div class="login-field"><label>Mot de passe</label><input type="password" id="lPass" autocomplete="current-password"></div>
-    <button class="login-btn" onclick="doLogin()">Connexion</button>
+    <div class="lf"><label>Identifiant</label><input id="lUser" type="text" autocomplete="username"></div>
+    <div class="lf"><label>Mot de passe</label><input id="lPass" type="password" autocomplete="current-password"></div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Connexion</button>
     <div class="login-err" id="lErr"></div>
   </div>
 </div>
 
-<aside class="sidebar">
+<aside class="sb">
   <div class="sb-brand">
     <div class="sb-logo">M.A.C<span>.</span></div>
     <div class="sb-sub">Administration</div>
   </div>
   <div class="sb-section">Contenu</div>
-  <a class="nav-item active" href="#" onclick="show('dashboard')"><span class="ico">◈</span>Dashboard</a>
-  <a class="nav-item" href="#" onclick="show('artiste')"><span class="ico">◉</span>Artiste</a>
-  <a class="nav-item" href="#" onclick="show('albums')"><span class="ico">◎</span>Albums</a>
-  <a class="nav-item" href="#" onclick="show('events')"><span class="ico">◷</span>Événements</a>
-  <a class="nav-item" href="#" onclick="show('galerie')"><span class="ico">◫</span>Galerie Photos</a>
-  <div class="sb-section">Transactions</div>
-  <a class="nav-item" href="#" onclick="show('commandes')"><span class="ico">🛒</span>Commandes<span class="nav-badge" id="badgeCmd"></span></a>
-  <a class="nav-item" href="#" onclick="show('reservations')"><span class="ico">🎫</span>Réservations<span class="nav-badge" id="badgeRes"></span></a>
-  <a class="nav-item" href="#" onclick="show('messages')"><span class="ico">✉</span>Messages</a>
-  <a class="nav-item" href="#" onclick="show('newsletter')"><span class="ico">◌</span>Newsletter</a>
+  <a class="nav-item active" onclick="show('dashboard')"><span class="ico">◈</span>Dashboard</a>
+  <a class="nav-item" onclick="show('artiste')"><span class="ico">◉</span>Artiste</a>
+  <a class="nav-item" onclick="show('albums')"><span class="ico">◎</span>Albums</a>
+  <a class="nav-item" onclick="show('events')"><span class="ico">◷</span>Événements</a>
+  <a class="nav-item" onclick="show('galerie')"><span class="ico">◫</span>Galerie</a>
+  <div class="sb-section">Activité</div>
+  <a class="nav-item" onclick="show('commandes')"><span class="ico">🛒</span>Commandes<span class="nb" id="nbCmd"></span></a>
+  <a class="nav-item" onclick="show('reservations')"><span class="ico">🎫</span>Réservations<span class="nb" id="nbRes"></span></a>
+  <a class="nav-item" onclick="show('messages')"><span class="ico">✉</span>Messages<span class="nb" id="nbMsg"></span></a>
+  <a class="nav-item" onclick="show('newsletter')"><span class="ico">◌</span>Newsletter</a>
   <div class="sb-footer">
-    <a href="index.html" target="_blank" class="back-link">↗ Voir le site</a>
+    <a href="index.html" target="_blank" class="sb-back">↗ Voir le site</a>
   </div>
 </aside>
 
 <main class="main">
   <div class="topbar">
-    <div class="topbar-title">Admin <span>M.A.C</span></div>
+    <div class="topbar-left">Admin <span>M.A.C</span></div>
     <div class="topbar-right">
-      <div class="saved-badge" id="savedBadge">✓ Sauvegardé</div>
+      <div class="saved" id="savedBadge">✓ Sauvegardé</div>
       <button class="btn btn-blue" onclick="exportAll()">↓ Export JSON</button>
       <button class="btn btn-red" onclick="doLogout()">Déconnexion</button>
     </div>
   </div>
 
-  <!-- DASHBOARD -->
-  <div class="panel active" id="panel-dashboard">
-    <div class="panel-title">Dashboard</div>
-    <div class="panel-sub">Vue d'ensemble en temps réel.</div>
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-n" id="sAlbums">—</div><div class="stat-l">Albums</div></div>
-      <div class="stat-card"><div class="stat-n" id="sEvents">—</div><div class="stat-l">Événements</div></div>
-      <div class="stat-card"><div class="stat-n" id="sCmds">—</div><div class="stat-l" id="sCmdsSub">Commandes</div></div>
-      <div class="stat-card"><div class="stat-n" id="sRes">—</div><div class="stat-l" id="sResSub">Réservations</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Actions rapides</div></div>
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-        <button class="btn btn-terra" onclick="show('albums');openAlbumModal()">+ Album</button>
-        <button class="btn btn-terra" onclick="show('events');openEventModal()">+ Événement</button>
-        <button class="btn btn-terra" onclick="show('galerie');openGalerieModal()">+ Photo</button>
-        <button class="btn btn-outline" onclick="show('commandes')">Commandes</button>
-        <button class="btn btn-outline" onclick="show('reservations')">Réservations</button>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="panel-title">Dashboard</div>
+      <div class="panel-sub">Vue d'ensemble en temps réel.</div>
+      <div class="stats-grid">
+        <div class="stat-c"><div class="stat-n" id="sAlb">—</div><div class="stat-l">Albums</div></div>
+        <div class="stat-c"><div class="stat-n" id="sEv">—</div><div class="stat-l">Événements</div></div>
+        <div class="stat-c"><div class="stat-n" id="sCmds">—</div><div class="stat-l" id="sCmdsL">Commandes</div></div>
+        <div class="stat-c"><div class="stat-n" id="sRes">—</div><div class="stat-l" id="sResL">Réservations</div></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">Actions rapides</div></div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+          <button class="btn btn-terra" onclick="show('albums');openAlbumModal()">+ Album</button>
+          <button class="btn btn-terra" onclick="show('events');openEventModal()">+ Événement</button>
+          <button class="btn btn-terra" onclick="show('galerie');openGalerieModal()">+ Photo</button>
+          <button class="btn btn-out" onclick="show('commandes')">Voir commandes</button>
+          <button class="btn btn-out" onclick="show('messages')">Voir messages</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">Dernière activité</div></div>
+        <div id="dashActivity"></div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Dernière activité</div></div>
-      <div id="recentActivity"></div>
-    </div>
-  </div>
 
-  <!-- ARTISTE -->
-  <div class="panel" id="panel-artiste">
-    <div class="panel-title">Profil Artiste</div>
-    <div class="panel-sub">Photo, biographie et statistiques affichées sur le site.</div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Photo principale</div></div>
-      <div class="photo-row">
-        <div>
+    <!-- ARTISTE -->
+    <div class="panel" id="panel-artiste">
+      <div class="panel-title">Profil Artiste</div>
+      <div class="panel-sub">Tout ce qui s'affiche sur la page d'accueil.</div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">Photo principale</div></div>
+        <div class="photo-row">
           <div class="photo-zone" id="photoZone" onclick="document.getElementById('photoInput').click()">
-            <span style="font-size:1.5rem;opacity:0.3">⊕</span>
-            <small style="font-size:0.65rem;color:var(--gris);text-align:center;margin-top:0.5rem;">Cliquer pour<br>choisir</small>
+            <span style="font-size:1.5rem;opacity:.3">⊕</span>
+            <small style="font-size:.62rem;color:var(--gris);text-align:center;margin-top:.5rem;padding:0 .5rem;">Cliquer pour choisir</small>
           </div>
           <input type="file" id="photoInput" accept="image/*" onchange="handlePhoto(event)" style="display:none">
-        </div>
-        <div class="photo-info">
-          <p>JPG · PNG · WEBP · Max 3 Mo<br>Ratio portrait recommandé</p>
-          <p id="photoInfoTxt" style="color:var(--terra2);font-size:0.75rem;margin-bottom:0.8rem;"></p>
-          <div style="display:flex;gap:0.5rem;">
-            <button class="btn btn-green" onclick="savePhoto()">Sauvegarder</button>
-            <button class="btn btn-red" onclick="deletePhoto()">Supprimer</button>
+          <div class="photo-info">
+            <p>JPG · PNG · WEBP · Max 2 Mo<br>Ratio portrait recommandé</p>
+            <p class="photo-status" id="photoStatus"></p>
+            <div style="display:flex;gap:.4rem;">
+              <button class="btn btn-green" onclick="savePhoto()">Sauvegarder</button>
+              <button class="btn btn-red" onclick="deletePhoto()">Supprimer</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Biographie</div></div>
-      <div class="fg full">
-        <label>Texte de biographie (une phrase par ligne)</label>
-        <textarea id="bioInput" rows="6" placeholder="Écrivez la biographie de l'artiste..."></textarea>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">Biographie</div></div>
+        <div class="fg full"><label>Texte (une phrase par ligne)</label><textarea id="bioInput" rows="6" placeholder="Écrivez la biographie de l'artiste..."></textarea></div>
+        <div class="form-actions"><button class="btn btn-green" onclick="saveSetting('bio',document.getElementById('bioInput').value)">Sauvegarder</button></div>
       </div>
-      <div class="form-actions">
-        <button class="btn btn-green" onclick="saveSetting('bio', document.getElementById('bioInput').value)">Sauvegarder</button>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">Citation Hero</div></div>
+        <div class="fg"><label>Phrase affichée sur la page d'accueil</label><input id="quoteInput" type="text" placeholder="Ex: La musique, c'est ma vie..."></div>
+        <div class="form-actions"><button class="btn btn-green" onclick="saveSetting('hero_quote',document.getElementById('quoteInput').value)">Sauvegarder</button></div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Citation Hero</div></div>
-      <div class="fg full">
-        <label>Citation affichée sur la page d'accueil</label>
-        <input type="text" id="quoteInput" placeholder="Ex: Le rap, c'est ma rue...">
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-green" onclick="saveSetting('hero_quote', document.getElementById('quoteInput').value)">Sauvegarder</button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Statistiques</div></div>
-      <div class="form-grid">
-        <div class="fg"><label>Albums</label><input type="text" id="statAlbumsInput" placeholder="Ex: 4"></div>
-        <div class="fg"><label>Concerts</label><input type="text" id="statConcertsInput" placeholder="Ex: 50+"></div>
-        <div class="fg"><label>Années de carrière</label><input type="text" id="statAnneesInput" placeholder="Ex: 8"></div>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-green" onclick="saveStats()">Sauvegarder</button>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">Statistiques</div></div>
+        <div class="form-grid">
+          <div class="fg"><label>Albums</label><input id="statAlb" type="text" placeholder="Ex: 4"></div>
+          <div class="fg"><label>Concerts</label><input id="statCon" type="text" placeholder="Ex: 50+"></div>
+          <div class="fg"><label>Années de carrière</label><input id="statAnn" type="text" placeholder="Ex: 8"></div>
+        </div>
+        <div class="form-actions"><button class="btn btn-green" onclick="saveStats()">Sauvegarder</button></div>
       </div>
     </div>
-  </div>
 
-  <!-- ALBUMS -->
-  <div class="panel" id="panel-albums">
-    <div class="panel-title">Albums</div>
-    <div class="panel-sub">Gérez le catalogue musical affiché sur le site.</div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Albums (<span id="albumCount">0</span>)</div>
-        <button class="btn btn-terra" onclick="openAlbumModal()">+ Ajouter</button>
+    <!-- ALBUMS -->
+    <div class="panel" id="panel-albums">
+      <div class="panel-title">Albums <span id="albCount" style="font-size:.8rem;color:var(--gris);font-weight:400"></span></div>
+      <div class="panel-sub">Catalogue musical affiché sur le site.</div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">Albums</div>
+          <button class="btn btn-terra" onclick="openAlbumModal()">+ Ajouter</button>
+        </div>
+        <div class="search-bar"><input type="text" id="searchAlb" placeholder="Rechercher un album..." oninput="filterAlbums(this.value)"></div>
+        <div id="albumsList"></div>
       </div>
-      <div id="albumsList"></div>
     </div>
-  </div>
 
-  <!-- ÉVÉNEMENTS -->
-  <div class="panel" id="panel-events">
-    <div class="panel-title">Événements</div>
-    <div class="panel-sub">Concerts, festivals et événements à venir.</div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Événements (<span id="eventCount">0</span>)</div>
-        <button class="btn btn-terra" onclick="openEventModal()">+ Ajouter</button>
+    <!-- ÉVÉNEMENTS -->
+    <div class="panel" id="panel-events">
+      <div class="panel-title">Événements <span id="evCount" style="font-size:.8rem;color:var(--gris);font-weight:400"></span></div>
+      <div class="panel-sub">Concerts, festivals et événements à venir.</div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">Événements</div>
+          <button class="btn btn-terra" onclick="openEventModal()">+ Ajouter</button>
+        </div>
+        <div class="search-bar"><input type="text" id="searchEv" placeholder="Rechercher un événement..." oninput="filterEvents(this.value)"></div>
+        <div id="eventsList"></div>
       </div>
-      <div id="eventsList"></div>
     </div>
-  </div>
 
-  <!-- GALERIE -->
-  <div class="panel" id="panel-galerie">
-    <div class="panel-title">Galerie Photos</div>
-    <div class="panel-sub">Photos d'événements et de concerts affichées sur le site.</div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Photos (<span id="galerieCount">0</span>)</div>
-        <button class="btn btn-terra" onclick="openGalerieModal()">+ Ajouter une photo</button>
+    <!-- GALERIE -->
+    <div class="panel" id="panel-galerie">
+      <div class="panel-title">Galerie Photos <span id="galCount" style="font-size:.8rem;color:var(--gris);font-weight:400"></span></div>
+      <div class="panel-sub">Photos d'événements affichées sur le site.</div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">Photos</div>
+          <button class="btn btn-terra" onclick="openGalerieModal()">+ Ajouter</button>
+        </div>
+        <div class="gal-grid" id="galerieGrid"></div>
       </div>
-      <div class="galerie-grid" id="galerieGrid"></div>
     </div>
-  </div>
 
-  <!-- COMMANDES -->
-  <div class="panel" id="panel-commandes">
-    <div class="panel-title">Commandes Albums</div>
-    <div class="panel-sub">Commandes reçues depuis le site.</div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Commandes (<span id="cmdCount">0</span>)</div>
-        <div style="display:flex;gap:0.4rem;">
+    <!-- COMMANDES -->
+    <div class="panel" id="panel-commandes">
+      <div class="panel-title">Commandes Albums</div>
+      <div class="panel-sub">Commandes reçues depuis le site.</div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">Commandes (<span id="cmdTotal">0</span>)</div>
           <button class="btn btn-blue" onclick="exportCSV('commandes')">↓ CSV</button>
         </div>
+        <div class="search-bar"><input type="text" id="searchCmd" placeholder="Rechercher par nom, email, album, référence..." oninput="searchData('commandes',this.value)"></div>
+        <div class="filters">
+          <button class="f-btn active" onclick="filterCmd('all')">Tous</button>
+          <button class="f-btn" onclick="filterCmd('en_attente')">En attente</button>
+          <button class="f-btn" onclick="filterCmd('traite')">Traités</button>
+          <button class="f-btn" onclick="filterCmd('annule')">Annulés</button>
+        </div>
+        <div id="cmdList"></div>
       </div>
-      <div class="filters">
-        <button class="f-btn active" onclick="filterCmd('all')">Tous</button>
-        <button class="f-btn" onclick="filterCmd('en_attente')">En attente</button>
-        <button class="f-btn" onclick="filterCmd('traite')">Traités</button>
-        <button class="f-btn" onclick="filterCmd('annule')">Annulés</button>
-      </div>
-      <div id="cmdList"></div>
     </div>
-  </div>
 
-  <!-- RÉSERVATIONS -->
-  <div class="panel" id="panel-reservations">
-    <div class="panel-title">Réservations Billets</div>
-    <div class="panel-sub">Réservations reçues depuis le site.</div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Réservations (<span id="resCount">0</span>)</div>
-        <button class="btn btn-blue" onclick="exportCSV('reservations')">↓ CSV</button>
+    <!-- RÉSERVATIONS -->
+    <div class="panel" id="panel-reservations">
+      <div class="panel-title">Réservations Billets</div>
+      <div class="panel-sub">Réservations reçues depuis le site.</div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">Réservations (<span id="resTotal">0</span>)</div>
+          <button class="btn btn-blue" onclick="exportCSV('reservations')">↓ CSV</button>
+        </div>
+        <div class="search-bar"><input type="text" id="searchRes" placeholder="Rechercher par nom, email, événement..." oninput="searchData('reservations',this.value)"></div>
+        <div class="filters">
+          <button class="f-btn active" onclick="filterRes('all')">Tous</button>
+          <button class="f-btn" onclick="filterRes('confirmee')">Confirmées</button>
+          <button class="f-btn" onclick="filterRes('traite')">Traitées</button>
+          <button class="f-btn" onclick="filterRes('annule')">Annulées</button>
+        </div>
+        <div id="resList"></div>
       </div>
-      <div class="filters">
-        <button class="f-btn active" onclick="filterRes('all')">Tous</button>
-        <button class="f-btn" onclick="filterRes('confirmee')">Confirmées</button>
-        <button class="f-btn" onclick="filterRes('traite')">Traitées</button>
-        <button class="f-btn" onclick="filterRes('annule')">Annulées</button>
-      </div>
-      <div id="resList"></div>
     </div>
-  </div>
 
-  <!-- MESSAGES -->
-  <div class="panel" id="panel-messages">
-    <div class="panel-title">Messages</div>
-    <div class="panel-sub">Messages reçus via le formulaire de contact.</div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Messages (<span id="msgCount">0</span>)</div></div>
-      <div id="msgList"></div>
-    </div>
-  </div>
-
-  <!-- NEWSLETTER -->
-  <div class="panel" id="panel-newsletter">
-    <div class="panel-title">Newsletter</div>
-    <div class="panel-sub">Abonnés inscrits depuis le site.</div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Abonnés (<span id="nlCount">0</span>)</div>
-        <button class="btn btn-blue" onclick="exportCSV('newsletter')">↓ CSV</button>
+    <!-- MESSAGES -->
+    <div class="panel" id="panel-messages">
+      <div class="panel-title">Messages Contact</div>
+      <div class="panel-sub">Messages reçus via le formulaire du site.</div>
+      <div class="card">
+        <div class="card-hd"><div class="card-title">Messages (<span id="msgTotal">0</span>)</div></div>
+        <div class="search-bar"><input type="text" id="searchMsg" placeholder="Rechercher par nom, email, message..." oninput="searchData('messages',this.value)"></div>
+        <div id="msgList"></div>
       </div>
-      <div class="nl-grid" id="nlGrid"></div>
     </div>
-  </div>
+
+    <!-- NEWSLETTER -->
+    <div class="panel" id="panel-newsletter">
+      <div class="panel-title">Newsletter</div>
+      <div class="panel-sub">Abonnés inscrits depuis le site.</div>
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">Abonnés (<span id="nlTotal">0</span>)</div>
+          <button class="btn btn-blue" onclick="exportCSV('newsletter')">↓ CSV</button>
+        </div>
+        <div class="search-bar"><input type="text" id="searchNl" placeholder="Rechercher un email..." oninput="searchData('newsletter',this.value)"></div>
+        <div class="nl-grid" id="nlGrid"></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
 </main>
 
 <!-- MODAL ALBUM -->
 <div class="modal-bg" id="mAlbum">
   <div class="modal-box">
-    <div class="modal-head"><div class="modal-ttl" id="mAlbumTtl">Nouvel Album</div><button class="modal-x" onclick="closeM('mAlbum')">✕</button></div>
+    <div class="modal-head"><div class="modal-ttl" id="mAlbTtl">Nouvel Album</div><button class="modal-x" onclick="closeM('mAlbum')">✕</button></div>
     <input type="hidden" id="aId">
     <div class="form-grid">
-      <div class="fg full"><label>Titre *</label><input type="text" id="aTitre" placeholder="Titre de l'album"></div>
-      <div class="fg"><label>Année</label><input type="text" id="aAnnee" placeholder="2025"></div>
-      <div class="fg"><label>Genre</label><input type="text" id="aGenre" placeholder="Rap / Gospel"></div>
-      <div class="fg"><label>Prix</label><input type="text" id="aPrix" placeholder="12 000 FCFA"></div>
-      <div class="fg"><label>Code (2-5 lettres)</label><input type="text" id="aCode" placeholder="JA" maxlength="5"></div>
-      <div class="fg"><label>Thème couleur</label>
-        <select id="aTheme">
-          <option value="terra">Terracotta</option>
-          <option value="or">Doré</option>
-          <option value="vert">Vert</option>
-          <option value="sable">Sable</option>
-        </select>
+      <div class="fg full"><label>Titre *</label><input id="aTitre" type="text" placeholder="Titre de l'album"></div>
+      <div class="fg"><label>Année</label><input id="aAnnee" type="text" placeholder="2025"></div>
+      <div class="fg"><label>Genre</label><input id="aGenre" type="text" placeholder="Rap / Gospel"></div>
+      <div class="fg"><label>Prix</label><input id="aPrix" type="text" placeholder="12 000 FCFA"></div>
+      <div class="fg"><label>Code (3-5 lettres)</label><input id="aCode" type="text" placeholder="JA" maxlength="5"></div>
+      <div class="fg"><label>Thème</label>
+        <select id="aTheme"><option value="terra">Terracotta</option><option value="or">Doré</option><option value="vert">Vert</option><option value="sable">Sable</option></select>
       </div>
       <div class="fg"><label>Badge</label>
-        <select id="aBadge">
-          <option value="">Aucun</option>
-          <option value="new">Nouveau</option>
-          <option value="gospel">Gospel</option>
-          <option value="single">Single</option>
-        </select>
+        <select id="aBadge"><option value="">Aucun</option><option value="new">Nouveau</option><option value="gospel">Gospel</option><option value="single">Single</option></select>
       </div>
-      <div class="fg full"><label>URL de la pochette (optionnel)</label><input type="url" id="aCoverUrl" placeholder="https://..."></div>
+      <div class="fg full"><label>URL Pochette (https://...)</label><input id="aCover" type="url" placeholder="https://..."></div>
     </div>
     <div class="form-actions">
-      <button class="btn btn-outline" onclick="closeM('mAlbum')">Annuler</button>
+      <button class="btn btn-out" onclick="closeM('mAlbum')">Annuler</button>
       <button class="btn btn-green" onclick="saveAlbum()">Sauvegarder</button>
     </div>
   </div>
@@ -422,32 +454,24 @@ body{background:var(--bg);color:var(--blanc);font-family:'DM Sans',sans-serif;mi
 <!-- MODAL ÉVÉNEMENT -->
 <div class="modal-bg" id="mEvent">
   <div class="modal-box">
-    <div class="modal-head"><div class="modal-ttl" id="mEventTtl">Nouvel Événement</div><button class="modal-x" onclick="closeM('mEvent')">✕</button></div>
+    <div class="modal-head"><div class="modal-ttl" id="mEvTtl">Nouvel Événement</div><button class="modal-x" onclick="closeM('mEvent')">✕</button></div>
     <input type="hidden" id="eId">
     <div class="form-grid">
-      <div class="fg full"><label>Titre *</label><input type="text" id="eTitre" placeholder="Nom de l'événement"></div>
-      <div class="fg full"><label>Lieu *</label><input type="text" id="eLieu" placeholder="Salle, Ville, Pays"></div>
-      <div class="fg"><label>Jour</label><input type="text" id="eJour" placeholder="18" maxlength="2"></div>
-      <div class="fg"><label>Mois (abrégé)</label><input type="text" id="eMois" placeholder="Avr" maxlength="4"></div>
-      <div class="fg"><label>Année</label><input type="text" id="eAnnee" placeholder="2025" maxlength="4"></div>
-      <div class="fg"><label>Prix</label><input type="text" id="ePrix" placeholder="5 000 FCFA"></div>
+      <div class="fg full"><label>Titre *</label><input id="eTitre" type="text" placeholder="Nom de l'événement"></div>
+      <div class="fg full"><label>Lieu</label><input id="eLieu" type="text" placeholder="Salle, Ville, Pays"></div>
+      <div class="fg"><label>Jour</label><input id="eJour" type="text" placeholder="18" maxlength="2"></div>
+      <div class="fg"><label>Mois (abrégé)</label><input id="eMois" type="text" placeholder="Avr" maxlength="4"></div>
+      <div class="fg"><label>Année</label><input id="eAnnee" type="text" placeholder="2025" maxlength="4"></div>
+      <div class="fg"><label>Prix</label><input id="ePrix" type="text" placeholder="5 000 FCFA"></div>
       <div class="fg"><label>Type</label>
-        <select id="eType">
-          <option value="concert">Concert</option>
-          <option value="festival">Festival</option>
-          <option value="gospel">Gospel</option>
-          <option value="mbalax">Mbalax</option>
-        </select>
+        <select id="eType"><option value="concert">Concert</option><option value="festival">Festival</option><option value="gospel">Gospel</option><option value="mbalax">Mbalax</option></select>
       </div>
       <div class="fg"><label>Statut</label>
-        <select id="eStatut">
-          <option value="dispo">Disponible</option>
-          <option value="complet">Complet</option>
-        </select>
+        <select id="eStatut"><option value="dispo">Disponible</option><option value="complet">Complet</option></select>
       </div>
     </div>
     <div class="form-actions">
-      <button class="btn btn-outline" onclick="closeM('mEvent')">Annuler</button>
+      <button class="btn btn-out" onclick="closeM('mEvent')">Annuler</button>
       <button class="btn btn-green" onclick="saveEvent()">Sauvegarder</button>
     </div>
   </div>
@@ -456,13 +480,12 @@ body{background:var(--bg);color:var(--blanc);font-family:'DM Sans',sans-serif;mi
 <!-- MODAL GALERIE -->
 <div class="modal-bg" id="mGalerie">
   <div class="modal-box">
-    <div class="modal-head"><div class="modal-ttl" id="mGalerieTtl">Ajouter une photo</div><button class="modal-x" onclick="closeM('mGalerie')">✕</button></div>
-    <input type="hidden" id="gId">
-    <div class="fg full"><label>URL de la photo *</label><input type="url" id="gUrl" placeholder="https://... (Imgur, Cloudinary, etc.)"></div>
-    <div class="fg full"><label>Légende</label><input type="text" id="gLegende" placeholder="Ex: Concert CCBM — Avril 2025"></div>
-    <p style="font-size:0.72rem;color:var(--gris);margin-bottom:0.8rem;">Conseil : hébergez vos photos sur <a href="https://imgur.com" target="_blank" style="color:var(--terra2)">imgur.com</a> ou <a href="https://cloudinary.com" target="_blank" style="color:var(--terra2)">cloudinary.com</a> et copiez l'URL directe.</p>
+    <div class="modal-head"><div class="modal-ttl">Ajouter une photo</div><button class="modal-x" onclick="closeM('mGalerie')">✕</button></div>
+    <div class="fg"><label>URL de la photo (https://...)*</label><input id="gUrl" type="url" placeholder="https://imgur.com/..."></div>
+    <div class="fg"><label>Légende</label><input id="gLegende" type="text" placeholder="Ex: Concert CCBM — Avril 2025"></div>
+    <p style="font-size:.7rem;color:var(--gris);margin-bottom:.8rem;">Hébergez vos photos sur <a href="https://imgur.com" target="_blank" style="color:var(--terra2)">imgur.com</a> ou <a href="https://cloudinary.com" target="_blank" style="color:var(--terra2)">cloudinary.com</a></p>
     <div class="form-actions">
-      <button class="btn btn-outline" onclick="closeM('mGalerie')">Annuler</button>
+      <button class="btn btn-out" onclick="closeM('mGalerie')">Annuler</button>
       <button class="btn btn-green" onclick="saveGaleriePhoto()">Ajouter</button>
     </div>
   </div>
@@ -473,29 +496,21 @@ body{background:var(--bg);color:var(--blanc);font-family:'DM Sans',sans-serif;mi
 <script>
 'use strict';
 
-/* ── AUTH JWT ──
-   Le mot de passe est vérifié côté serveur (bcrypt).
-   On reçoit un JWT signé, jamais le mot de passe en clair.
-   Le JWT expire après 8h et est stocké en sessionStorage. */
-
+/* ── AUTH JWT ── */
 let _tok = sessionStorage.getItem('mac_jwt') || '';
 
 async function doLogin() {
   const u = document.getElementById('lUser').value.trim();
   const p = document.getElementById('lPass').value;
   if (!u || !p) { showErr('Remplissez tous les champs.'); return; }
-
-  const btn = document.querySelector('.login-btn');
-  btn.textContent = 'Connexion…'; btn.disabled = true;
-
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Connexion…';
   try {
     const r = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: u, password: p })
     });
     const d = await r.json();
-
     if (d.success && d.token) {
       _tok = d.token;
       sessionStorage.setItem('mac_jwt', _tok);
@@ -504,95 +519,59 @@ async function doLogin() {
     } else {
       showErr(d.error || 'Identifiant ou mot de passe incorrect.');
     }
-  } catch {
-    showErr('Erreur réseau. Réessayez.');
-  } finally {
-    btn.textContent = 'Connexion'; btn.disabled = false;
-  }
+  } catch { showErr('Erreur réseau. Réessayez.'); }
+  finally { btn.disabled = false; btn.textContent = 'Connexion'; }
 }
+function showErr(m) { const e = document.getElementById('lErr'); e.textContent = m; e.style.display = 'block'; }
+function doLogout() { sessionStorage.removeItem('mac_jwt'); _tok = ''; location.reload(); }
+['lUser','lPass'].forEach(id => document.getElementById(id)?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); }));
 
-function showErr(m) {
-  const e = document.getElementById('lErr');
-  e.textContent = m; e.style.display = 'block';
-}
-
-function doLogout() {
-  sessionStorage.removeItem('mac_jwt');
-  _tok = '';
-  location.reload();
-}
-
-['lUser','lPass'].forEach(id =>
-  document.getElementById(id).addEventListener('keydown', e => {
-    if (e.key === 'Enter') doLogin();
-  })
-);
-
-// Vérifie le JWT stocké au chargement
+// Vérifie le JWT au chargement
 if (_tok) {
-  // Vérifie que le token n'est pas expiré côté client (décode le payload)
   try {
-    const payload = JSON.parse(atob(_tok.split('.')[1]));
-    if (payload.exp * 1000 > Date.now()) {
-      document.getElementById('loginScreen').style.display = 'none';
-      boot();
-    } else {
-      sessionStorage.removeItem('mac_jwt');
-      _tok = '';
-    }
-  } catch {
-    sessionStorage.removeItem('mac_jwt');
-    _tok = '';
-  }
+    const pl = JSON.parse(atob(_tok.split('.')[1]));
+    if (pl.exp * 1000 > Date.now()) { document.getElementById('loginScreen').style.display = 'none'; boot(); }
+    else { sessionStorage.removeItem('mac_jwt'); _tok = ''; }
+  } catch { sessionStorage.removeItem('mac_jwt'); _tok = ''; }
 }
 
 /* ── API ── */
-async function apiGet(store){
-  try{
-    const r=await fetch(`/api/get-data?store=${store}`,{
-      headers:{'Authorization':'Bearer '+_tok},
-      cache:'no-store'
-    });
-    if(r.status===401){doLogout();return[];}
-    if(!r.ok)return[];
-    return(await r.json()).items||[];
-  }catch{return[];}
+const H = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _tok });
+
+async function apiGet(store, q = '') {
+  try {
+    const url = `/api/get-data?store=${store}${q ? '&q='+encodeURIComponent(q) : ''}`;
+    const r = await fetch(url, { headers: H(), cache: 'no-store' });
+    if (r.status === 401) { doLogout(); return []; }
+    if (!r.ok) return [];
+    return (await r.json()).items || [];
+  } catch { return []; }
 }
-async function apiPost(ep,data){
-  try{
-    const r=await fetch(ep,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+_tok},
-      body:JSON.stringify(data)
-    });
-    return await r.json();
-  }catch(e){return{error:String(e)};}
+async function apiPost(ep, data) {
+  try {
+    const r = await fetch(ep, { method: 'POST', headers: H(), body: JSON.stringify(data) });
+    return r.json();
+  } catch (e) { return { error: String(e) }; }
 }
-async function apiPatch(ep,data){
-  try{
-    const r=await fetch(ep,{
-      method:'PATCH',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+_tok},
-      body:JSON.stringify(data)
-    });
-    return await r.json();
-  }catch(e){return{error:String(e)};}
+async function apiPatch(ep, data) {
+  try {
+    const r = await fetch(ep, { method: 'PATCH', headers: H(), body: JSON.stringify(data) });
+    return r.json();
+  } catch (e) { return { error: String(e) }; }
 }
 
 /* ── STATE ── */
-let _albums=[],_events=[],_galerie=[],_cmds=[],_res=[],_msgs=[],_nl=[];
-let _cmdFilter='all',_resFilter='all';
+let _albums = [], _events = [], _galerie = [], _cmds = [], _res = [], _msgs = [], _nl = [];
+let _cmdFilter = 'all', _resFilter = 'all';
 
 /* ── BOOT ── */
-async function boot(){
+async function boot() {
   await Promise.all([
-    loadAlbums(),loadEvents(),loadGalerie(),
-    loadCmds(),loadRes(),loadMsgs(),loadNl(),
+    loadAlbums(), loadEvents(), loadGalerie(),
+    loadCmds(), loadRes(), loadMsgs(), loadNl(),
     loadArtiste()
   ]);
-  renderDashboard();renderAlbums();renderEvents();renderGalerie();
-  renderCmds();renderRes();renderMsgs();renderNl();
-  updateBadges();
+  renderAll();
 }
 
 async function loadAlbums()  { _albums  = await apiGet('albums'); }
@@ -603,394 +582,352 @@ async function loadRes()     { _res     = await apiGet('reservations'); }
 async function loadMsgs()    { _msgs    = await apiGet('messages'); }
 async function loadNl()      { _nl      = await apiGet('newsletter'); }
 
-async function loadArtiste(){
+async function loadArtiste() {
   const items = await apiGet('settings_public');
-  const get = k => items.find(i=>i.key===k)?.value||'';
-  const bio   = get('bio');
-  const quote = get('hero_quote');
+  const get = k => items.find(i => i.key === k)?.value || '';
+  document.getElementById('bioInput').value   = get('bio');
+  document.getElementById('quoteInput').value = get('hero_quote');
   const stats = get('stats');
-  if(bio)   document.getElementById('bioInput').value   = bio;
-  if(quote) document.getElementById('quoteInput').value = quote;
-  if(stats){try{const s=JSON.parse(stats);document.getElementById('statAlbumsInput').value=s.albums||'';document.getElementById('statConcertsInput').value=s.concerts||'';document.getElementById('statAnneesInput').value=s.annees||'';}catch{}}
-  // Photo
-  const {photo}=await fetch('/api/save-photo').then(r=>r.json()).catch(()=>({}));
-  if(photo) showPhotoPreview(photo);
+  if (stats) { try { const s = JSON.parse(stats); document.getElementById('statAlb').value=s.albums||''; document.getElementById('statCon').value=s.concerts||''; document.getElementById('statAnn').value=s.annees||''; } catch {} }
+  const { photo } = await fetch('/api/save-photo').then(r=>r.json()).catch(()=>({}));
+  if (photo) showPhotoPreview(photo);
+}
+
+function renderAll() {
+  renderDashboard(); renderAlbums(); renderEvents(); renderGalerie();
+  renderCmds(); renderRes(); renderMsgs(); renderNl(); updateBadges();
 }
 
 /* ── NAV ── */
-function show(name){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+function show(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('panel-'+name).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')?.includes(`'${name}'`))n.classList.add('active');});
+  document.querySelectorAll('.nav-item').forEach(n => { if (n.getAttribute('onclick')?.includes(`'${name}'`)) n.classList.add('active'); });
 }
-function flashSaved(){const b=document.getElementById('savedBadge');b.style.display='block';clearTimeout(b._t);b._t=setTimeout(()=>b.style.display='none',2500);}
+function flashSaved() { const b=document.getElementById('savedBadge'); b.style.display='block'; clearTimeout(b._t); b._t=setTimeout(()=>b.style.display='none',2500); }
 
 /* ── DASHBOARD ── */
-function renderDashboard(){
-  const pc=_cmds.filter(c=>c.statut==='en_attente').length;
-  const pr=_res.filter(r=>r.statut==='confirmee').length;
-  document.getElementById('sAlbums').textContent=_albums.length;
-  document.getElementById('sEvents').textContent=_events.filter(e=>e.visible).length;
-  document.getElementById('sCmds').textContent=_cmds.length;
-  document.getElementById('sCmdsSub').textContent=`Commandes${pc?` (${pc} nouvelles)`:''}`;
-  document.getElementById('sRes').textContent=_res.length;
-  document.getElementById('sResSub').textContent=`Réservations${pr?` (${pr} nouvelles)`:''}`;
-  document.getElementById('sCmds').className=`stat-n${pc?' alert':''}`;
-  document.getElementById('sRes').className=`stat-n${pr?' alert':''}`;
-  const all=[..._cmds.map(x=>({...x,_t:'cmd'})),..._res.map(x=>({...x,_t:'res'})),..._msgs.map(x=>({...x,_t:'msg'}))];
+function renderDashboard() {
+  const nc = _cmds.filter(c=>c.statut==='en_attente').length;
+  const nr = _res.filter(r=>r.statut==='confirmee').length;
+  const nm = _msgs.filter(m=>!m.lu).length;
+  document.getElementById('sAlb').textContent  = _albums.length;
+  document.getElementById('sEv').textContent   = _events.filter(e=>e.visible).length;
+  document.getElementById('sCmds').textContent = _cmds.length;
+  document.getElementById('sCmdsL').textContent= nc ? `Commandes (${nc} nouvelles)` : 'Commandes';
+  document.getElementById('sCmds').className   = 'stat-n' + (nc?' alert':'');
+  document.getElementById('sRes').textContent  = _res.length;
+  document.getElementById('sResL').textContent = nr ? `Réservations (${nr} nouvelles)` : 'Réservations';
+  document.getElementById('sRes').className    = 'stat-n' + (nr?' alert':'');
+
+  const all = [..._cmds.map(x=>({...x,_t:'cmd'})),..._res.map(x=>({...x,_t:'res'})),..._msgs.map(x=>({...x,_t:'msg'}))];
   all.sort((a,b)=>(b.created_at||'').localeCompare(a.created_at||''));
-  const el=document.getElementById('recentActivity');
-  el.innerHTML=all.slice(0,5).map(x=>{
-    if(x._t==='cmd')return`<div class="order-card"><div><div class="order-ref">${x.id}</div><div class="order-name">🛒 ${x.prenom} ${x.nom}</div><div class="order-detail">${x.album} × ${x.quantite} — ${x.prix}</div><div class="order-meta">${x.date}</div></div><div class="order-right"><span class="pill ${x.statut}">${sLabel(x.statut)}</span></div></div>`;
-    if(x._t==='res')return`<div class="order-card"><div><div class="order-ref">${x.id}</div><div class="order-name">🎫 ${x.prenom} ${x.nom}</div><div class="order-detail">${x.evenement} — ${x.date_event}</div><div class="order-meta">${x.date}</div></div><div class="order-right"><span class="pill ${x.statut}">${sLabel(x.statut)}</span></div></div>`;
-    return`<div class="item-row"><div class="item-main"><div class="item-title">✉ ${x.nom}</div><div class="item-meta">${(x.message||'').substring(0,80)}</div></div></div>`;
-  }).join('')||'<div class="empty"><div class="empty-ico">○</div><p>Aucune activité récente.</p></div>';
+  document.getElementById('dashActivity').innerHTML = all.slice(0,6).map(x => {
+    if (x._t==='cmd') return `<div class="order-card"><div><div class="order-ref">${x.id}</div><div class="order-name">🛒 ${x.prenom} ${x.nom}</div><div class="order-detail">${x.album} × ${x.quantite} — ${x.prix}</div><div class="order-meta">${x.date_fr}</div></div><div class="order-right"><span class="pill ${x.statut}">${sLbl(x.statut)}</span></div></div>`;
+    if (x._t==='res') return `<div class="order-card"><div><div class="order-ref">${x.id}</div><div class="order-name">🎫 ${x.prenom} ${x.nom}</div><div class="order-detail">${x.evenement} — ${x.date_event}</div><div class="order-meta">${x.date_fr}</div></div><div class="order-right"><span class="pill ${x.statut}">${sLbl(x.statut)}</span></div></div>`;
+    return `<div class="msg-card ${x.lu?'':'non-lu'}"><div class="msg-head"><div><div class="msg-sender">✉ ${x.prenom} ${x.nom}</div><div class="msg-email">${x.email}</div></div><div class="msg-meta">${x.date_fr}</div></div><div class="msg-body">${(x.message||'').slice(0,80)}…</div></div>`;
+  }).join('') || '<div class="empty"><div class="empty-ico">○</div><p>Aucune activité récente.</p></div>';
 }
-function sLabel(s){return{en_attente:'En attente',confirmee:'Confirmée',traite:'Traité',annule:'Annulé'}[s]||s;}
-function updateBadges(){
-  const bc=document.getElementById('badgeCmd'),br=document.getElementById('badgeRes');
-  const pc=_cmds.filter(c=>c.statut==='en_attente').length;
-  const pr=_res.filter(r=>r.statut==='confirmee').length;
-  bc.textContent=pc;bc.style.display=pc?'inline':'none';
-  br.textContent=pr;br.style.display=pr?'inline':'none';
+function sLbl(s) { return {en_attente:'En attente',confirmee:'Confirmée',traite:'Traité',annule:'Annulé'}[s]||s; }
+
+function updateBadges() {
+  const nc = _cmds.filter(c=>c.statut==='en_attente').length;
+  const nr = _res.filter(r=>r.statut==='confirmee').length;
+  const nm = _msgs.filter(m=>!m.lu).length;
+  const set = (id, n) => { const el=document.getElementById(id); el.textContent=n; el.style.display=n?'inline':'none'; };
+  set('nbCmd', nc); set('nbRes', nr); set('nbMsg', nm);
 }
 
-/* ── PHOTO ARTISTE ── */
-let _pendingPhoto=null;
-function showPhotoPreview(src){
-  const z=document.getElementById('photoZone');
-  z.querySelectorAll('img,span,small').forEach(el=>el.style.display='none');
-  let img=z.querySelector('img');
-  if(!img){img=document.createElement('img');z.appendChild(img);}
-  img.src=src;img.style.display='block';
-  document.getElementById('photoInfoTxt').textContent='✓ Photo chargée';
+/* ── PHOTO ── */
+let _pendingPhoto = null;
+function showPhotoPreview(src) {
+  const z = document.getElementById('photoZone');
+  z.querySelectorAll('span,small').forEach(el=>el.style.display='none');
+  let img = z.querySelector('img');
+  if (!img) { img=document.createElement('img'); z.appendChild(img); }
+  img.src = src; img.style.display = 'block';
+  document.getElementById('photoStatus').textContent = '✓ Photo chargée';
 }
-function handlePhoto(e){
-  const f=e.target.files[0];if(!f)return;
-  if(f.size>3*1024*1024){toast('Image trop lourde (max 3 Mo).','error');return;}
-  const r=new FileReader();r.onload=ev=>{_pendingPhoto=ev.target.result;showPhotoPreview(_pendingPhoto);document.getElementById('photoInfoTxt').textContent=`📎 ${f.name} — cliquez Sauvegarder`;};r.readAsDataURL(f);
+function handlePhoto(e) {
+  const f = e.target.files[0]; if (!f) return;
+  if (f.size>2.5*1024*1024) { toast('Image trop lourde (max ~2 Mo).','error'); return; }
+  const r = new FileReader();
+  r.onload = ev => { _pendingPhoto=ev.target.result; showPhotoPreview(_pendingPhoto); document.getElementById('photoStatus').textContent=`📎 ${f.name} — cliquez Sauvegarder`; };
+  r.readAsDataURL(f);
 }
-async function savePhoto(){
-  if(!_pendingPhoto){toast('Choisissez d\'abord une photo.','error');return;}
-  const r=await apiPost('/api/save-photo',{action:'save',photo:_pendingPhoto});
-  if(r.success){_pendingPhoto=null;flashSaved();toast('Photo sauvegardée !','success');}
+async function savePhoto() {
+  if (!_pendingPhoto) { toast('Choisissez d\'abord une photo.','error'); return; }
+  const r = await apiPost('/api/save-photo', { action:'save', photo:_pendingPhoto });
+  if (r.success) { _pendingPhoto=null; flashSaved(); toast('Photo mise à jour !','success'); }
   else toast(r.error||'Erreur.','error');
 }
-async function deletePhoto(){
-  await apiPost('/api/save-photo',{action:'delete',photo:null});
+async function deletePhoto() {
+  await apiPost('/api/save-photo', { action:'delete', photo:null });
   const z=document.getElementById('photoZone');
-  const img=z.querySelector('img');if(img)img.style.display='none';
+  const img=z.querySelector('img'); if(img)img.style.display='none';
   z.querySelectorAll('span,small').forEach(el=>el.style.display='');
-  document.getElementById('photoInfoTxt').textContent='';
-  _pendingPhoto=null;toast('Photo supprimée.','success');
+  document.getElementById('photoStatus').textContent='';
+  _pendingPhoto=null; toast('Photo supprimée.','success');
 }
 
 /* ── SETTINGS ── */
-async function saveSetting(key,value){
-  if(!value.trim()){toast('Valeur vide — non sauvegardée.','error');return;}
-  const r=await apiPost('/api/save-catalog',{store:'settings',action:'set',item:{id:key,key,value}});
-  if(r.success){flashSaved();toast('Sauvegardé !','success');}
+async function saveSetting(key, value) {
+  if (!value.trim()) { toast('Valeur vide.','error'); return; }
+  const r = await apiPost('/api/save-catalog', { store:'settings', action:'set', item:{id:key,key,value} });
+  if (r.success) { flashSaved(); toast('Sauvegardé !','success'); }
   else toast(r.error||'Erreur.','error');
 }
-async function saveStats(){
-  const s=JSON.stringify({
-    albums:document.getElementById('statAlbumsInput').value,
-    concerts:document.getElementById('statConcertsInput').value,
-    annees:document.getElementById('statAnneesInput').value
-  });
-  await saveSetting('stats',s);
+async function saveStats() {
+  const s = JSON.stringify({ albums:document.getElementById('statAlb').value, concerts:document.getElementById('statCon').value, annees:document.getElementById('statAnn').value });
+  await saveSetting('stats', s);
 }
 
 /* ── ALBUMS ── */
-function renderAlbums(){
-  document.getElementById('albumCount').textContent=_albums.length;
-  const el=document.getElementById('albumsList');
-  el.innerHTML=_albums.map(a=>`
-    <div class="item-row ${!a.visible?'hidden-item':''}">
+function renderAlbums(list) {
+  const items = list || _albums;
+  document.getElementById('albCount').textContent = `(${_albums.length})`;
+  document.getElementById('albumsList').innerHTML = items.map(a => `
+    <div class="item-row ${!a.visible?'dimmed':''}">
       <div class="item-id">#${a.id}</div>
       <div class="item-main">
-        <div class="item-title">${a.titre} ${a.badge?`<span style="font-size:0.6rem;color:var(--terra2);border:1px solid rgba(196,98,45,0.3);padding:0.1rem 0.4rem;">${a.badge_label||a.badge}</span>`:''}</div>
+        <div class="item-title">${a.titre} ${a.badge?`<span style="font-size:.58rem;color:var(--terra2);border:1px solid rgba(196,98,45,.3);padding:.08rem .4rem;">${a.badge_label||a.badge}</span>`:''}</div>
         <div class="item-meta">${a.annee||'—'}${a.genre?' · '+a.genre:''} · ${a.prix||'—'}</div>
       </div>
       <div class="item-actions">
-        <button class="btn btn-outline ${a.visible?'on':''}" onclick="toggleAlbum(${a.id})">${a.visible?'Visible':'Masqué'}</button>
-        <button class="btn btn-outline" onclick="editAlbum(${a.id})">Modifier</button>
+        <button class="btn btn-out ${a.visible?'on':''}" onclick="toggleAlbum(${a.id})">${a.visible?'Visible':'Masqué'}</button>
+        <button class="btn btn-out" onclick="editAlbum(${a.id})">Modifier</button>
         <button class="btn btn-red" onclick="delAlbum(${a.id})">✕</button>
       </div>
-    </div>
-  `).join('')||'<div class="empty"><div class="empty-ico">◎</div><p>Aucun album. Cliquez "+ Ajouter".</p></div>';
+    </div>`).join('') || '<div class="empty"><div class="empty-ico">◎</div><p>Aucun album.</p></div>';
 }
-function openAlbumModal(){
-  document.getElementById('mAlbumTtl').textContent='Nouvel Album';
+function filterAlbums(q) {
+  const s = q.toLowerCase();
+  renderAlbums(s ? _albums.filter(a=>(a.titre+a.genre+a.annee).toLowerCase().includes(s)) : _albums);
+}
+function openAlbumModal() {
+  document.getElementById('mAlbTtl').textContent='Nouvel Album';
   document.getElementById('aId').value='';
-  ['aTitre','aAnnee','aGenre','aPrix','aCode','aCoverUrl'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('aTheme').value='terra';
-  document.getElementById('aBadge').value='';
+  ['aTitre','aAnnee','aGenre','aPrix','aCode','aCover'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('aTheme').value='terra'; document.getElementById('aBadge').value='';
   openM('mAlbum');
 }
-function editAlbum(id){
-  const a=_albums.find(x=>x.id===id);if(!a)return;
-  document.getElementById('mAlbumTtl').textContent='Modifier l\'album';
+function editAlbum(id) {
+  const a=_albums.find(x=>x.id===id); if(!a)return;
+  document.getElementById('mAlbTtl').textContent='Modifier l\'album';
   document.getElementById('aId').value=id;
-  document.getElementById('aTitre').value=a.titre;
-  document.getElementById('aAnnee').value=a.annee||'';
-  document.getElementById('aGenre').value=a.genre||'';
-  document.getElementById('aPrix').value=a.prix||'';
-  document.getElementById('aCode').value=a.code||'';
-  document.getElementById('aTheme').value=a.theme||'terra';
-  document.getElementById('aBadge').value=a.badge||'';
-  document.getElementById('aCoverUrl').value=a.cover_url||'';
+  document.getElementById('aTitre').value=a.titre; document.getElementById('aAnnee').value=a.annee||'';
+  document.getElementById('aGenre').value=a.genre||''; document.getElementById('aPrix').value=a.prix||'';
+  document.getElementById('aCode').value=a.code||''; document.getElementById('aTheme').value=a.theme||'terra';
+  document.getElementById('aBadge').value=a.badge||''; document.getElementById('aCover').value=a.cover_url||'';
   openM('mAlbum');
 }
-async function saveAlbum(){
-  const titre=document.getElementById('aTitre').value.trim();
-  if(!titre){toast('Titre obligatoire.','error');return;}
+async function saveAlbum() {
+  const titre=document.getElementById('aTitre').value.trim(); if(!titre){toast('Titre obligatoire.','error');return;}
   const uid=document.getElementById('aId').value;
   const ex=uid?_albums.find(x=>String(x.id)===String(uid)):null;
   const bv=document.getElementById('aBadge').value;
   const r=await apiPost('/api/save-catalog',{store:'albums',action:'set',item:{
-    id:uid?parseInt(uid):null,titre,
-    annee:document.getElementById('aAnnee').value.trim(),
-    genre:document.getElementById('aGenre').value.trim(),
-    prix:document.getElementById('aPrix').value.trim(),
-    code:document.getElementById('aCode').value.trim().toUpperCase()||titre.slice(0,3).toUpperCase(),
-    theme:document.getElementById('aTheme').value,
-    badge:bv,badgeLabel:{new:'Nouveau',gospel:'Gospel',single:'Single'}[bv]||bv,
-    cover_url:document.getElementById('aCoverUrl').value.trim()||null,
+    id:uid?parseInt(uid):null, titre, annee:document.getElementById('aAnnee').value.trim(),
+    genre:document.getElementById('aGenre').value.trim(), prix:document.getElementById('aPrix').value.trim(),
+    code:document.getElementById('aCode').value.trim().toUpperCase(),
+    theme:document.getElementById('aTheme').value, badge:bv,
+    badgeLabel:{new:'Nouveau',gospel:'Gospel',single:'Single'}[bv]||bv,
+    cover_url:document.getElementById('aCover').value.trim()||null,
     visible:ex?ex.visible:true
   }});
   if(r.success){await loadAlbums();renderAlbums();renderDashboard();closeM('mAlbum');flashSaved();toast(`"${titre}" sauvegardé.`,'success');}
   else toast(r.error||'Erreur.','error');
 }
-async function toggleAlbum(id){
-  const a=_albums.find(x=>x.id===id);if(!a)return;
-  const r=await apiPost('/api/save-catalog',{store:'albums',action:'set',item:{...a,visible:!a.visible}});
-  if(r.success){await loadAlbums();renderAlbums();renderDashboard();flashSaved();toast(`${a.visible?'Masqué':'Visible'}.`,'success');}
+async function toggleAlbum(id) {
+  const a=_albums.find(x=>x.id===id); if(!a)return;
+  const r=await apiPost('/api/save-catalog',{store:'albums',action:'set',item:{...a,badgeLabel:a.badge_label,visible:!a.visible}});
+  if(r.success){await loadAlbums();renderAlbums();renderDashboard();flashSaved();toast(a.visible?'Masqué.':'Visible.','success');}
 }
-async function delAlbum(id){
+async function delAlbum(id) {
   if(!confirm('Supprimer cet album ?'))return;
   const r=await apiPost('/api/save-catalog',{store:'albums',action:'delete',item:{id}});
   if(r.success){await loadAlbums();renderAlbums();renderDashboard();flashSaved();toast('Album supprimé.','success');}
 }
 
 /* ── ÉVÉNEMENTS ── */
-function renderEvents(){
-  document.getElementById('eventCount').textContent=_events.length;
-  const el=document.getElementById('eventsList');
-  el.innerHTML=_events.map(ev=>`
-    <div class="item-row ${!ev.visible?'hidden-item':''}">
-      <div class="item-id" style="text-align:center;background:var(--terra);padding:0.4rem;min-width:50px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;line-height:1;">${ev.jour}</div>
-        <div style="font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;">${ev.mois} ${ev.annee}</div>
+function renderEvents(list) {
+  const items = list || _events;
+  document.getElementById('evCount').textContent = `(${_events.length})`;
+  document.getElementById('eventsList').innerHTML = items.map(ev=>`
+    <div class="item-row ${!ev.visible?'dimmed':''}">
+      <div class="item-id" style="background:var(--terra);padding:.3rem .5rem;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;line-height:1;">${ev.jour}</div>
+        <div style="font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;">${ev.mois} ${ev.annee}</div>
       </div>
       <div class="item-main">
         <div class="item-title">${ev.titre}</div>
-        <div class="item-meta">📍 ${ev.lieu} · ${ev.prix||'—'} · <span style="color:${ev.statut==='complet'?'var(--rouge2)':'var(--vert2)'}">${ev.statut}</span></div>
+        <div class="item-meta">📍 ${ev.lieu||'—'} · ${ev.prix||'—'} · <span style="color:${ev.statut==='complet'?'var(--rouge2)':'var(--vert2)'}">${ev.statut}</span></div>
       </div>
       <div class="item-actions">
-        <button class="btn btn-outline" onclick="toggleEventStatut(${ev.id})">${ev.statut==='complet'?'→ Dispo':'→ Complet'}</button>
-        <button class="btn btn-outline ${ev.visible?'on':''}" onclick="toggleEvent(${ev.id})">${ev.visible?'Visible':'Masqué'}</button>
-        <button class="btn btn-outline" onclick="editEvent(${ev.id})">Modifier</button>
+        <button class="btn btn-out" onclick="toggleEvStatut(${ev.id})">${ev.statut==='complet'?'→ Dispo':'→ Complet'}</button>
+        <button class="btn btn-out ${ev.visible?'on':''}" onclick="toggleEvent(${ev.id})">${ev.visible?'Visible':'Masqué'}</button>
+        <button class="btn btn-out" onclick="editEvent(${ev.id})">Modifier</button>
         <button class="btn btn-red" onclick="delEvent(${ev.id})">✕</button>
       </div>
-    </div>
-  `).join('')||'<div class="empty"><div class="empty-ico">◷</div><p>Aucun événement. Cliquez "+ Ajouter".</p></div>';
+    </div>`).join('') || '<div class="empty"><div class="empty-ico">◷</div><p>Aucun événement.</p></div>';
 }
-function openEventModal(){
-  document.getElementById('mEventTtl').textContent='Nouvel Événement';
+function filterEvents(q) {
+  const s=q.toLowerCase();
+  renderEvents(s?_events.filter(e=>(e.titre+e.lieu).toLowerCase().includes(s)):_events);
+}
+function openEventModal() {
+  document.getElementById('mEvTtl').textContent='Nouvel Événement';
   document.getElementById('eId').value='';
   ['eTitre','eLieu','eJour','eMois','ePrix'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('eAnnee').value=new Date().getFullYear();
-  document.getElementById('eType').value='concert';
-  document.getElementById('eStatut').value='dispo';
+  document.getElementById('eType').value='concert'; document.getElementById('eStatut').value='dispo';
   openM('mEvent');
 }
-function editEvent(id){
-  const ev=_events.find(x=>x.id===id);if(!ev)return;
-  document.getElementById('mEventTtl').textContent='Modifier l\'événement';
+function editEvent(id) {
+  const ev=_events.find(x=>x.id===id); if(!ev)return;
+  document.getElementById('mEvTtl').textContent='Modifier l\'événement';
   document.getElementById('eId').value=id;
-  document.getElementById('eTitre').value=ev.titre;
-  document.getElementById('eLieu').value=ev.lieu;
-  document.getElementById('eJour').value=ev.jour;
-  document.getElementById('eMois').value=ev.mois;
-  document.getElementById('eAnnee').value=ev.annee;
-  document.getElementById('ePrix').value=ev.prix||'';
-  document.getElementById('eType').value=ev.type;
-  document.getElementById('eStatut').value=ev.statut;
+  document.getElementById('eTitre').value=ev.titre; document.getElementById('eLieu').value=ev.lieu||'';
+  document.getElementById('eJour').value=ev.jour; document.getElementById('eMois').value=ev.mois;
+  document.getElementById('eAnnee').value=ev.annee; document.getElementById('ePrix').value=ev.prix||'';
+  document.getElementById('eType').value=ev.type; document.getElementById('eStatut').value=ev.statut;
   openM('mEvent');
 }
-async function saveEvent(){
-  const titre=document.getElementById('eTitre').value.trim();
-  if(!titre){toast('Titre obligatoire.','error');return;}
+async function saveEvent() {
+  const titre=document.getElementById('eTitre').value.trim(); if(!titre){toast('Titre obligatoire.','error');return;}
   const uid=document.getElementById('eId').value;
   const ex=uid?_events.find(x=>String(x.id)===String(uid)):null;
   const tv=document.getElementById('eType').value;
   const r=await apiPost('/api/save-catalog',{store:'events',action:'set',item:{
-    id:uid?parseInt(uid):null,titre,
-    lieu:document.getElementById('eLieu').value.trim(),
-    jour:document.getElementById('eJour').value.trim(),
-    mois:document.getElementById('eMois').value.trim(),
-    annee:document.getElementById('eAnnee').value.trim(),
-    prix:document.getElementById('ePrix').value.trim(),
-    type:tv,typeLabel:{concert:'Concert',festival:'Festival',gospel:'Gospel',mbalax:'Mbalax'}[tv]||tv,
-    statut:document.getElementById('eStatut').value,
-    visible:ex?ex.visible:true
+    id:uid?parseInt(uid):null, titre, lieu:document.getElementById('eLieu').value.trim(),
+    jour:document.getElementById('eJour').value.trim(), mois:document.getElementById('eMois').value.trim(),
+    annee:document.getElementById('eAnnee').value.trim(), prix:document.getElementById('ePrix').value.trim(),
+    type:tv, typeLabel:{concert:'Concert',festival:'Festival',gospel:'Gospel',mbalax:'Mbalax'}[tv]||tv,
+    statut:document.getElementById('eStatut').value, visible:ex?ex.visible:true
   }});
   if(r.success){await loadEvents();renderEvents();renderDashboard();closeM('mEvent');flashSaved();toast(`"${titre}" sauvegardé.`,'success');}
   else toast(r.error||'Erreur.','error');
 }
-async function toggleEvent(id){
-  const ev=_events.find(x=>x.id===id);if(!ev)return;
-  await apiPost('/api/save-catalog',{store:'events',action:'set',item:{...ev,visible:!ev.visible}});
-  await loadEvents();renderEvents();renderDashboard();flashSaved();
-}
-async function toggleEventStatut(id){
-  const ev=_events.find(x=>x.id===id);if(!ev)return;
-  await apiPost('/api/save-catalog',{store:'events',action:'set',item:{...ev,statut:ev.statut==='complet'?'dispo':'complet'}});
-  await loadEvents();renderEvents();flashSaved();toast('Statut mis à jour.','success');
-}
-async function delEvent(id){
-  if(!confirm('Supprimer cet événement ?'))return;
-  await apiPost('/api/save-catalog',{store:'events',action:'delete',item:{id}});
-  await loadEvents();renderEvents();renderDashboard();flashSaved();toast('Événement supprimé.','success');
-}
+async function toggleEvent(id){const ev=_events.find(x=>x.id===id);if(!ev)return;await apiPost('/api/save-catalog',{store:'events',action:'set',item:{...ev,typeLabel:ev.type_label,visible:!ev.visible}});await loadEvents();renderEvents();renderDashboard();flashSaved();}
+async function toggleEvStatut(id){const ev=_events.find(x=>x.id===id);if(!ev)return;await apiPost('/api/save-catalog',{store:'events',action:'set',item:{...ev,typeLabel:ev.type_label,statut:ev.statut==='complet'?'dispo':'complet'}});await loadEvents();renderEvents();flashSaved();toast('Statut mis à jour.','success');}
+async function delEvent(id){if(!confirm('Supprimer ?'))return;await apiPost('/api/save-catalog',{store:'events',action:'delete',item:{id}});await loadEvents();renderEvents();renderDashboard();flashSaved();toast('Événement supprimé.','success');}
 
 /* ── GALERIE ── */
-function renderGalerie(){
-  document.getElementById('galerieCount').textContent=_galerie.length;
-  const el=document.getElementById('galerieGrid');
-  el.innerHTML=_galerie.map(p=>`
-    <div class="galerie-item">
+function renderGalerie() {
+  document.getElementById('galCount').textContent=`(${_galerie.length})`;
+  document.getElementById('galerieGrid').innerHTML=_galerie.map(p=>`
+    <div class="gal-item">
       <img src="${p.url}" alt="${p.legende||''}" loading="lazy" onerror="this.style.display='none'">
-      <div class="galerie-item-overlay">
-        <button class="btn btn-outline" style="font-size:0.6rem;padding:0.3rem 0.6rem;" onclick="toggleGalerie(${p.id})">${p.visible?'👁':'🚫'}</button>
-        <button class="btn btn-red" style="font-size:0.6rem;padding:0.3rem 0.6rem;" onclick="delGalerie(${p.id})">✕</button>
+      <div class="gal-overlay">
+        <button class="btn btn-out" style="padding:.2rem .45rem;font-size:.58rem;" onclick="toggleGal(${p.id})">${p.visible?'👁':'🚫'}</button>
+        <button class="btn btn-red" style="padding:.2rem .45rem;font-size:.58rem;" onclick="delGal(${p.id})">✕</button>
       </div>
-    </div>
-  `).join('')||'<div style="grid-column:1/-1" class="empty"><div class="empty-ico">📷</div><p>Aucune photo. Cliquez "+ Ajouter une photo".</p></div>';
+    </div>`).join('')||'<div class="empty" style="grid-column:1/-1"><div class="empty-ico">📷</div><p>Aucune photo.</p></div>';
 }
-function openGalerieModal(){
-  document.getElementById('mGalerieTtl').textContent='Ajouter une photo';
-  document.getElementById('gId').value='';
-  document.getElementById('gUrl').value='';
-  document.getElementById('gLegende').value='';
-  openM('mGalerie');
-}
+function openGalerieModal(){document.getElementById('gUrl').value='';document.getElementById('gLegende').value='';openM('mGalerie');}
 async function saveGaleriePhoto(){
-  const url=document.getElementById('gUrl').value.trim();
-  if(!url){toast('URL obligatoire.','error');return;}
-  const r=await apiPost('/api/save-catalog',{store:'galerie',action:'set',item:{
-    id:document.getElementById('gId').value?parseInt(document.getElementById('gId').value):null,
-    url, legende:document.getElementById('gLegende').value.trim(), visible:true
-  }});
+  const url=document.getElementById('gUrl').value.trim();if(!url){toast('URL obligatoire.','error');return;}
+  const r=await apiPost('/api/save-catalog',{store:'galerie',action:'set',item:{url,legende:document.getElementById('gLegende').value.trim(),visible:true}});
   if(r.success){await loadGalerie();renderGalerie();closeM('mGalerie');flashSaved();toast('Photo ajoutée.','success');}
   else toast(r.error||'Erreur.','error');
 }
-async function toggleGalerie(id){
-  const p=_galerie.find(x=>x.id===id);if(!p)return;
-  await apiPost('/api/save-catalog',{store:'galerie',action:'set',item:{...p,visible:!p.visible}});
-  await loadGalerie();renderGalerie();flashSaved();
-}
-async function delGalerie(id){
-  if(!confirm('Supprimer cette photo ?'))return;
-  await apiPost('/api/save-catalog',{store:'galerie',action:'delete',item:{id}});
-  await loadGalerie();renderGalerie();flashSaved();toast('Photo supprimée.','success');
-}
+async function toggleGal(id){const p=_galerie.find(x=>x.id===id);if(!p)return;await apiPost('/api/save-catalog',{store:'galerie',action:'set',item:{...p,visible:!p.visible}});await loadGalerie();renderGalerie();flashSaved();}
+async function delGal(id){if(!confirm('Supprimer ?'))return;await apiPost('/api/save-catalog',{store:'galerie',action:'delete',item:{id}});await loadGalerie();renderGalerie();flashSaved();toast('Photo supprimée.','success');}
 
 /* ── COMMANDES ── */
-function renderCmds(){
-  const list=_cmdFilter==='all'?_cmds:_cmds.filter(c=>c.statut===_cmdFilter);
-  document.getElementById('cmdCount').textContent=_cmds.length;
-  document.getElementById('cmdList').innerHTML=list.map(c=>`
+function renderCmds(list) {
+  const items=(list||_cmds).filter(c=>_cmdFilter==='all'||c.statut===_cmdFilter);
+  document.getElementById('cmdTotal').textContent=_cmds.length;
+  document.getElementById('cmdList').innerHTML=items.map(c=>`
     <div class="order-card">
       <div>
         <div class="order-ref">${c.id}</div>
         <div class="order-name">${c.prenom} ${c.nom}</div>
         <div class="order-detail">${c.album} × ${c.quantite} — ${c.prix}</div>
-        <div class="order-meta">📧 ${c.email} &nbsp;📞 ${c.tel||'—'} &nbsp;📍 ${c.ville||'—'} &nbsp;🕐 ${c.date}</div>
+        <div class="order-meta">📧 ${c.email} &nbsp;📞 ${c.tel||'—'} &nbsp;📍 ${c.ville||'—'} &nbsp;🕐 ${c.date_fr}</div>
       </div>
       <div class="order-right">
-        <span class="pill ${c.statut}">${sLabel(c.statut)}</span>
-        <select class="statut-sel" onchange="updCmd('${c.id}',this.value)">
+        <span class="pill ${c.statut}">${sLbl(c.statut)}</span>
+        <select class="s-sel" onchange="updCmd('${c.id}',this.value)">
           <option value="en_attente" ${c.statut==='en_attente'?'selected':''}>En attente</option>
           <option value="traite"     ${c.statut==='traite'?'selected':''}>Traité</option>
           <option value="annule"     ${c.statut==='annule'?'selected':''}>Annulé</option>
         </select>
       </div>
-    </div>
-  `).join('')||'<div class="empty"><div class="empty-ico">🛒</div><p>Aucune commande.</p></div>';
+    </div>`).join('')||'<div class="empty"><div class="empty-ico">🛒</div><p>Aucune commande.</p></div>';
 }
-async function updCmd(id,val){
-  await apiPatch('/api/update-statut',{store:'commandes',id,statut:val});
-  await loadCmds();renderCmds();updateBadges();toast('Statut mis à jour.','success');
-}
+async function updCmd(id,val){await apiPatch('/api/update-statut',{store:'commandes',id,statut:val});await loadCmds();renderCmds();updateBadges();renderDashboard();toast('Statut mis à jour.','success');}
 function filterCmd(f){_cmdFilter=f;renderCmds();document.querySelectorAll('#panel-commandes .f-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes(`'${f}'`)));}
+async function searchData(store,q){
+  if(store==='commandes'){const items=await apiGet(store,q);renderCmds(items);}
+  else if(store==='reservations'){const items=await apiGet(store,q);renderRes(items);}
+  else if(store==='messages'){const items=await apiGet(store,q);renderMsgs(items);}
+  else if(store==='newsletter'){const items=await apiGet(store,q);renderNl(items);}
+}
 
 /* ── RÉSERVATIONS ── */
-function renderRes(){
-  const list=_resFilter==='all'?_res:_res.filter(r=>r.statut===_resFilter);
-  document.getElementById('resCount').textContent=_res.length;
-  document.getElementById('resList').innerHTML=list.map(r=>`
+function renderRes(list) {
+  const items=(list||_res).filter(r=>_resFilter==='all'||r.statut===_resFilter);
+  document.getElementById('resTotal').textContent=_res.length;
+  document.getElementById('resList').innerHTML=items.map(r=>`
     <div class="order-card">
       <div>
         <div class="order-ref">${r.id}</div>
         <div class="order-name">${r.prenom} ${r.nom}</div>
         <div class="order-detail">${r.evenement} — ${r.date_event}</div>
-        <div class="order-meta">📧 ${r.email} &nbsp;📞 ${r.tel} &nbsp;🎫 ${r.quantite} place(s) · ${r.prix} &nbsp;🕐 ${r.date}</div>
+        <div class="order-meta">📧 ${r.email} &nbsp;📞 ${r.tel} &nbsp;🎫 ${r.quantite} place(s) · ${r.prix} &nbsp;🕐 ${r.date_fr}</div>
       </div>
       <div class="order-right">
-        <span class="pill ${r.statut}">${sLabel(r.statut)}</span>
-        <select class="statut-sel" onchange="updRes('${r.id}',this.value)">
+        <span class="pill ${r.statut}">${sLbl(r.statut)}</span>
+        <select class="s-sel" onchange="updRes('${r.id}',this.value)">
           <option value="confirmee" ${r.statut==='confirmee'?'selected':''}>Confirmée</option>
           <option value="traite"    ${r.statut==='traite'?'selected':''}>Traitée</option>
           <option value="annule"    ${r.statut==='annule'?'selected':''}>Annulée</option>
         </select>
       </div>
-    </div>
-  `).join('')||'<div class="empty"><div class="empty-ico">🎫</div><p>Aucune réservation.</p></div>';
+    </div>`).join('')||'<div class="empty"><div class="empty-ico">🎫</div><p>Aucune réservation.</p></div>';
 }
-async function updRes(id,val){
-  await apiPatch('/api/update-statut',{store:'reservations',id,statut:val});
-  await loadRes();renderRes();updateBadges();toast('Statut mis à jour.','success');
-}
+async function updRes(id,val){await apiPatch('/api/update-statut',{store:'reservations',id,statut:val});await loadRes();renderRes();updateBadges();renderDashboard();toast('Statut mis à jour.','success');}
 function filterRes(f){_resFilter=f;renderRes();document.querySelectorAll('#panel-reservations .f-btn').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick').includes(`'${f}'`)));}
 
 /* ── MESSAGES ── */
-function renderMsgs(){
-  document.getElementById('msgCount').textContent=_msgs.length;
-  document.getElementById('msgList').innerHTML=_msgs.map(m=>`
-    <div class="item-row">
-      <div class="item-main">
-        <div class="item-title">${m.nom} <span style="font-size:0.72rem;color:var(--terra2)">${m.email}</span></div>
-        <div class="item-meta">${m.message}</div>
-        <div class="item-meta" style="opacity:0.5;font-size:0.65rem;">${m.date}</div>
+function renderMsgs(list) {
+  const items=list||_msgs;
+  document.getElementById('msgTotal').textContent=_msgs.length;
+  document.getElementById('msgList').innerHTML=items.map(m=>`
+    <div class="msg-card ${m.lu?'':'non-lu'}">
+      <div class="msg-head">
+        <div>
+          <div class="msg-sender">${m.prenom} ${m.nom}</div>
+          <div class="msg-email">${m.email}</div>
+        </div>
+        <div class="msg-meta">${m.date_fr}${!m.lu?`<br><button class="btn btn-out" style="margin-top:.3rem;font-size:.55rem;padding:.15rem .4rem;" onclick="marquerLu('${m.id}')">Marquer lu</button>`:''}</div>
       </div>
-    </div>
-  `).join('')||'<div class="empty"><div class="empty-ico">✉</div><p>Aucun message.</p></div>';
+      <div class="msg-sujet">${m.sujet||'general'}</div>
+      <div class="msg-body">${m.message}</div>
+    </div>`).join('')||'<div class="empty"><div class="empty-ico">✉</div><p>Aucun message.</p></div>';
 }
+async function marquerLu(id){await apiPatch('/api/marquer-lu',{id});await loadMsgs();renderMsgs();updateBadges();}
 
 /* ── NEWSLETTER ── */
-function renderNl(){
-  document.getElementById('nlCount').textContent=_nl.length;
-  document.getElementById('nlGrid').innerHTML=_nl.map(n=>`
+function renderNl(list) {
+  const items=list||_nl;
+  document.getElementById('nlTotal').textContent=_nl.length;
+  document.getElementById('nlGrid').innerHTML=items.map(n=>`
     <div class="nl-item">
       <span class="nl-email">${n.email}</span>
-      <button class="btn btn-red" style="padding:0.15rem 0.45rem;font-size:0.58rem;" onclick="delNl('${n.email}')">✕</button>
-    </div>
-  `).join('')||'<div style="grid-column:1/-1" class="empty"><div class="empty-ico">◌</div><p>Aucun abonné.</p></div>';
+      <button class="btn btn-red" style="padding:.1rem .38rem;font-size:.56rem;" onclick="delNl('${n.email}')">✕</button>
+    </div>`).join('')||'<div style="grid-column:1/-1" class="empty"><div class="empty-ico">◌</div><p>Aucun abonné.</p></div>';
 }
-async function delNl(email){
-  await apiPost('/api/save-catalog',{store:'newsletter',action:'delete',item:{id:email}});
-  await loadNl();renderNl();toast('Retiré.','success');
-}
+async function delNl(email){await apiPost('/api/save-catalog',{store:'newsletter',action:'delete',item:{id:email}});await loadNl();renderNl();toast('Retiré.','success');}
 
 /* ── EXPORT ── */
 function dl(content,name,type='text/csv'){const b=new Blob(['\uFEFF'+content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
 function toCSV(arr,cols){return[cols.join(';'),...arr.map(r=>cols.map(c=>`"${(r[c]||'').toString().replace(/"/g,'""')}"`).join(';'))].join('\n');}
 function exportCSV(t){
-  if(t==='commandes')    dl(toCSV(_cmds,['id','date','nom','prenom','email','tel','ville','album','quantite','prix','statut']),'commandes_mac.csv');
-  if(t==='reservations') dl(toCSV(_res, ['id','date','nom','prenom','email','tel','evenement','date_event','lieu','quantite','prix','statut']),'reservations_mac.csv');
+  if(t==='commandes')    dl(toCSV(_cmds,['id','date_fr','prenom','nom','email','tel','ville','album','quantite','prix','statut']),'commandes_mac.csv');
+  if(t==='reservations') dl(toCSV(_res, ['id','date_fr','prenom','nom','email','tel','evenement','date_event','lieu','quantite','prix','statut']),'reservations_mac.csv');
   if(t==='newsletter')   dl(_nl.map(n=>n.email).join('\n'),'newsletter_mac.csv');
   toast('Export téléchargé.','success');
 }
@@ -1007,13 +944,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelect
 
 /* ── TOAST ── */
 let _tt;
-function toast(msg,type='success'){
-  const t=document.getElementById('toast');
-  t.className=`toast ${type}`;
-  document.getElementById('toastMsg').textContent=msg;
-  t.classList.add('show');clearTimeout(_tt);
-  _tt=setTimeout(()=>t.classList.remove('show'),3200);
-}
+function toast(msg,type='success'){const t=document.getElementById('toast');t.className=`toast ${type}`;document.getElementById('toastMsg').textContent=msg;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3200);}
 </script>
 </body>
 </html>
